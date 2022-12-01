@@ -24,8 +24,31 @@ class CaloriesFinder {
         }
     }
 
+    private function getTop($number) {
+        $sortedArray = $this->elves; 
+        arsort($sortedArray);
+        $totalCalories = 0;
+        $count = 0;
+
+        foreach($sortedArray as $calories) {
+            $totalCalories += $calories;
+            $count++;
+            if($count >= $number) {
+                break;
+            }
+            
+        }
+            
+        return $totalCalories;
+    }
+
+
     public function showElves() {
         return $this->elves;
+    }
+
+    public function getCaloriesTop($numberOfPositions) {
+        return $this->getTop($numberOfPositions);
     }
 
     public function showElvesDetails() {
