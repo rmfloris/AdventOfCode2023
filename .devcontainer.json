@@ -1,0 +1,13 @@
+{
+    "extensions": [
+        "dbaeumer.vscode-eslint",
+        "HTMLHint.vscode-htmlhint",
+        "vscode-icons-team.vscode-icons",
+        "esbenp.prettier-vscode",
+        "xdebug.php-debug",
+        "formulahendry.auto-rename-tag",
+        "chrmarti.regex",
+        "bmewburn.vscode-intelephense-client",
+		"amatiasq.sort-imports"
+    ]
+}
