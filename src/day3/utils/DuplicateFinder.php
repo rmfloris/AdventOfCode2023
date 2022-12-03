@@ -7,6 +7,7 @@ class DuplicateFinder {
 
     private $inputData = array();
     private $rucksackContent = array();
+    private $duplicate = array();
 
     public function __construct($inputFile) {
         $this->inputData = $this->parseInput($inputFile);
@@ -25,15 +26,21 @@ class DuplicateFinder {
     }
 
     public function calculatePriorities() {
-        return $this->calculate($this->findDuplicateCharacters());
+        $this->findDuplicateCharacters();
+        return $this->calculate();
     }
 
-    private function calculate($listOfDuplicates) {
+    private function calculate() {
         $score = 0;
-        foreach($listOfDuplicates as $letter) {
-            $score += $this->letterToPoints($letter);
+        foreach($this->duplicates as $key => $duplicate) {
+            $score += $this->letterToPoints($duplicate["letter"]);
+            $this->duplicates[$key]["score"] = $this->letterToPoints($duplicate["letter"]);
         }
         return $score;
+    }
+
+    public function showDuplicates() {
+        return $this->duplicates;
     }
 
     private function letterToPoints($letter) {
@@ -43,7 +50,6 @@ class DuplicateFinder {
     }
 
     private function findDuplicateCharacters() {
-        $duplicates = [];
         foreach($this->rucksackContent as $key => $compartments) {
             $compartment1 = str_split($compartments[0]);
             $compartment2 = str_split($compartments[1]);
@@ -51,10 +57,9 @@ class DuplicateFinder {
             foreach(array_unique($compartment1) as $content) {
                 // echo $content ." - ". strpos($compartments[1], $content) ."<br>";
                 if(array_search($content, $compartment2)) {
-                    $duplicates[] = $content;
+                    $this->duplicates[]["letter"] = $content;
                 }
             }
         }
-        return $duplicates;
     }
 }
