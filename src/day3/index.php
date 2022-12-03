@@ -9,7 +9,5 @@ $file = "input/input.txt";
 
 $error = new DuplicateFinder($file);
 $totalPriorities = $error->calculatePriorities();
-echo "<pre>";
-print_r($error->showDuplicates());
 
 echo $totalPriorities;
