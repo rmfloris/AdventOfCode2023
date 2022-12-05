@@ -3,16 +3,17 @@ require_once '../autoload.php';
 
 use day5\utils\Day5;
 
-$moves = "input/input_moves_test.txt";
-$crates = "input/input_crates_test.txt";
+// $moves = "input/input_moves_test.txt";
+// $crates = "input/input_crates_test.txt";
 $moves = "input/input_moves.txt";
 $crates = "input/input_crates.txt";
 
 $crateStack = new Day5($crates, $moves);
 $crateStack->processCrates();
-$crateStack->processMoves();
-echo "List of top Crates: ". $crateStack->getTopCrates() ."<p>";
+$crateStack->processMovesWithCrateMover(9000);
+echo "List of top Crates for part 1: ". $crateStack->getTopCrates() ."<p>";
 
-
-echo "<pre>";
-var_dump($crateStack);
+// reset to the start
+$crateStack->processCrates();
+$crateStack->processMovesWithCrateMover(9001);
+echo "List of top Crates for part 2: ". $crateStack->getTopCrates() ."<p>";

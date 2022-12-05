@@ -29,7 +29,7 @@ class Day5 {
         }
     }
 
-    public function processMoves() {
+    public function processMovesWithCrateMover($moverNumber) {
         foreach($this->inputMoves as $move) {
             /**
              * first is # of crates
@@ -37,29 +37,37 @@ class Day5 {
              * third is to position
              */
             preg_match('#^\D*(\d*)\D*(\d*)\D*(\d*)#', $move, $movesDetail);
-            // echo "<pre>";
-            // var_dump($movesDetail);
 
-            $this->moveCrates($movesDetail[1], $movesDetail[2], $movesDetail[3]);
-            
+            if($moverNumber == 9000) {
+                $this->moveCratesWithCrateMover9000($movesDetail[1], $movesDetail[2], $movesDetail[3]);
+            } else {
+                $this->moveCratesWithCrateMover9001($movesDetail[1], $movesDetail[2], $movesDetail[3]);
+            }
         }
     }
 
-    private function moveCrates($number, $from, $to) {
-        // end($array)
-        // move 1 from 2 to 1
-        // get last
-        // delete last from 2
-        // add last to 1
+    public function processMovesWithCrateMover9001() {
+        foreach($this->inputMoves as $move) {
+            preg_match('#^\D*(\d*)\D*(\d*)\D*(\d*)#', $move, $movesDetail);
+            // echo "<pre>";
+            // var_dump($movesDetail);
 
-        // $crateToMove = end($this->cratesPosition[$from]);
-        // $cratesToMove = array_reverse(array_slice($this->cratesPosition[$from], -$number, null, true), true);
-        // $cratesToMove = array_reverse(array_slice($this->cratesPosition[$from], -2, null, true), true);
+            $this->moveCratesWithCrateMover9000($movesDetail[1], $movesDetail[2], $movesDetail[3]);
+        }
+    }
 
+    private function moveCratesWithCrateMover9000($number, $from, $to) {
         for($i=0; $i<$number; $i++) {
             $crateToMove = array_pop($this->cratesPosition[$from]);
             $this->cratesPosition[$to][] = $crateToMove;
         }
+    }
+
+    private function moveCratesWithCrateMover9001($number, $from, $to) {
+        $cratesToMove = array_slice($this->cratesPosition[$from], -$number, null, true);
+        array_splice($this->cratesPosition[$from], -$number);
+        $this->cratesPosition[$to] = array_merge($this->cratesPosition[$to], $cratesToMove);
+       
     }
 
     public function getTopCrates() {
