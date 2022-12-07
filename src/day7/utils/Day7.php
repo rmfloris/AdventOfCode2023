@@ -9,12 +9,12 @@ class Day7 {
     private $inputArray = [];
     private $dirStructure = [];
     private $parentDirectory = [];
-    // private $dirRef = [];
+    private $folderSize = [];
 
     public function __construct($filename) {
         $this->inputArray = $this->parseInput($filename);
-        // $this->dirRef = & $this->dirStructure;
         $this->constructDirStructure();
+        $this->calculateFolderSize($this->dirStructure);
     }
 
     private function parseInput($inputFile) {
@@ -23,30 +23,10 @@ class Day7 {
     }
 
     private function constructDirStructure() {
-        /*
-        - / (dir)
-            - a (dir)
-                - e (dir)
-                - i (file, size=584)
-                - f (file, size=29116)
-                - g (file, size=2557)
-                - h.lst (file, size=62596)
-            - b.txt (file, size=14848514)
-            - c.dat (file, size=8504156)
-            - d (dir)
-                - j (file, size=4060174)
-                - d.log (file, size=8033020)
-                - d.ext (file, size=5626152)
-                - k (file, size=7214296)
-    */
-        
         foreach($this->inputArray as $lineId => $line) {
-            echo "* Line: ". $line ."<br>";
-            echo "  - is command? ". $this->isCommand($line) ."<br>";
             if($this->isCommand($line)) {
                 $this->executeCommand($line, $lineId);
             }
-            echo "  - Parent Dir: ". print_r($this->parentDirectory, true) ."<br>";
         }
     }
 
@@ -62,7 +42,6 @@ class Day7 {
                 break;
             case 'ls':
                 $contentDir = $this->getDirContent($lineId);
-                // echo "<pre>". print_r($contentDir, true) ."</pre><br>";
                 $this->addDirContentToStructure($contentDir);
                 break;
         }
@@ -72,6 +51,7 @@ class Day7 {
         $nextLines = array_slice($this->inputArray, $lineId+1);
         $nextCommand = 0;
         foreach($nextLines as $key => $line) {
+            $nextCommand = count($nextLines);
             if($this->isCommand($line)) {
                 $nextCommand = $key;
                 break;
@@ -90,8 +70,9 @@ class Day7 {
         foreach($contentDir as $content) {
             $data = explode(" ", $content);
             $name = $data[1];
-            $dirData[$name] = $name;
-            echo "Name: ". $name ."<br>";
+            $sizeOrDir = $data[0];
+            $dirData[$name] = ($this->isDir($sizeOrDir) ? [] : $sizeOrDir);
+            // echo "Name: ". $name ."<br>";
         }
         $ref = $dirData;
         unset($ref);
@@ -105,21 +86,53 @@ class Day7 {
         switch($dir) {
             case '/':
                 $this->parentDirectory = ["/"];
-                // $this->dirRef = &$this->dirRef["/"];
                 $this->dirStructure["/"] = [];
-                // $this->currentDirLevel = 1;
                 break;
             case "..":
                 array_pop($this->parentDirectory);
-                // array_pop($this->dirRef);
-                // $this->currentDirLevel--;
                 break;
             default:
                 $this->parentDirectory = array_merge($this->parentDirectory, [$dir]);
-                // $this->dirRef = &$this->dirRef[$dir];
-                // $this->currentDirLevel++;
                 break;
         }
+    }
+
+    private function calculateFolderSize($startingPoint) {
+        /**
+         * check if it is a dir
+         * sum the content
+         * add to size array
+         * add to parent
+         * 
+         */
+
+         /**
+          * $size["key"] = 123456
+          */
+        $parent = null;
+        foreach($startingPoint as $key => $directory) {
+            echo "Key: ". $key ."<br>";
+            if($this->hasSubDirectory($directory)) {
+                echo "subdir: ". print_r($directory, true) ."<br>";
+                // $this->calculateFolderSize($directory);
+            } 
+            // echo "- ". print_r($directory,true) ." - ". $this->getFolderSize($directory) ."<br>";
+            $this->folderSize[$key] += $this->getFolderSize($key);
+        }
+    }
+
+    private function hasSubDirectory($data) {
+        return is_array($data);
+    }
+
+    private function getFolderSize($directory) {
+        $size = 0;
+        foreach($this->dirStructure[$directory] as $content) {
+            if(!$this->hasSubDirectory($content)) {
+                $size += $content;
+            }
+        }
+        return $size;
     }
 
     public function getDirStructure() {

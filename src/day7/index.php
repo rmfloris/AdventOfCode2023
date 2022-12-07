@@ -1,6 +1,11 @@
 <?php
 require_once '../autoload.php';
 
+/**
+ * not resolved. Used solution from the internet.
+ * something for the christmas holidays
+ */
+
 use day7\utils\Day7;
 
 $filename = "input/input_test.txt";
