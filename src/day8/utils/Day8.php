@@ -55,18 +55,66 @@ class Day8 {
     }
 
     private function isVisibleHorizontally($row, $column) {
-         $rowData = $this->inputArray[$row];
-         $maxTreesOnLeft = max(array_slice($rowData,0,$column));
-         $maxTreesOnRight = max(array_slice($rowData,$column+1));
+        $rowData = $this->getRowData($row);
+        $maxTreesOnLeft = max($this->getTreesBefore($column, $rowData));
+        $maxTreesOnRight = max($this->getTreesAfter($column, $rowData));
         //  echo "value: ". $this->inputArray[$row][$column] ." - Left: ". $maxTreesOnLeft . " - right: ". $maxTreesOnRight ."<br>";
          return ($this->inputArray[$row][$column] > $maxTreesOnLeft || $this->inputArray[$row][$column] > $maxTreesOnRight);
     }
 
     private function isVisibileVertically($row, $column) {
-        $columnData = array_column($this->inputArray, $column);
+        $columnData = $this->getColumnData($column);
         
-        $maxTreesOnTop = max(array_slice($columnData,0,$row));
-        $maxTreesOnBottom = max(array_slice($columnData,$row+1));
+        $maxTreesOnTop = max($this->getTreesBefore($row, $columnData));
+        $maxTreesOnBottom = max($this->getTreesAfter($row, $columnData));
         return ($this->inputArray[$row][$column] > $maxTreesOnTop || $this->inputArray[$row][$column] > $maxTreesOnBottom);
+    }
+
+    public function getHighestScenicScore() {
+        return $this->scenicScoreForTreesOnInside();
+    }
+
+    private function scenicScoreForTreesOnInside() {
+        $highestScore = 0;
+
+        for($x=1; $x<count($this->inputArray)-1;$x++) {
+            /**
+             * x = row
+             * y = columns
+             */
+            for($y=1; $y<count($this->inputArray[$x])-1;$y++) {
+                $score = $this->getScoreForTree($x, $y);
+                $highestScore = ($score > $highestScore ? $score : $highestScore);
+            }
+        }
+        return $highestScore;
+    }
+
+    private function getScoreForTree($row, $column) {
+        $rowData = $this->getRowData($row);
+        $columnData = $this->getColumnData($column);
+
+        $treesToTheLeft = $this->getTreesBefore($column, $rowData);
+        $treesToTheRight = $this->getTreesAfter($column, $rowData);
+        $treesToTheTop = $this->getTreesBefore($row, $columnData);
+        $treesToTheBottom = $this->getTreesBefore($row, $columnData);
+
+        $treesVisibleToTheLeft = 1;
+    }
+
+    private function getColumnData($column) {
+        return array_column($this->inputArray, $column);
+    }
+    
+    private function getRowData($row) {
+        return $this->inputArray[$row];
+    }
+
+    private function getTreesBefore($position, $trees) {
+        return array_slice($trees,0,$position);
+    }
+
+    private function getTreesAfter($position, $trees) {
+        return array_slice($trees,$position+1);
     }
 }

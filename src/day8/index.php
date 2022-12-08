@@ -9,10 +9,10 @@ $filename = "input/input.txt";
 $numberOfTrees = new Day8($filename);
 // echo "<pre>";
 // var_dump($numberOfTrees);
-echo "1. Total visible number of trees: ". $numberOfTrees->calculateVisibleTrees();
+echo "1. Total visible number of trees: ". $numberOfTrees->calculateVisibleTrees() . " (1736)";
 /**
- * Visibile trees
- * - All on the outside
+ * Viewing range
+ * - All on the outside will score 0, so no total due to multiplier
  * - for the inside
  *  - if vertically / horizontally a higher number is availble
  * 
