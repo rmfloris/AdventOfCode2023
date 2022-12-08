@@ -41,14 +41,9 @@ class Day8 {
              * x = row
              * y = columns
              */
-            // $rowData = str_split($this->inputArray[$x]);
+            
             for($y=1; $y<count($this->inputArray[$x])-1;$y++) {
-                // echo "number: ". $this->inputArray[$x][$y] ."<br>";
-                // echo "Visible: ". $this->isVisibleHorizontally($x, $y) ." - ". $this->isVisibileVertically($x, $y) ."<br>";
-                // echo $this->isVisibileVertically($x, $y) ."<br>";
                 $number += ($this->isVisibleHorizontally($x, $y) || $this->isVisibileVertically($x, $y) ? 1 : 0);
-                // $number += ($this->isVisibleHorizontally($x, $y) ? 1 : 0);
-                
             }
         }
         return $number;
@@ -58,7 +53,7 @@ class Day8 {
         $rowData = $this->getRowData($row);
         $maxTreesOnLeft = max($this->getTreesBefore($column, $rowData));
         $maxTreesOnRight = max($this->getTreesAfter($column, $rowData));
-        //  echo "value: ". $this->inputArray[$row][$column] ." - Left: ". $maxTreesOnLeft . " - right: ". $maxTreesOnRight ."<br>";
+
          return ($this->inputArray[$row][$column] > $maxTreesOnLeft || $this->inputArray[$row][$column] > $maxTreesOnRight);
     }
 
@@ -97,9 +92,30 @@ class Day8 {
         $treesToTheLeft = $this->getTreesBefore($column, $rowData);
         $treesToTheRight = $this->getTreesAfter($column, $rowData);
         $treesToTheTop = $this->getTreesBefore($row, $columnData);
-        $treesToTheBottom = $this->getTreesBefore($row, $columnData);
+        $treesToTheBottom = $this->getTreesAfter($row, $columnData);
 
-        $treesVisibleToTheLeft = 1;
+        $score = $this->getScore($treesToTheTop, $this->inputArray[$row][$column], true) * 
+                    $this->getScore($treesToTheLeft, $this->inputArray[$row][$column], true) *
+                    $this->getScore($treesToTheRight, $this->inputArray[$row][$column]) * 
+                    $this->getScore($treesToTheBottom, $this->inputArray[$row][$column]);
+
+        return $score;        
+    }
+
+    private function getScore($treeline, $currentTree, $flip = false) {
+        $treeline = ($flip ? array_reverse($treeline) : $treeline);
+        $score = 0;
+        
+        foreach($treeline as $tree) {
+            if($tree < $currentTree) {
+                $score += 1;
+            }
+            if($tree >= $currentTree) {
+                $score += 1;
+                break;
+            }
+        }
+        return $score;
     }
 
     private function getColumnData($column) {
