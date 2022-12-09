@@ -1,102 +1,73 @@
 <?php
-namespace day9\utils;
 
+namespace day9\utils;
 use common\LoadInput;
-use LDAP\Result;
 
 class Day9 {
     private $inputArray = [];
-    private $tailLocations = [];
-    private $currentLocationHead = ["x"=>1, "y"=>1];
-    private $currentLocationTail = ["x"=>1, "y"=>1];
+    private $currentLocations = [];
+    private $visitedLocations = [];
 
     public function __construct($filename) {
         $this->inputArray = $this->parseInput($filename);
+        $this->currentLocations = array_fill(0,10,["x"=>0, "y"=>0]);
     }
 
     private function parseInput($inputFile) {
-        $data = explode("\n", (new LoadInput)->loadFile($inputFile));
-        return $data;
+        return explode("\n", (new LoadInput)->loadFile($inputFile));
     }
 
     public function startMoving() {
-        $this->setTailLocation($this->currentLocationHead["x"], $this->currentLocationHead["y"]);
         foreach($this->inputArray as $moveDetail) {
-            $move = explode(" ", $moveDetail);
-            $this->makeMoveHead($move[0], $move[1]);
+            [$direction, $steps] = explode(" ", $moveDetail);
+            $this->makeMoveHead($direction, $steps);
         }
     }
 
     private function makeMoveHead($direction, $steps) {
-        ['x' => $x, 'y' => $y] = $this->currentLocationHead;
-        // echo "Start Head -> x: ". $x ." - y: ". $y ."<br>";
-        // echo "Start Tail -> x: ". $this->currentLocationTail["x"] ." - y: ". $this->currentLocationTail["y"] ."<br>";
-
         for($i=0; $i<$steps;$i++) {
-            $this->currentLocationHead = [
-                "x" => $this->calculateNewValuePosition("x", "head", $direction), 
-                "y" => $this->calculateNewValuePosition("y", "head", $direction)
-            ];
-            // echo "Direction: ". $direction ." x: ". $this->currentLocationHead["x"] ." - y: ". $this->currentLocationHead["y"] ."<br>";
-            $this->checkTailTouching();
-            
-        }        
+            [$x, $y] = $this->calculateStep($direction);
+            $this->currentLocations[0]["x"] += $x;
+            $this->currentLocations[0]["y"] += $y;
+
+            for($y=1; $y<count($this->currentLocations);$y++) {
+                $this->checkNextKnotTouching($y-1);
+            }
+        }
     }
 
-    private function makeMoveTail($direction, $steps) {
-        ['x' => $x, 'y' => $y] = $this->currentLocationTail;
-        // echo "Start Tail-> x: ". $x ." - y: ". $y ."<br>";
-        for($i=0; $i<$steps;$i++) {
-            $x =$this->calculateNewValuePosition("x", "tail", $direction);
-            $y =$this->calculateNewValuePosition("y", "tail", $direction);
-            
-            $this->currentLocationTail = [
-                "x" => $x, 
-                "y" => $y
-            ];
-            $this->setTailLocation($x, $y);
-
-            // echo "Direction Tail: ". $direction ." x: ". $this->currentLocationTail["x"] ." - y: ". $this->currentLocationTail["y"] ."<br>";
-        }        
-    }
-
-    private function checkTailTouching() {
-        ['x' => $xTail, 'y' => $yTail] = $this->currentLocationTail;
-        ['x' => $xHead, 'y' => $yHead] = $this->currentLocationHead;
-
-        if(abs($xHead - $xTail) <= 1 && abs($yHead - $yTail) <= 1) {
-            // still touching
+    private function checkNextKnotTouching ($prevKnotIndex) {
+        $currentKnotIndex = $prevKnotIndex+1;
+        ["x" => $xPrev, "y" => $yPrev] = $this->currentLocations[$prevKnotIndex];
+        ["x" => $xCurrent, "y" => $yCurrent] = $this->currentLocations[$currentKnotIndex];
+        if(abs($xPrev - $xCurrent) <= 1 && abs($yPrev - $yCurrent) <= 1) {
+            $this->setVisitedLocations($currentKnotIndex, $xCurrent, $yCurrent);
             return false;
         }
-        if(abs($xHead - $xTail) > 1 && abs($yHead - $yTail) == 0) {
+        if(abs($xPrev - $xCurrent) > 1 && abs($yPrev - $yCurrent) == 0) {
             // delta alleen op x
-            $direction = ($xHead - $xTail > 0 ? "R" : "L");
-            $this->makeMoveTail($direction, 1);
+            $direction = ($xPrev - $xCurrent > 0 ? "R" : "L");
         }
-        if(abs($yHead - $yTail) > 1 && abs($xHead - $xTail) == 0) {
+        if(abs($xPrev - $xCurrent) == 0 && abs($yPrev - $yCurrent) > 1) {
             // delta alleen op y
-            $direction = ($yHead - $yTail > 0 ? "U" : "D");
-            $this->makeMoveTail($direction, 1);
-        }        
+            $direction = ($yPrev - $yCurrent > 0 ? "U" : "D");
+        }
         if(
-            abs($yHead - $yTail) > 1 && abs($xHead - $xTail) == 1 ||
-            abs($xHead - $xTail) > 1 && abs($yHead - $yTail) == 1
+            abs($yPrev - $yCurrent) > 1 && abs($xPrev - $xCurrent) >= 1 ||
+            abs($xPrev - $xCurrent) > 1 && abs($yPrev - $yCurrent) >= 1
             ) {
             // diagonaal 1
             $direction = "";
-            $direction .= ($xHead - $xTail > 0 ? "R" : "L");
-            $direction .= ($yHead - $yTail > 0 ? "U" : "D");
-            $this->makeMoveTail($direction, 1);
+            $direction .= ($xPrev - $xCurrent > 0 ? "R" : "L");
+            $direction .= ($yPrev - $yCurrent > 0 ? "U" : "D");
         }
+        [$x, $y] = $this->calculateStep($direction);
+        $this->currentLocations[$currentKnotIndex]["x"] += $x;
+        $this->currentLocations[$currentKnotIndex]["y"] += $y;
+        $this->setVisitedLocations($currentKnotIndex, $xCurrent+$x, $yCurrent+$y);
     }
 
-    private function calculateNewValuePosition($axis, $who, $direction) {
-        if ($who == "head") {
-            ['x' => $x, 'y' => $y] = $this->currentLocationHead;
-        }
-        if ($who == "tail") {
-            ['x' => $x, 'y' => $y] = $this->currentLocationTail;
-        }
+    private function calculateStep($direction) {
         $xValue = 0;
         $yValue = 0;
 
@@ -129,18 +100,15 @@ class Day9 {
                 $xValue = -1;
                 $yValue = -1;
                 break;
-        }
-
-        if($axis == "x") { return $x + $xValue;}
-        if($axis == "y") { return $y + $yValue;}
-        return 0;
+            }
+        return [$xValue, $yValue];
+    }
+    
+    private function setVisitedLocations($knotIndex, $x, $y) {
+        $this->visitedLocations[$knotIndex][$x."-".$y] = "1";
     }
 
-    private function setTailLocation($x, $y) {
-        $this->tailLocations[$x."-".$y] = "1";
-    }
-
-    public function getNumberOfPositions() {
-        return count($this->tailLocations);
+    public function getNumberOfPositions($knotIndex) {
+        return count($this->visitedLocations[$knotIndex]);
     }
 }
