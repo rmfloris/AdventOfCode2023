@@ -11,5 +11,21 @@ $computer->startProgram();
 
 echo "1.Total signal strenght: " . $computer->getSignalStrength() ." (14780)<br>";
 
-echo "<pre>";
-var_dump($computer);
+    // echo "<pre>";
+    // var_dump($computer);
+
+
+?>
+<html>
+    <head>
+        <title>Day 10 - AOC</title>
+    <link type="text/css" href="style.css" rel="stylesheet" />
+    </head>
+    <body>
+        ELPLZGZL
+        <?php
+        echo $computer->showGrid();
+        ?>
+    </body>
+</html>
+

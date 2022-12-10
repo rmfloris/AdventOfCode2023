@@ -8,10 +8,11 @@ class Day10 {
     private $registerX = 1;
     private $cycle = 1;
     private $valueAtCycle = [];
+    private $screenPixels = [];
+    private $spriteLocation = [1,2,3];
 
     public function __construct($filename) {
         $this->inputArray = $this->parseInput($filename);
-        // $this->valueAtCycle[$this->cycle] = $this->registerX;
     }
 
     private function parseInput($inputFile) {
@@ -22,13 +23,12 @@ class Day10 {
         foreach($this->inputArray as $lines) {
             [$program, $value] = explode(" ", $lines) + ["1"=>null];
 
-            // echo "Program: ". $program ."<br>";
+            // echo "Program: ". $program ." - value: ". $value ."<br>";
             $this->{$program}($value);
         }
     }
 
     private function noop($value) {
-        // echo "noop<br>";
         $this->addCycle();
         return true;
     }
@@ -40,15 +40,33 @@ class Day10 {
     }
 
     private function setRegisterXValue($addValue) {
-        return $this->registerX += $addValue;
+        $this->registerX += $addValue;
+        $this->updateSpriteLocation();
+        return true;
     }
+    
     private function addCycle($numberOfTicks = 1) {
         // $this->cycle += $numberOfTicks;
         for($i=0; $i<$numberOfTicks; $i++) {
             $this->setValueAtCycle();
-            $this->cycle++;            
+            $this->markScreenPixel();
+            $this->cycle++;
         }
         return true;
+    }
+
+    private function updateSpriteLocation(){
+        $row = floor($this->cycle/40) * 40;
+        // echo "row: ". $row ."<br>";
+        $this->spriteLocation = range($this->registerX+$row, $this->registerX+$row+2);
+        
+    }
+
+    private function markScreenPixel() {
+        $this->screenPixels[$this->cycle-1] = (in_array($this->cycle, $this->spriteLocation) ? "#" : ".");
+        // echo "draws at postion ". $this->cycle-1 ."<br>";
+        // echo "sprite location: ". implode("", $this->spriteLocation) ."<br>";
+        // echo "Current CRT row: ". implode("", $this->screenPixels) ."<br>";
     }
 
     private function setValueAtCycle() {
@@ -63,5 +81,18 @@ class Day10 {
             $totalSignalStrength += $i * $this->valueAtCycle[$i];
         }
         return $totalSignalStrength;
+    }
+
+    public function showGrid() {
+        $table = "<table>";
+
+        for($y=0;$y<240;$y+=40) {
+            $table .= "<tr>";
+            for($x=0; $x<40; $x++) {
+                $table .= "<td>". $this->screenPixels[$y+$x] ."</td>";
+            }
+            $table .= "</tr>";
+        }
+        return $table;
     }
 }
