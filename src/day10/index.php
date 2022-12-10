@@ -10,11 +10,6 @@ $computer = new Day10($filename);
 $computer->startProgram();
 
 echo "1.Total signal strenght: " . $computer->getSignalStrength() ." (14780)<br>";
-
-    // echo "<pre>";
-    // var_dump($computer);
-
-
 ?>
 <html>
     <head>
@@ -22,7 +17,7 @@ echo "1.Total signal strenght: " . $computer->getSignalStrength() ." (14780)<br>
     <link type="text/css" href="style.css" rel="stylesheet" />
     </head>
     <body>
-        ELPLZGZL
+        2. Answer: (ELPLZGZL)
         <?php
         echo $computer->showGrid();
         ?>

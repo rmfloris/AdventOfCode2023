@@ -9,7 +9,6 @@ class Day10 {
     private $cycle = 1;
     private $valueAtCycle = [];
     private $screenPixels = [];
-    private $spriteLocation = [1,2,3];
 
     public function __construct($filename) {
         $this->inputArray = $this->parseInput($filename);
@@ -41,7 +40,6 @@ class Day10 {
 
     private function setRegisterXValue($addValue) {
         $this->registerX += $addValue;
-        $this->updateSpriteLocation();
         return true;
     }
     
@@ -55,18 +53,15 @@ class Day10 {
         return true;
     }
 
-    private function updateSpriteLocation(){
-        $row = floor($this->cycle/40) * 40;
-        // echo "row: ". $row ."<br>";
-        $this->spriteLocation = range($this->registerX+$row, $this->registerX+$row+2);
-        
-    }
-
     private function markScreenPixel() {
-        $this->screenPixels[$this->cycle-1] = (in_array($this->cycle, $this->spriteLocation) ? "#" : ".");
-        // echo "draws at postion ". $this->cycle-1 ."<br>";
-        // echo "sprite location: ". implode("", $this->spriteLocation) ."<br>";
-        // echo "Current CRT row: ". implode("", $this->screenPixels) ."<br>";
+        $pixelPosition = ($this->cycle - 1) % 40;
+        $spriteCenter = (($this->registerX - 1) % 40) + 1;
+
+        $this->screenPixels[$this->cycle-1] = (
+            $pixelPosition >= $spriteCenter-1 &&
+            $pixelPosition <= $spriteCenter+1
+            ? "#"
+            : ".");
     }
 
     private function setValueAtCycle() {
