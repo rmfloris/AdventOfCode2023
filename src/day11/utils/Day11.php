@@ -17,9 +17,13 @@ class Day11 {
     }
 
     public function startRounds($numberOfRound=1) {
+        echo "<pre>";
         for($round=1;$round<=$numberOfRound;$round++) {
             echo "round: ". $round ."<br>";
             $this->inspectItems($round);
+
+            echo "after round #". $round ." the item list: <br>";
+            print_r($this->monkeyItems);
         }
     }
 
@@ -32,6 +36,7 @@ class Day11 {
         reset($this->monkeyItems);
         while($val = current($this->monkeyItems)) {
             $monkeyId = key($this->monkeyItems);
+            echo "MonkeyId: ". $monkeyId ."<br>";
             while($item = current($this->monkeyItems[$monkeyId])) {
                 $itemId = key($this->monkeyItems[$monkeyId]);
                 echo "id: ". $monkeyId ." - ". $item ." - ". $itemId ." - ";
@@ -45,15 +50,33 @@ class Day11 {
             }
             next($this->monkeyItems);
         }
+
+        /**
+         * foreach doesn't work with updates to array
+         */
+        // echo "<pre>";
+        // foreach($this->monkeyItems as $monkeyId => $items) {
+        //     if ( empty($this->monkeyItems[$monkeyId] ) ) {
+		// 		continue;
+		// 	}
+        //     foreach($items as $itemId => $item) {
+        //         echo "id: ". $monkeyId ." - ". $item ." - ". $itemId ." - ";
+        //         $this->monkeyInspections[$monkeyId] = +1;
+        //         $worryLevel = $this->applyOperation($monkeyId, $item);
+        //         $worryLevel = $this->getsBored($worryLevel);
+        //         echo $worryLevel ."<br>";
+        //         $this->actOnItem($monkeyId, $itemId, $worryLevel);
+        //     }
+        // }
     }
 
     private function actOnItem($monkeyId, $itemId, $worryLevel) {
         if($worryLevel % $this->monkeyRules[$monkeyId]["test"] == 0) {
             $toMonkey = $this->monkeyRules[$monkeyId]["testTrue"];
-            // echo "true: ". $this->monkeyRules[$monkeyId]["testTrue"] ."<br>";
+            echo "true: to monkey = ". $this->monkeyRules[$monkeyId]["testTrue"] ."<br>";
         } else {
             $toMonkey = $this->monkeyRules[$monkeyId]["testFalse"];
-            // echo "false: ". $this->monkeyRules[$monkeyId]["testFalse"] ."<br>";
+            echo "false: to monkey = ". $this->monkeyRules[$monkeyId]["testFalse"] ."<br>";
         }
 
         unset($this->monkeyItems[$monkeyId][$itemId]);
