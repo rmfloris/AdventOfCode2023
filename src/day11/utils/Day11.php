@@ -17,13 +17,8 @@ class Day11 {
     }
 
     public function startRounds($numberOfRound=1) {
-        echo "<pre>";
         for($round=1;$round<=$numberOfRound;$round++) {
-            echo "round: ". $round ."<br>";
-            $this->inspectItems($round);
-
-            echo "after round #". $round ." the item list: <br>";
-            print_r($this->monkeyItems);
+            $this->inspectItems();
         }
     }
 
@@ -31,58 +26,29 @@ class Day11 {
         return $this->monkeyItems;
     }
 
-    private function inspectItems($round) {
-        echo "<pre>";
-        reset($this->monkeyItems);
-        while($val = current($this->monkeyItems)) {
-            $monkeyId = key($this->monkeyItems);
-            echo "MonkeyId: ". $monkeyId ."<br>";
-            while($item = current($this->monkeyItems[$monkeyId])) {
-                $itemId = key($this->monkeyItems[$monkeyId]);
-                echo "id: ". $monkeyId ." - ". $item ." - ". $itemId ." - ";
-                $this->monkeyInspections[$monkeyId] = +1;
-
+    private function inspectItems() {
+        foreach($this->monkeyItems as $monkeyId => &$items) {
+            if ( empty($this->monkeyItems[$monkeyId] ) ) {
+				continue;
+			}
+            foreach($items as $itemId => &$item) {
+                $this->monkeyInspections[$monkeyId] += 1;
                 $worryLevel = $this->applyOperation($monkeyId, $item);
                 $worryLevel = $this->getsBored($worryLevel);
-                echo $worryLevel ."<br>";
                 $this->actOnItem($monkeyId, $itemId, $worryLevel);
-                
             }
-            next($this->monkeyItems);
         }
-
-        /**
-         * foreach doesn't work with updates to array
-         */
-        // echo "<pre>";
-        // foreach($this->monkeyItems as $monkeyId => $items) {
-        //     if ( empty($this->monkeyItems[$monkeyId] ) ) {
-		// 		continue;
-		// 	}
-        //     foreach($items as $itemId => $item) {
-        //         echo "id: ". $monkeyId ." - ". $item ." - ". $itemId ." - ";
-        //         $this->monkeyInspections[$monkeyId] = +1;
-        //         $worryLevel = $this->applyOperation($monkeyId, $item);
-        //         $worryLevel = $this->getsBored($worryLevel);
-        //         echo $worryLevel ."<br>";
-        //         $this->actOnItem($monkeyId, $itemId, $worryLevel);
-        //     }
-        // }
     }
 
     private function actOnItem($monkeyId, $itemId, $worryLevel) {
         if($worryLevel % $this->monkeyRules[$monkeyId]["test"] == 0) {
             $toMonkey = $this->monkeyRules[$monkeyId]["testTrue"];
-            echo "true: to monkey = ". $this->monkeyRules[$monkeyId]["testTrue"] ."<br>";
         } else {
             $toMonkey = $this->monkeyRules[$monkeyId]["testFalse"];
-            echo "false: to monkey = ". $this->monkeyRules[$monkeyId]["testFalse"] ."<br>";
         }
 
         unset($this->monkeyItems[$monkeyId][$itemId]);
         $this->monkeyItems[$toMonkey][] = $worryLevel;
-        // echo "<pre>";
-        // print_r($this->monkeyItems);
     }
 
     private function getsBored($value) {
@@ -116,9 +82,7 @@ class Day11 {
         $lines = $this->inputData = explode("\n", (new LoadInput)->loadFile($filename));
         foreach($lines as $key => $line) {
             $indent = strspn($line, " ");
-            // echo "line ". $key .": ". strspn($line, " ") ." <br>";
             if(strlen($line) > 0) {
-
                 switch($indent) {
                     case 0:
                         // new monkey
@@ -133,7 +97,6 @@ class Day11 {
                         // operation
                         // test
                         $operator = trim(substr($line,0,strpos($line, ":",0)));
-                        // echo "op: ". $operator ."<br>";
                         if($operator == 'Starting items') {
                             $items = explode(",", substr($line, strpos($line, ":",0)+1));
                             foreach($items as $item) {
@@ -166,8 +129,12 @@ class Day11 {
     }
 
     private function addItemToMonkeyNo($monkeyId, $item) {
-        // echo "Add ". $item ." to ". $monkeyId ."<br>";
         $this->monkeyItems[$monkeyId][] = trim($item);
     }
 
+    public function getScore() {
+        arsort($this->monkeyInspections,);
+        $top2 = array_slice($this->monkeyInspections,0,2);
+        return $top2[0] * $top2[1];
+    }
 }

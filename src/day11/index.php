@@ -7,9 +7,9 @@ $filename = "input/input_test.txt";
 use day11\utils\Day11;
 
 $monkeys = new Day11($filename);
-$monkeys->startRounds(3);
+$monkeys->startRounds(20);
+echo "Score for round 1: ". $monkeys->getScore() ." (117624)";
 
-// print_r($monkeys->getItemList() );
-
-// echo "<Pre>";
-// var_dump($monkeys);
+$monkeys2 = new Day11($filename);
+$monkeys2->startRounds(1000);
+echo "Score for round 2: ". $monkeys2->getScore() ." (???)";
