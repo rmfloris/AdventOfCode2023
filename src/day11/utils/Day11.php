@@ -11,12 +11,14 @@ class Day11 {
     private array $monkeyInspections = [];
     private array $monkeyRules = [];
     private int $currentMonkeyId = 0;
+    private bool $monkeyGetsBored;
 
     public function __construct($filename) {
         $this->parseInput($filename);
     }
 
-    public function startRounds($numberOfRound=1) {
+    public function startRounds($numberOfRound=1, $getsBored = TRUE) {
+        $this->monkeyGetsBored = $getsBored;
         for($round=1;$round<=$numberOfRound;$round++) {
             $this->inspectItems();
         }
@@ -52,7 +54,8 @@ class Day11 {
     }
 
     private function getsBored($value) {
-        return floor($value / 3);
+        $superModulo = array_product(array_column($this->monkeyRules, "test"));
+        return ($this->monkeyGetsBored ? floor($value / 3) : $value % $superModulo);
     }
     private function applyOperation($monkeyId, $value) {
         $operation = $this->monkeyRules[$monkeyId]["operation"];
