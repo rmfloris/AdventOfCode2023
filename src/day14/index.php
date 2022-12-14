@@ -8,9 +8,11 @@ $filename = "input/input.txt";
 echo "<pre>";
 
 $sand = new Day14($filename);
-// echo "score: ". $sand->dropSandUnits(25);
+// echo "score: ". $sand->dropSandUnits(95, 2);
 echo "score part 1: ". $sand->dropSandUnits1() ." (1199) <br>";
-// var_dump($sand);
+
+$sand->setPart(2);
+echo "score part 2: ". $sand->dropSandUnits1() ." (23925) <br>";
 ?>
 <html>
     <head>
