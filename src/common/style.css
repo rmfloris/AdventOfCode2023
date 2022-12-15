@@ -1,5 +1,11 @@
 table, td {
-    border: 1px solid #000;
+    /* border: 1px solid #000; */
     padding: 2px;
     border-collapse: collapse;
+}
+
+th {
+    width: 10px;
+    overflow-wrap: anywhere;
+    vertical-align: bottom;
 }
