@@ -12,8 +12,8 @@ echo "<pre>";
 
 $sensors = new Day15($filename);
 
-echo "number of positions: ". $sensors->getPositionsAt(2000000);
-// var_dump($sensors);
+echo "Part 1 - Number of positions: ". $sensors->getPositionsAt(2000000);
+
 ?>
 <html>
     <head>

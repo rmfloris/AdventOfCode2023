@@ -8,6 +8,7 @@ class Day15 {
     private array $inputData;
     private array $map;
     private array $count = [];
+    private array $temp;
 
     public function __construct($filename) {
         $this->inputData = $this->parseData($filename);
@@ -101,20 +102,55 @@ class Day15 {
             ["x" => $x, "y" => $y, "distance" => $distance] = $sensorData;
 
             if($y >= ($row-$distance) && $y <= ($row+$distance) ) {
-                $numberOfYPositions = (($distance - abs($row-$y))*2)+1;
-                $adjustX = $numberOfYPositions / 2;
-                echo $key ." - ". $x ." - ". $y ." - ". $distance ." - " .$numberOfYPositions ."<br>";
-                
-                for($i=$x-$adjustX; $i<=$x+$adjustX;$i++){
-                    // echo "i: ". $i ."<br>";
-                    $key = $this->getKey($i, $row);
-                    // if(!isset($this->map[$key])) {
-                        // $this->map[$key] = "#";
-                        $score++;
-                    // }
-                }
-                
+                $numberOfYPositions = (($distance - abs($row-$y))*2);
+
+                $xMin = $x - $numberOfYPositions/2;
+                $xMax = $x + $numberOfYPositions/2;
+
+                $positions[$key] = array(
+                    "xMin" => $xMin,
+                    "xMax" => $xMax,
+                    "x" => $x
+                );
+
+                // echo $key ." - ". $x ." - ". $y ." - ". $distance ." - " .$numberOfYPositions ." - ". $xMin ." - ". $xMax ."<br>";
             }
+        }
+        
+        $xMinSort  = array_column($positions, 'xMin');
+        array_multisort($xMinSort, SORT_ASC, $positions);
+
+        $min = null;
+        $max = null;
+        $i=0;
+
+        foreach($positions as $key => $position) {
+            ["xMin" => $xMin, "xMax" => $xMax, "x" => $x] = $position;
+
+            // echo "Key: ". $key ." - ";
+            if($i == 0) {
+                $min = $xMin;
+                $max = $xMax;
+                $score += $max - $min; // delta
+                $score += 1; // x column
+                $i++;
+            } else {
+                if($xMin < $max && $xMax > $max) {
+                    $xMin = $max+1;
+                } elseif($xMin == $max) {
+                    $xMin += 1;
+                } else {
+                    $xMin = 0;
+                }
+                $min = $xMin;
+
+                if($x > $max) {
+                    $score += 1;
+                }
+                ($xMax > $max ? $max = $xMax : $xMax = 0);
+                $score += $xMax - $xMin; // delta
+            }
+            // echo $score ."<br>";
         }
         return $score;
     }
