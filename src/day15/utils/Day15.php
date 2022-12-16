@@ -8,7 +8,6 @@ class Day15 {
     private array $inputData;
     private array $map;
     private array $count = [];
-    private array $temp;
 
     public function __construct($filename) {
         $this->inputData = $this->parseData($filename);
@@ -51,6 +50,10 @@ class Day15 {
             $keyBeacon = $this->getKey($positions[0][2], $positions[0][3]);
             $this->map[$keySensor] = "S";
             $this->map[$keyBeacon] = "B";
+            $this->beacon[$keyBeacon] = [
+                "x" => $positions[0][2],
+                "y" => $positions[0][3]
+            ];
             $this->sensor[$keySensor] = array(
                 "x" => $positions[0][0],
                 "y" => $positions[0][1],
@@ -69,18 +72,18 @@ class Day15 {
     public function printGraph() {
         $table = "<table>";
         $table .= "<tr><th></th>";
-        // foreach(range(-2, 25) as $header) {
-        foreach(range(0, 20) as $header) {
+        foreach(range(-2, 25) as $header) {
+        // foreach(range(0, 20) as $header) {
             $table .= "<th>". $header ."</th>";
         }
         $table .= "</tr>";
         
-        // for($y = 0; $y <= 22; $y++) {
-        for($y = 0; $y <= 20; $y++) {
+        for($y = 0; $y <= 22; $y++) {
+        // for($y = 0; $y <= 20; $y++) {
             $table .= "<tr>";
             $table .= "<td>". $y ."</td>";
-            // for($x = -2; $x <= 25; $x++) {
-            for($x = 0; $x <= 20; $x++) {
+            for($x = -2; $x <= 25; $x++) {
+            // for($x = 0; $x <= 20; $x++) {
                 $value = $this->map[$this->getKey($x, $y)] ?? ".";
                 $table .= "<td>". $value ."</td>";
             }
@@ -121,6 +124,72 @@ class Day15 {
         $xMinSort  = array_column($positions, 'xMin');
         array_multisort($xMinSort, SORT_ASC, $positions);
 
+        $max = null;
+        $i=0;
+
+        foreach($positions as $key => $position) {
+            ["xMin" => $xMin, "xMax" => $xMax] = $position;
+
+            echo "Key: ". $key ." - ";
+            
+            // correct for 0 in range
+            ($xMin <= 0 && $xMax >= 0 ? $score += 1 : null);
+            if($i == 0) {
+                $min = $xMin;
+                $max = $xMax;
+                $score += $max - $min; // delta
+                $i++;
+            } else {
+                ($xMin <= $max && $xMax <= $max ? $xMin = 0 : $xMin = $max);
+                ($xMax > $max ? $max = $xMax : $xMax = 0);
+                $score += $xMax - $xMin; // delta
+            }
+            echo "xMin: ". $xMin ." - xMax: ". $xMax ." - ";
+            echo "score: ". $score ."<br>";
+        }
+        // exclude beacons
+        $score -= $this->getBeaconsAtRow($row);
+        echo "Beacons to exclude: ". $this->getBeaconsAtRow($row) ."<br>";
+        // echo "final score: ". $score ."<br>";
+        return $score;
+    }
+
+    private function getBeaconsAtRow(int $row) {
+        return count(array_keys(array_column($this->beacon, 'y'), $row));
+    }
+
+    public function findDistress(int $min, int $max) {
+        // for($y=$min; $y<=$max; $y++) {
+        //     echo "Row: ". $y ." -> ". $this->fillRowRange($y, $min, $max) ."<br>";
+        // }
+        echo $this->fillRowRange(2, $min, $max);
+    }
+
+    private function fillRowRange($row, $minRange, $maxRange) {
+        $score = 0;
+
+        foreach($this->sensor as $key => $sensorData) {
+            ["x" => $x, "y" => $y, "distance" => $distance] = $sensorData;
+
+            if($y >= ($row-$distance) && $y <= ($row+$distance) ) {
+                $numberOfYPositions = (($distance - abs($row-$y))*2);
+
+                $xMin = ($x - $numberOfYPositions/2 <= $minRange ? $minRange : $x - $numberOfYPositions/2);
+                $xMax = ($x + $numberOfYPositions/2 >= $maxRange ? $maxRange : $x + $numberOfYPositions/2);
+
+                $positions[$key] = array(
+                    "xMin" => $xMin,
+                    "xMax" => $xMax,
+                    "x" => $x
+                );
+
+                echo $key ." - ". $x ." - ". $y ." - ". $distance ." - " .$numberOfYPositions ." - ". $xMin ." - ". $xMax ."<br>";
+            }
+        }
+        
+        $xMinSort  = array_column($positions, 'xMin');
+        array_multisort($xMinSort, SORT_ASC, $positions);
+
         $min = null;
         $max = null;
         $i=0;
@@ -128,14 +197,15 @@ class Day15 {
         foreach($positions as $key => $position) {
             ["xMin" => $xMin, "xMax" => $xMax, "x" => $x] = $position;
 
-            // echo "Key: ". $key ." - ";
+            echo "Key: ". $key ." - ";
             if($i == 0) {
                 $min = $xMin;
                 $max = $xMax;
-                $score += $max - $min; // delta
-                $score += 1; // x column
+                echo "xmin: ". $xMin . " - xMax: ". $xMax ." ";
+                $score += ($max - $min)+1; // delta
                 $i++;
             } else {
+                echo "xmin: ". $xMin . "(". $min .") - xMax: ". $xMax ."(".$max .") ";
                 if($xMin < $max && $xMax > $max) {
                     $xMin = $max+1;
                 } elseif($xMin == $max) {
@@ -151,7 +221,7 @@ class Day15 {
                 ($xMax > $max ? $max = $xMax : $xMax = 0);
                 $score += $xMax - $xMin; // delta
             }
-            // echo $score ."<br>";
+            echo "score: ". $score ."<br>";
         }
         return $score;
     }
