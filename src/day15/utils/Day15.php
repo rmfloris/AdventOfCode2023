@@ -13,14 +13,13 @@ class Day15 {
     public function __construct($filename) {
         $this->inputData = $this->parseData($filename);
         $this->createMap();
-        // $this->fillMap();
     }
 
     private function parseData($filename) {
         return (new LoadInput)->loadFileToLines($filename);
     }
 
-    private function fillMap() {
+    public function fillMap() {
         foreach($this->sensor as $position => $sensor) {
             $distance = $sensor["distance"];
             [$xPos, $yPos] = json_decode($position);
@@ -32,7 +31,7 @@ class Day15 {
                 for($y=$yPos-$yCorrection;$y<=$yPos+$yCorrection;$y++) {
                     $key = $this->getKey($x, $y);
                     if(!isset($this->map[$key])) {
-                        // $this->map[$key] = "#";
+                        $this->map[$key] = "#";
                         (isset($this->count[$y]) ? $this->count[$y] += 1 : $this->count[$y] = 1);
                     }
                 }
@@ -67,24 +66,27 @@ class Day15 {
         return abs($x1 - $x2) + abs($y1 - $y2);
     }
 
-    // public function printGraph() {
-    //     $table = "<table>";
-    //     $table .= "<tr><th></th>";
-    //     foreach(range(-2, 25) as $header) {
-    //         $table .= "<th>". $header ."</th>";
-    //     }
-    //     $table .= "</tr>";
+    public function printGraph() {
+        $table = "<table>";
+        $table .= "<tr><th></th>";
+        // foreach(range(-2, 25) as $header) {
+        foreach(range(0, 20) as $header) {
+            $table .= "<th>". $header ."</th>";
+        }
+        $table .= "</tr>";
         
-    //     for($y = 0; $y <= 22; $y++) {
-    //         $table .= "<tr>";
-    //         $table .= "<td>". $y ."</td>";
-    //         for($x = -2; $x <= 25; $x++) {
-    //             $value = $this->map[$this->getKey($x, $y)] ?? ".";
-    //             $table .= "<td>". $value ."</td>";
-    //         }
-    //     }
-    //     return $table;
-    // }
+        // for($y = 0; $y <= 22; $y++) {
+        for($y = 0; $y <= 20; $y++) {
+            $table .= "<tr>";
+            $table .= "<td>". $y ."</td>";
+            // for($x = -2; $x <= 25; $x++) {
+            for($x = 0; $x <= 20; $x++) {
+                $value = $this->map[$this->getKey($x, $y)] ?? ".";
+                $table .= "<td>". $value ."</td>";
+            }
+        }
+        return $table;
+    }
 
     private function getKey($x, $y) {
         return json_encode([(string)$x, (string)$y]);
@@ -92,7 +94,6 @@ class Day15 {
 
     public function getPositionsAt($row) {
         return $this->fillRow($row);
-        // return $this->count[$row];
     }
 
     private function fillRow($row) {

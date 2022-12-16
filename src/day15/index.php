@@ -4,15 +4,17 @@ ini_set('max_execution_time', 180);
 require_once '../autoload.php';
 use day15\utils\Day15;
 
-$filename = "input/input_test.txt";
-$filename = "input/input.txt";
-// $filename = "input/input_sample.txt";
+$filename = "../input/15_input_test.txt";
+// $filename = "../input/15_input.txt";
+// $filename = "../input/15_input_sample.txt";
 
 echo "<pre>";
 
 $sensors = new Day15($filename);
+$sensors->fillMap();
 
-echo "Part 1 - Number of positions: ". $sensors->getPositionsAt(2000000);
+// echo "Part 1 - Number of positions: ". $sensors->getPositionsAt(2000000);
+echo "Part 1 - Number of positions: ". $sensors->getPositionsAt(10);
 
 ?>
 <html>
@@ -22,7 +24,7 @@ echo "Part 1 - Number of positions: ". $sensors->getPositionsAt(2000000);
     </head>
     <body>
         <?php
-        // echo $sensors->printGraph();
+        echo $sensors->printGraph();
         ?>
     </body>
 </html>
