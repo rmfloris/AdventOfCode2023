@@ -12,12 +12,13 @@ echo "<pre>";
 
 $sensors = new Day15($filename);
 $sensorsTest = new Day15($filenameTest);
-// $sensors->fillMap();
+$sensorsTest->fillMap();
 
 echo "Part 1 - Number of positions: ". $sensors->getPositionsAt(2000000) ." (5394423)<br>";
-echo "Part 1 - Number of positions: ". $sensorsTest->getPositionsAt(10);
+echo "Part 1 (test data) - Number of positions: ". $sensorsTest->getPositionsAt(10) ." (26)<br>";;
 echo "<p>";
-// echo $sensors->findDistress(0, 20);
+echo "Part 1 (test data) Distress frequency: ". $sensors->findDistressFrequency(0, 4000000) ." (11840879211051)<br>";
+echo "Part 2 (test data) Distress frequency: ". $sensorsTest->findDistressFrequency(0, 20) ." (56000011)";
 ?>
 <html>
     <head>
@@ -26,7 +27,7 @@ echo "<p>";
     </head>
     <body>
         <?php
-        // echo $sensors->printGraph();
+        echo $sensorsTest->printGraph();
         ?>
     </body>
 </html>
