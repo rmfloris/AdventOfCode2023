@@ -10,6 +10,7 @@ class Day18 {
     private array $grid;
     private array $max;
     private int $sidesCount = 0;
+    private int $surfaceCount = 0;
 
     public function __construct($filename)
     {
@@ -20,13 +21,12 @@ class Day18 {
 
     public function preparePart2() {
         $this->setMaxBoundries();
-        $this->findAir();
+        $this->findSurface();
     }
 
-    private function findAir() {
+    private function findSurface() {
         $start = $this->getKey(0,0,0);
         $queue[] = array($start);
-        $surface = 0;
 
         while(count($queue)) {
             $droplet = array_shift($queue);
@@ -38,9 +38,7 @@ class Day18 {
             if(isset($this->grid[$this->getKey($x, $y,$z)])) continue;
             $visited[$droplet[0]] = 1;
 
-
-            $surface += $this->checkFaces($x, $y, $z) / -2;
-            $this->sidesCount += $this->isAir($x, $y, $z);
+            $this->surfaceCount += $this->checkFaces($x, $y, $z) / -2;
 
             $queue[] = [$this->getKey($x+1, $y,   $z)];
             $queue[] = [$this->getKey($x-1, $y,   $z)];
@@ -48,21 +46,7 @@ class Day18 {
             $queue[] = [$this->getKey($x,   $y-1, $z)];
             $queue[] = [$this->getKey($x,   $y,   $z+1)];
             $queue[] = [$this->getKey($x,   $y,   $z-1)];
-            // $i++;
         }
-        // print_r($this->max);
-        // echo "i: ". $i ."<br>";
-        echo $surface;
-
-    }
-
-    private function isAir($x, $y, $z) {
-        if(isset($this->grid[$this->getKey($x, $y, $z)])) return 0;
-        if($this->checkFaces($x, $y, $z) == -12) {
-            echo $x ."-". $y ."-".$z." is air<br>";
-            return -6;
-        }
-        return 0;
     }
 
     private function setMaxBoundries() {
@@ -79,6 +63,10 @@ class Day18 {
 
     public function getSides() {
         return $this->sidesCount;
+    }
+
+    public function getSurfaceCount() {
+        return $this->surfaceCount;
     }
 
     private function setMaxSides() {

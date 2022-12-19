@@ -11,6 +11,6 @@ $dice = new Day18($filename);
 echo "Number of visible sides: ". $dice->getSides() ." (3522)<br>";
 
 $dice->preparePart2();
-echo "Number of visible sides: ". $dice->getSides() ."(2074)<br>";
+echo "Number of visible sides: ". $dice->getSurfaceCount() ." (2074)<br>";
 
 // var_dump($dice);
