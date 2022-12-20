@@ -1,18 +1,17 @@
 <?php
 
-namespace day20\utils;
+namespace day20;
 
-use common\LoadInput;
+use common\Day;
 
-class Day20 {
-    private array $inputData;
+class Day20 extends Day {
     private array $original;
     private int $decriptionKey = 811589153;
     private int $inputLength = 0;
 
-    public function __construct($filename)
+    protected function LoadData(): void
     {
-        $this->inputData = $this->parseData($filename);
+        parent::loadData();
         foreach($this->inputData as $key => $value) {
             $this->original[] = [
                 "index" => $key,
@@ -22,11 +21,7 @@ class Day20 {
         $this->inputLength = count($this->inputData);
     }
 
-    private function parseData($filename) {
-        return (new LoadInput)->loadFileToLines($filename);
-    }
-
-    public function applyDecriptionKey() {
+    public function applyDecriptionKey(): void {
         foreach($this->original as $original) {
             $originalNew[] = [
                 "index" => $original["index"],
@@ -38,13 +33,9 @@ class Day20 {
 
     public function startMoving($number = 1) {
         $data = $this->startMixing($number);
-        // print_r($data);
 
         $zeroIndex = $this->findZeroIndex($data);
-        // echo "zero: ". $zeroIndex ."<br>";
         $index = ($zeroIndex + 1000) % $this->inputLength;
-        // echo "index: ". $index ."<br>";
-        // echo $data[$index]["movement"];
 
         $answer = 0;
         foreach([1000,2000,3000] as $offset) {
