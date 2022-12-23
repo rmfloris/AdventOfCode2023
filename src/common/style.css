@@ -4,6 +4,10 @@ table, td {
     border-collapse: collapse;
 }
 
+td {
+    width: 12px;
+}
+
 th {
     width: 10px;
     overflow-wrap: anywhere;
