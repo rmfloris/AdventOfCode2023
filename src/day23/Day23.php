@@ -9,6 +9,8 @@ class Day23 extends Day {
     private array $moveDirection = ["N", "S", "W", "E"];
     // private array $elfsLocations; // contains X-Y coords
     private array $elfsLocations1; // contains X-Y coords
+    private int $rounds = 0;
+    private bool $noMoreMoves = false;
 
     protected function loadData(): void {
         parent::LoadData();
@@ -31,7 +33,12 @@ class Day23 extends Day {
     public function startRounds($numberOfRounds = 1) {
         for($i=1; $i<=$numberOfRounds; $i++) {
             // echo "round #". $i ."<br>";
-            if(!$proposals = $this->findMoves()) break;
+            $this->rounds = $i;
+            if(!$proposals = $this->findMoves()) {
+                $this->noMoreMoves = true;
+                break;
+
+            }
                 
             // print_r($proposals);
             $proposals = $this->checkProposals($proposals);
@@ -46,11 +53,13 @@ class Day23 extends Day {
     private function checkProposals(array $proposals):array
     {
         $emptyKeys = array_keys($proposals, "");
-        if(count($emptyKeys) >1) {
+        
+        if(count($emptyKeys) >= 1) {
             foreach($emptyKeys as $key) {
                 unset($proposals[$key]);
             }
         }
+
         foreach($proposals as $coords) {
             $keys = array_keys($proposals, $coords);
             if(count($keys) >1) {
@@ -67,6 +76,11 @@ class Day23 extends Day {
     {
         foreach($proposals as $elf => $coords) {
             [$x, $y] = json_decode($coords);
+            if(is_null($x)) {
+                echo "null for x<br>";
+                echo "round: ". $this->rounds ."<br>";
+                print_r($proposals);
+            }
             unset($this->elfsLocations1[$elf]);
             $this->elfsLocations1[Helper::getKey($x, $y)] = [
                 "x" => $x,
@@ -84,14 +98,22 @@ class Day23 extends Day {
         $proposed = [];
         foreach($this->elfsLocations1 as $elf => $position) {
             ["x" => $x, "y" => $y] = $position;
-            // echo "x: ". $x ." y: ". $y ."<br>";
+            // if($x == 73 && $y == 85 && $this->rounds == 804) {
+            //     echo "x: ". $x ." y: ". $y ."<br>";
+            // }
 
             if($this->isAnyoneAround($x, $y)) {
                 // echo "need to move<br>";
                 $proposed[$elf] = $this->findMove($x, $y);
+                
+                // if($x == 73 && $y == 85 && $this->rounds == 804) {
+                //     echo "proposal -> ". print_r($proposed[$elf], true) ."<br>";
+                // }
             }
             else {
-                // echo "No need to move<br>";
+                // if($x == 73 && $y == 85 && $this->rounds == 804) {
+                //     echo "No need to move<br>";
+                // }
             }
         }
         return $proposed;
@@ -216,6 +238,7 @@ class Day23 extends Day {
         $minY = (int)min(array_column($this->elfsLocations1, "y"));
         $maxY = (int)max(array_column($this->elfsLocations1, "y"));
 
+        // echo $minX ." x ". $maxX ." x ". $minY ." x ". $maxY ."<br>";
         // echo count(range($minX, $maxX)) ."<br>";
         // echo count(range($minY, $maxY)) ."<br>";
         // echo (count(range($minX, $maxX))*count(range($minY, $maxY))) ."<br>";
@@ -223,5 +246,10 @@ class Day23 extends Day {
         // echo "aantal: ". count($this->elfsLocations1) ."<br>";
 
         return (count(range($minX, $maxX))*count(range($minY, $maxY)))-count($this->elfsLocations1);
+    }
+
+    public function getRounds(): int
+    {
+        return ($this->noMoreMoves ? $this->rounds : 0);
     }
 }
