@@ -5,7 +5,7 @@
         Results:
         <ul>
         <?php
-        for($i = 1; $i<25; $i++) {
+        for($i = 1; $i<=25; $i++) {
             echo "<li><a href='/day". $i ."/'>Day ". $i ."</a></li>";
         }
         ?>
