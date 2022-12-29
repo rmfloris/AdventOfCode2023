@@ -34,7 +34,8 @@ class Day {
     protected function getArrayFromInputFile(): array
     {
         $inputFilename = $this->getInputFilename();
-        return file($inputFilename, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+        return file($inputFilename, FILE_IGNORE_NEW_LINES);
+        // return file($inputFilename, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
     }
 
     protected function getInputFilename(): string

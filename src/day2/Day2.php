@@ -1,11 +1,12 @@
 <?php
 
-namespace day2\utils;
+namespace day2;
 
-class ScoreCalculator {
+use common\Day;
+
+class Day2 extends Day {
 
     private $moves = array();
-    private $inputData = array();
     private $points = [
         "A" => 1, // Rock
         "B" => 2, // Paper
@@ -37,13 +38,14 @@ class ScoreCalculator {
         "Z" => 6
     ];
 
-    public function __construct($inputfile) {
-        $this->inputData = $this->parseInput($inputfile);
+    protected function LoadData():void
+    {
+        parent::loadData();
+        $this->loadMoves();
     }
 
-    private function parseinput($inputfile) {
-        $this->inputData = explode("\n", $this->loadFile($inputfile));
-
+    private function loadMoves(): void
+    {
         foreach($this->inputData as $setOfMoves) {
             $movesData = explode(" ", $setOfMoves);
             $this->moves[] = [
@@ -72,7 +74,7 @@ class ScoreCalculator {
     private function defineMove($moves) {
         if($this->strategicOutcome[$moves["me"]] == "draw") { return $moves["opponent"]; }
 
-        return $this->myMoveOptions[$this->strategicOutcome[$moves["me"]]][$moves["opponent"]];        
+        return $this->myMoveOptions[$this->strategicOutcome[$moves["me"]]][$moves["opponent"]];
     }
 
     private function gameResult($moves) {

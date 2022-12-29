@@ -2,11 +2,8 @@
 
 require_once '../autoload.php';
 
-use day2\utils\ScoreCalculator;
+use day2\Day2;
 
-$file = "input/input.txt";
-// $file = "input/input_test.txt";
-
-$score = new scoreCalculator($file);
+$score = new Day2();
 echo $score->calculateResult();
 
