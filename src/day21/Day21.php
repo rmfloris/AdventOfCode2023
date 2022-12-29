@@ -33,25 +33,18 @@ class Day21 extends Day {
 
     public function getRootNumber() {
         $i=0;
-        // while(count($this->monkeyNumbers) < $this->inputLength && $i< 100) {
             while(count($this->monkeyNumbers) < $this->inputLength) {
-            echo "round ". $i ."<br>";
             foreach($this->monkeys as $monkeyName => $details) {
                 $monkey1 = $details["monkey1"];
                 $monkey2 = $details["monkey2"];
                 
-                echo "Before -> monkey: ". $monkeyName ." 1: ". $monkey1 ." - 2: ". $monkey2 ."<br>";
-                                
                 $this->monkeys[$monkeyName]["monkey1"] = $this->checkIfMonkeyHasNumber($monkey1);
                 $this->monkeys[$monkeyName]["monkey2"] = $this->checkIfMonkeyHasNumber($monkey2);
 
                 $this->canCalculate($monkeyName, $monkey1, $monkey2);
-
-                // echo "After -> monkey: ". $monkeyName ." 1: ". $this->monkeys[$monkeyName]["monkey1"] ." - 2: ". $this->monkeys[$monkeyName]["monkey2"] ."<br>";
             }
             $i++;
         }
-        echo "done<p>";
         return $this->monkeyNumbers["root"];
     }
 
@@ -77,7 +70,6 @@ class Day21 extends Day {
             $this->monkeyNumbers[$monkeyName] = $outcome;
             unset($this->monkeys[$monkeyName]);
         }
-
     }
 
     private function checkIfMonkeyHasNumber($monkeyToCheck) {
@@ -90,8 +82,5 @@ class Day21 extends Day {
                 return $this->monkeyNumbers[$monkeyToCheck];
             }
         }
-        
-        
-        
     }
 }

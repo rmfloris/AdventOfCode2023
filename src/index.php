@@ -1,6 +1,6 @@
 <html>
     <body>
-        <a href="https://adventofcode.com/2022">Avent of Code</a> 
+        <a href="https://adventofcode.com/2022">Avent of Code</a>
         <p></p>
         Results:
         <ul>

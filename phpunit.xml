@@ -1,0 +1,13 @@
+<phpunit bootstrap="tests/bootstrap.php" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.0/phpunit.xsd"
+         extensionsDirectory="tools/phpunit.d"
+         testdox="true"
+         colors="true">
+
+  <testsuites>
+    <testsuite name="My whole project">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

@@ -16,6 +16,8 @@ class Day {
         if($test) $this->setOption("test");
         
         $this->loadData();
+
+        return $this;
         
     }
 
@@ -38,9 +40,9 @@ class Day {
     protected function getInputFilename(): string
     {
         if ($this->getOption('test')) {
-            return "../input/sample/day{$this->dayNumber}.txt";
+            return __DIR__."/../input/sample/day{$this->dayNumber}.txt";
         } else {
-            return "../input/day{$this->dayNumber}.txt";
+            return __DIR__."/../input/day{$this->dayNumber}.txt";
         }
     }
 

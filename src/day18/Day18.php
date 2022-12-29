@@ -1,20 +1,17 @@
 <?php
 
-namespace day18\utils;
+namespace day18;
+use common\Day;
 
-use common\LoadInput;
-
-
-class Day18 {
-    private array $inputData;
+class Day18 extends Day {
     private array $grid;
     private array $max;
     private int $sidesCount = 0;
     private int $surfaceCount = 0;
 
-    public function __construct($filename)
+    protected function loadData(): void
     {
-        $this->inputData = $this->parseData($filename);
+        parent::loadData();
         $this->sidesCount = $this->setMaxSides();
         $this->addToGrid();
     }
@@ -22,6 +19,7 @@ class Day18 {
     public function preparePart2() {
         $this->setMaxBoundries();
         $this->findSurface();
+        return $this;
     }
 
     private function findSurface() {
@@ -55,10 +53,6 @@ class Day18 {
             "y" => max(array_column($this->grid, "y")),
             "z" => max(array_column($this->grid, "z"))
         ];
-    }
-
-    private function parseData($filename) {
-        return (new LoadInput)->loadFileToLines($filename);
     }
 
     public function getSides() {

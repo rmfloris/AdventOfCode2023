@@ -2,9 +2,7 @@
 require_once '../autoload.php';
 use day20\Day20;
 
-// $coords = new Day21("true");
 $coords = new Day20();
-
 echo "answer part 1: ". $coords->startMoving() ." (872)<br>";
 
 $coords->applyDecriptionKey();

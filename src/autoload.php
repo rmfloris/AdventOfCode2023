@@ -15,5 +15,5 @@ spl_autoload_register(function ($className) {
     // get file if it is readable
         if(is_readable($file)) {
             require_once $file;
-        } 
+        }
 });

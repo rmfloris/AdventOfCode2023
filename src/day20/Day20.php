@@ -21,7 +21,7 @@ class Day20 extends Day {
         $this->inputLength = count($this->inputData);
     }
 
-    public function applyDecriptionKey(): void {
+    public function applyDecriptionKey() {
         foreach($this->original as $original) {
             $originalNew[] = [
                 "index" => $original["index"],
@@ -29,6 +29,7 @@ class Day20 extends Day {
             ];
         }
         $this->original = $originalNew;
+        return $this;
     }
 
     public function startMoving($number = 1) {

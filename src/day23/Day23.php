@@ -40,14 +40,12 @@ class Day23 extends Day {
 
             }
                 
-            // print_r($proposals);
             $proposals = $this->checkProposals($proposals);
-            // print_r($proposals);
             $this->performProposals($proposals);
-            // print_r($this->elfsLocations1);
 
             $this->updateMoveOptions();
         }
+        return $this;
     }
 
     private function checkProposals(array $proposals):array
