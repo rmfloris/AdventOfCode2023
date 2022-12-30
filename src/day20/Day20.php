@@ -31,8 +31,18 @@ class Day20 extends Day {
         $this->original = $originalNew;
         return $this;
     }
+    public function part1()
+    {
+        return $this->startMoving();
+    }
 
-    public function startMoving($number = 1) {
+    public function part2()
+    {
+        $this->applyDecriptionKey();
+        return $this->startMoving(10);
+    }
+
+    private function startMoving($number = 1) {
         $data = $this->startMixing($number);
 
         $zeroIndex = $this->findZeroIndex($data);

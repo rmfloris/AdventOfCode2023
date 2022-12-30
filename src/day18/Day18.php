@@ -55,11 +55,12 @@ class Day18 extends Day {
         ];
     }
 
-    public function getSides() {
+    public function part1() {
         return $this->sidesCount;
     }
 
-    public function getSurfaceCount() {
+    public function part2() {
+        $this->preparePart2();
         return $this->surfaceCount;
     }
 

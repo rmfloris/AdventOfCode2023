@@ -1,15 +1,11 @@
 <?php
 require_once '../autoload.php';
-$filename = "input/input_test.txt";
-$filename = "input/input_test_large.txt";
-$filename = "input/input.txt";
 
-use day10\utils\Day10;
+use day10\Day10;
 
-$computer = new Day10($filename);
-$computer->startProgram();
+$computer = new Day10();
 
-echo "1.Total signal strenght: " . $computer->getSignalStrength() ." (14780)<br>";
+echo "1.Total signal strenght: " . $computer->part1() ." (14780)<br>";
 ?>
 <html>
     <head>

@@ -14,11 +14,11 @@ final class Day20Test extends TestCase
     
     public function testPart1(): void
     {
-        $this->assertSame(872, $this->day->startMoving());
+        $this->assertSame(872, $this->day->part1());
     }
 
     public function testPart2(): void
     {
-        $this->assertSame(5382459262696, $this->day->applyDecriptionKey()->startMoving(10));
+        $this->assertSame(5382459262696, $this->day->part2());
     }
 }

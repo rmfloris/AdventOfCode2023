@@ -4,7 +4,7 @@ namespace day25;
 
 use common\Day;
 
-class day25 extends Day {
+class Day25 extends Day {
 
     private array $snafu = [
         -2 => "=",
@@ -14,13 +14,17 @@ class day25 extends Day {
         2
     ];
 
-    public function getNumber() {
+    public function part1() {
         $sum = 0;
         foreach($this->inputData as $snafu) {
             $sum += $this->snafuToDecimal($snafu);
         }
 
         return $this->decimalToSnafu($sum);
+    }
+
+    public function part2() {
+        return false;
     }
 
     private function snafuToDecimal(string $snafu): int

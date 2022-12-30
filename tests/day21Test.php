@@ -14,7 +14,7 @@ final class Day21Test extends TestCase
     
     public function testPart1(): void
     {
-        $this->assertSame(80326079210554, $this->day->getRootNumber());
+        $this->assertSame(80326079210554, $this->day->part1());
     }
 
     public function testPart2(): void

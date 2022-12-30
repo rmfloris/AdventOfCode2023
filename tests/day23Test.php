@@ -14,11 +14,11 @@ final class Day23Test extends TestCase
     
     public function testPart1(): void
     {
-        $this->assertSame(4195, $this->day->startRounds(10)->countEmptyGround());
+        $this->assertSame(4195, $this->day->startRounds(10)->part1());
     }
 
     public function testPart2(): void
     {
-        $this->assertSame(1069, $this->day->startRounds(2000)->getRounds());
+        $this->assertSame(1069, $this->day->startRounds(2000)->part2());
     }
 }

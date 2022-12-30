@@ -31,7 +31,8 @@ class Day21 extends Day {
         $this->inputLength = count($this->inputData);
     }
 
-    public function getRootNumber() {
+    public function part1() {
+        // getRootNumber
         $i=0;
             while(count($this->monkeyNumbers) < $this->inputLength) {
             foreach($this->monkeys as $monkeyName => $details) {
@@ -82,5 +83,10 @@ class Day21 extends Day {
                 return $this->monkeyNumbers[$monkeyToCheck];
             }
         }
+    }
+
+    public function part2() 
+    {
+        return false;
     }
 }

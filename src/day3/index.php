@@ -1,17 +1,8 @@
 <?php
-
 require_once '../autoload.php';
 
-use day3\utils\DuplicateFinder;
+use day3\Day3;
 
-// $file = "input/input_test.txt";
-$file = "input/input.txt";
-
-$error = new DuplicateFinder($file);
-echo "Score part 1: ". $error->calculatePriorities() ."<br>";
-echo "Score part 2: ". $error->getPriorityByBadge() ."<br>";
-/**
- * part 2
- * group lines by 3
- * find letter in all three of them
- */
+$error = new Day3();
+echo "Score part 1: ". $error->part1() ."<br>";
+echo "Score part 2: ". $error->part2() ."<br>";

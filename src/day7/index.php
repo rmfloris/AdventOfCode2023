@@ -6,7 +6,7 @@ require_once '../autoload.php';
  * something for the christmas holidays
  */
 
-use day7\utils\Day7;
+use day7\Day7;
 
 $filename = "input/input_test.txt";
 // $filename = "input/input.txt";

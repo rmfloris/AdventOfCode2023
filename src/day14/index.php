@@ -1,18 +1,13 @@
 <?php
 require_once '../autoload.php';
-use day14\utils\Day14;
-
-$filename = "input/input_test.txt";
-$filename = "input/input.txt";
+use day14\Day14;
 
 echo "<pre>";
 
-$sand = new Day14($filename);
-// echo "score: ". $sand->dropSandUnits(95, 2);
-echo "score part 1: ". $sand->dropSandUnits1() ." (1199) <br>";
+$sand = new Day14();
+echo "score part 1: ". $sand->part1() ." (1199) <br>";
 
-$sand->setPart(2);
-echo "score part 2: ". $sand->dropSandUnits1() ." (23925) <br>";
+echo "score part 2: ". $sand->part2() ." (23925) <br>";
 ?>
 <html>
     <head>

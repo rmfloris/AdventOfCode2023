@@ -1,10 +1,8 @@
 <?php
 require_once '../autoload.php';
 
-use day5\utils\Day5;
+use day5\Day5;
 
-// $moves = "input/input_moves_test.txt";
-// $crates = "input/input_crates_test.txt";
 $moves = "input/input_moves.txt";
 $crates = "input/input_crates.txt";
 

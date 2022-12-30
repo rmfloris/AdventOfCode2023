@@ -14,11 +14,11 @@ final class Day18Test extends TestCase
     
     public function testPart1(): void
     {
-        $this->assertSame(3522, $this->day->getSides());
+        $this->assertSame(3522, $this->day->part1());
     }
 
     public function testPart2(): void
     {
-        $this->assertSame(2074, $this->day->preparePart2()->getSurfaceCount());
+        $this->assertSame(2074, $this->day->part2());
     }
 }

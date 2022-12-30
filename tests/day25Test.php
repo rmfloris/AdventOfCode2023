@@ -14,7 +14,7 @@ final class Day25Test extends TestCase
     
     public function testPart1(): void
     {
-        $this->assertSame("2-212-2---=00-1--102", $this->day->getNumber());
+        $this->assertSame("2-212-2---=00-1--102", $this->day->part1());
     }
 
     public function testPart2(): void

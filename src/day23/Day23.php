@@ -7,7 +7,6 @@ use common\Helper;
 
 class Day23 extends Day {
     private array $moveDirection = ["N", "S", "W", "E"];
-    // private array $elfsLocations; // contains X-Y coords
     private array $elfsLocations1; // contains X-Y coords
     private int $rounds = 0;
     private bool $noMoreMoves = false;
@@ -17,10 +16,6 @@ class Day23 extends Day {
         foreach($this->inputData as $y => $line) {
             foreach(str_split($line) as $x => $value) {
                 if($value == "#") {
-                    // $this->elfsLocations[]= [
-                    //     "x" => $x,
-                    //     "y" => $y
-                    // ];
                     $this->elfsLocations1[Helper::getKey($x, $y)] = [
                         "x" => $x,
                         "y" => $y
@@ -229,7 +224,7 @@ class Day23 extends Day {
         return $table;
     }
 
-    public function countEmptyGround(): int
+    public function part1(): int
     {
         $minX = (int)min(array_column($this->elfsLocations1, "x"));
         $maxX = (int)max(array_column($this->elfsLocations1, "x"));
@@ -246,8 +241,9 @@ class Day23 extends Day {
         return (count(range($minX, $maxX))*count(range($minY, $maxY)))-count($this->elfsLocations1);
     }
 
-    public function getRounds(): int
+    public function part2()
     {
+        // get number of rounds
         return ($this->noMoreMoves ? $this->rounds : 0);
     }
 }
