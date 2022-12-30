@@ -2,13 +2,15 @@
 
 namespace common;
 
-class Day {
+abstract class Day {
     protected array $inputData = [];
     protected array $options = [];
     protected int $dayNumber;
+    protected string $startTime;
 
     public function __construct($test = false)
     {
+        $this->startTime = $this->getMicroSeconds();
         $className = get_class($this);
         preg_match("#\d+#", $className, $matches);
         $this->dayNumber = $matches[0];
@@ -51,4 +53,24 @@ class Day {
     {
         return isset($this->options[$value]);
     }
+
+    public function getMemoryUsage(): string
+    {
+        $bytes = memory_get_peak_usage();
+        $size   = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $factor = floor(log($bytes, 1024));
+
+        return sprintf("%.2f", $bytes / pow(1024, $factor)) . @$size[$factor];
+    }
+
+    protected function getMicroSeconds() {
+        return microtime(true);
+    }
+
+    public function getElapsedTime() {
+        return round($this->getMicroSeconds() - $this->startTime, 4) ." seconds\n";
+    }
+
+    abstract protected function part1();
+    abstract protected function part2();
 }

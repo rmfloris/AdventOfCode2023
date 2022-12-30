@@ -10,7 +10,10 @@ class Day2 extends Day {
     private $points = [
         "A" => 1, // Rock
         "B" => 2, // Paper
-        "C" => 3  // Scissors
+        "C" => 3,  // Scissors
+        "X" => 1, // Rock
+        "Y" => 2, // Paper
+        "Z" => 3  // Scissors
     ];
     private $strategicOutcome = [
         "X" => "lose",
@@ -55,19 +58,18 @@ class Day2 extends Day {
         }
     }
 
-    public function calculateResult() {
+    private function calculateScorePart1($move) {
         $score = 0;
-        foreach($this->moves as $moves) {
-            $score += $this->calculateScore($moves);
-        }
+        $score += $this->points[$move["me"]];
+        $score += $this->pointsResult[$this->gameResult($move)];
         return $score;
     }
 
-    private function calculateScore($moves) {
+    private function calculateScorePart2($move) {
         $score = 0;
-        $myMove = $this->defineMove($moves);
+        $myMove = $this->defineMove($move);
         $score += $this->points[$myMove];
-        $score += $this->pointsResult[$moves["me"]];
+        $score += $this->pointsResult[$move["me"]];
         return $score;
     }
 
@@ -77,7 +79,7 @@ class Day2 extends Day {
         return $this->myMoveOptions[$this->strategicOutcome[$moves["me"]]][$moves["opponent"]];
     }
 
-    private function gameResult($moves) {
+    private function gameResult($move) {
         /**
          * A Rock
          * B Paper
@@ -86,38 +88,48 @@ class Day2 extends Day {
          * Y Paper
          * Z Scissors
          */
-        if($moves["opponent"] == "A") {
-            if($moves["me"] == "Y") {
+        if($move["opponent"] == "A") {
+            if($move["me"] == "Y") {
                 return "win";
             }
-            if($moves["me"] == "X") {
+            if($move["me"] == "X") {
                 return "draw";
             }
         }
-        if($moves["opponent"] == "B") {
-            if($moves["me"] == "Z") {
+        if($move["opponent"] == "B") {
+            if($move["me"] == "Z") {
                 return "win";
             }
-            if($moves["me"] == "Y") {
+            if($move["me"] == "Y") {
                 return "draw";
             }
         }
-        if($moves["opponent"] == "C") {
-            if($moves["me"] == "X") {
+        if($move["opponent"] == "C") {
+            if($move["me"] == "X") {
                 return "win";
             }
-            if($moves["me"] == "Z") {
+            if($move["me"] == "Z") {
                 return "draw";
             }
         }
         return "lose";
     }
 
-    private function loadFile($filename) {
-        $file = fopen($filename, "r") or die("Unable to open file!");
-        $data = fread($file,filesize($filename));
-        fclose($file);
+    public function part1()
+    {
+        $score = 0;
+        foreach($this->moves as $move) {
+            $score += $this->calculateScorePart1($move);
+        }
+        return $score;
+    }
 
-        return $data;
+    public function part2()
+    {
+        $score = 0;
+        foreach($this->moves as $moves) {
+            $score += $this->calculateScorePart2($moves);
+        }
+        return $score;
     }
 }

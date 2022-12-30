@@ -6,6 +6,7 @@ class Day1 extends Day {
 
     private $elves = array();
     private $elfDetail = array();
+    private int $numberOfPositions = 1;
 
     protected function loadData(): void
     {
@@ -24,36 +25,23 @@ class Day1 extends Day {
     private function getTop($number) {
         $sortedArray = $this->elves;
         arsort($sortedArray);
-        $totalCalories = 0;
-        $count = 0;
 
-        foreach($sortedArray as $calories) {
-            $totalCalories += $calories;
-            $count++;
-            if($count >= $number) {
-                break;
-            }
-        }
-        return $totalCalories;
+        return array_sum(array_slice($sortedArray,0,$number));
     }
 
-    public function showElves() {
-        return $this->elves;
+    public function setNumberOfPositions(int $positions)
+    {
+        $this->numberOfPositions = $positions;
+        return $this;
     }
 
-    public function getCaloriesTop($numberOfPositions) {
-        return $this->getTop($numberOfPositions);
-    }
-
-    public function showElvesDetails() {
-        return $this->elfDetail;
-    }
-
-    public function getMostCaloriesWithSingleElf() {
+    public function part1() {
+        //getMostCaloriesWithSingleElf
         return max($this->elves);
     }
 
-    public function getElfWithMostCalories() {
-        return array_search(max($this->elves), $this->elves);
+    public function part2() {
+        //getCaloriesTop
+        return $this->getTop($this->numberOfPositions);
     }
 }
