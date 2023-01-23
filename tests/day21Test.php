@@ -16,11 +16,4 @@ final class Day21Test extends TestCase
     {
         $this->assertSame(80326079210554, $this->day->part1());
     }
-
-    public function testPart2(): void
-    {
-        $this->markTestIncomplete(
-            'Solution has not been written.'
-          );
-    }
 }

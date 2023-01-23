@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
-use day25\day25;
+use day25\Day25;
 
 final class Day25Test extends TestCase
 {
@@ -15,12 +15,5 @@ final class Day25Test extends TestCase
     public function testPart1(): void
     {
         $this->assertSame("2-212-2---=00-1--102", $this->day->part1());
-    }
-
-    public function testPart2(): void
-    {
-        $this->markTestIncomplete(
-            'Solution has not been written.'
-          );
     }
 }
