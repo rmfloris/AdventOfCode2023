@@ -33,17 +33,19 @@ abstract class Day {
         $this->inputData = $this->getArrayFromInputFile();
     }
 
-    protected function getArrayFromInputFile(): array
+    protected function getArrayFromInputFile($inputFilename = NULL): array
     {
-        $inputFilename = $this->getInputFilename();
+        $inputFilename = $this->getInputFilename($inputFilename);
         return file($inputFilename, FILE_IGNORE_NEW_LINES);
         // return file($inputFilename, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
     }
 
-    protected function getInputFilename(): string
+    protected function getInputFilename($inputFilename = NULL): string
     {
         if ($this->getOption('test')) {
             return __DIR__."/../input/sample/day{$this->dayNumber}.txt";
+        } elseif(isset($inputFilename)) {
+            return __DIR__."/../input/{$inputFilename}.txt";
         } else {
             return __DIR__."/../input/day{$this->dayNumber}.txt";
         }
