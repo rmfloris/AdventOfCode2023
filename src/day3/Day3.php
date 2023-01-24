@@ -5,9 +5,12 @@ use common\Day;
 
 class Day3 extends Day {
 
-    private $rucksackContent = array();
-    private $badges = array();
-    private $duplicates = array();
+    /** @var array<mixed> */
+    private array $rucksackContent;
+    /** @var array<mixed> */
+    private array $badges;
+    /** @var array<mixed> */
+    private array $duplicates;
 
     protected function LoadData():void
     {
@@ -15,17 +18,17 @@ class Day3 extends Day {
         $this->loadRucksack();
     }
     
-    public function part1()
+    public function part1(): int
     {
         return $this->calculatePriorities();
     }
 
-    public function part2()
+    public function part2(): int
     {
         return $this->getPriorityByBadge();
     }
 
-    private function loadRucksack() {
+    private function loadRucksack(): void {
         foreach($this->inputData as $rucksack) {
             $this->rucksackContent[] = array(
                 substr($rucksack, 0, (strlen($rucksack)/2)),
@@ -34,12 +37,12 @@ class Day3 extends Day {
         }
     }
 
-    public function getPriorityByBadge() {
+    public function getPriorityByBadge(): int {
         $this->findBadgeLetter();
         return $this->calculate($this->badges);
     }
 
-    private function findBadgeLetter() {
+    private function findBadgeLetter(): void {
         $i=0;
         while($i < count($this->inputData)-2) {
             $rucksack1 = str_split($this->inputData[$i]);
@@ -55,31 +58,36 @@ class Day3 extends Day {
         }
     }
 
-    public function calculatePriorities() {
+    public function calculatePriorities(): int {
         $this->findDuplicateCharacters();
         return $this->calculate($this->duplicates);
     }
 
-    private function calculate($duplicates) {
+    /**
+     * @param array<string> $duplicates
+     */
+    private function calculate(array $duplicates): int {
         $score = 0;
         foreach($duplicates as $duplicate) {
             $score += $this->letterToPoints($duplicate);
-            // $this->duplicates[$key]["score"] = $this->letterToPoints($duplicate["letter"]);
         }
         return $score;
     }
 
-    public function showDuplicates() {
+    /**
+     * @return array<mixed>
+     */
+    public function showDuplicates(): array {
         return $this->duplicates;
     }
 
-    private function letterToPoints($letter) {
+    private function letterToPoints(string $letter): int {
         $listOfPoints = array_merge(range('a', 'z'), range('A', 'Z'));
 
         return array_search($letter, $listOfPoints)+1;
     }
 
-    private function findDuplicateCharacters() {
+    private function findDuplicateCharacters(): void {
         foreach($this->rucksackContent as $key => $compartments) {
             $compartment1 = str_split($compartments[0]);
             $compartment2 = str_split($compartments[1]);

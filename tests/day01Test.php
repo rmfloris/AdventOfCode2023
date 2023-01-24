@@ -19,6 +19,6 @@ final class Day01Test extends TestCase
 
     public function testPart2(): void
     {
-        $this->assertSame(200158, $this->day->setNumberOfPositions(3)->part2());
+        $this->assertSame(200158, $this->day->part2());
     }
 }

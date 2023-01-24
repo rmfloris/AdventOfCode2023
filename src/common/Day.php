@@ -6,24 +6,23 @@ abstract class Day {
     protected array $inputData = [];
     protected array $options = [];
     protected int $dayNumber;
-    protected string $startTime;
+    protected float $startTime;
 
-    public function __construct($test = false)
+    public function __construct(bool $test = false)
     {
         $this->startTime = $this->getMicroSeconds();
         $className = get_class($this);
         preg_match("#\d+#", $className, $matches);
-        $this->dayNumber = $matches[0];
+        $this->dayNumber = (int) $matches[0];
         
         if($test) $this->setOption("test");
         
         $this->loadData();
 
-        return $this;
-        
+        // return $this;        
     }
 
-    public function setOption($value): void
+    public function setOption(string $value): void
     {
         $this->options[$value] = true;
     }
@@ -33,14 +32,14 @@ abstract class Day {
         $this->inputData = $this->getArrayFromInputFile();
     }
 
-    protected function getArrayFromInputFile($inputFilename = NULL): array
+    protected function getArrayFromInputFile(?string $inputFilename = NULL): array
     {
         $inputFilename = $this->getInputFilename($inputFilename);
         return file($inputFilename, FILE_IGNORE_NEW_LINES);
         // return file($inputFilename, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
     }
 
-    protected function getInputFilename($inputFilename = NULL): string
+    protected function getInputFilename(string $inputFilename = NULL): string
     {
         if ($this->getOption('test')) {
             return __DIR__."/../input/sample/day{$this->dayNumber}.txt";
@@ -51,7 +50,7 @@ abstract class Day {
         }
     }
 
-    private function getOption($value): bool
+    private function getOption(string $value): bool
     {
         return isset($this->options[$value]);
     }
@@ -65,14 +64,16 @@ abstract class Day {
         return sprintf("%.2f", $bytes / pow(1024, $factor)) . @$size[$factor];
     }
 
-    protected function getMicroSeconds() {
+    protected function getMicroSeconds(): float
+    {
         return microtime(true);
     }
 
-    public function getElapsedTime() {
+    public function getElapsedTime(): string
+    {
         return round($this->getMicroSeconds() - $this->startTime, 4) ." seconds\n";
     }
 
-    abstract protected function part1();
-    abstract protected function part2();
+    abstract protected function part1(): int|string;
+    abstract protected function part2(): int|string;
 }

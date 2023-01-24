@@ -4,8 +4,8 @@ use common\Day;
 
 class Day1 extends Day {
 
-    private $elves = array();
-    private $elfDetail = array();
+    /** @var array<mixed> */
+    private array $elves = [];
     private int $numberOfPositions = 1;
 
     protected function loadData(): void
@@ -17,31 +17,28 @@ class Day1 extends Day {
                 $key++;
             } else {
                 (isset($this->elves[$key]) ? $this->elves[$key] += $calories: $this->elves[$key] = $calories);
-                $this->elfDetail[$key][] = $calories;
             }
         }
     }
 
-    private function getTop($number) {
+    private function getTop(int $number): int {
         $sortedArray = $this->elves;
         arsort($sortedArray);
 
         return array_sum(array_slice($sortedArray,0,$number));
     }
 
-    public function setNumberOfPositions(int $positions)
+    public function setNumberOfPositions(int $positions): void
     {
         $this->numberOfPositions = $positions;
-        return $this;
     }
 
-    public function part1() {
-        //getMostCaloriesWithSingleElf
+    public function part1(): int {
         return max($this->elves);
     }
 
-    public function part2() {
-        //getCaloriesTop
+    public function part2(): int {
+        $this->setNumberOfPositions(3);
         return $this->getTop($this->numberOfPositions);
     }
 }

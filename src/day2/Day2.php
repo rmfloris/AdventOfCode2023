@@ -6,8 +6,10 @@ use common\Day;
 
 class Day2 extends Day {
 
-    private $moves = array();
-    private $points = [
+    /** @var array<mixed> */
+    private array $moves = [];
+    /** @var array<mixed> */
+    private array $points = [
         "A" => 1, // Rock
         "B" => 2, // Paper
         "C" => 3,  // Scissors
@@ -15,12 +17,14 @@ class Day2 extends Day {
         "Y" => 2, // Paper
         "Z" => 3  // Scissors
     ];
-    private $strategicOutcome = [
+    /** @var array<mixed> */
+    private array $strategicOutcome = [
         "X" => "lose",
         "Y" => "draw",
         "Z" => "win"
     ];
-    private $myMoveOptions = [
+    /** @var array<mixed> */
+    private array $myMoveOptions = [
         "win" => [
             "A" => "B",
             "B" => "C",
@@ -32,7 +36,8 @@ class Day2 extends Day {
             "C" => "B"
         ]
     ];
-    private $pointsResult = [
+    /** @var array<mixed> */
+    private array $pointsResult = [
         "win" => 6,
         "draw" => 3,
         "lose" => 0,
@@ -58,14 +63,20 @@ class Day2 extends Day {
         }
     }
 
-    private function calculateScorePart1($move) {
+    /**
+     * @param array<string> $move
+     */
+    private function calculateScorePart1(array $move): int {
         $score = 0;
         $score += $this->points[$move["me"]];
         $score += $this->pointsResult[$this->gameResult($move)];
         return $score;
     }
 
-    private function calculateScorePart2($move) {
+    /**
+     * @param array<string> $move
+     */
+    private function calculateScorePart2(array $move): int {
         $score = 0;
         $myMove = $this->defineMove($move);
         $score += $this->points[$myMove];
@@ -73,13 +84,19 @@ class Day2 extends Day {
         return $score;
     }
 
-    private function defineMove($moves) {
+    /**
+     * @param array<string> $moves
+     */
+    private function defineMove(array $moves): string {
         if($this->strategicOutcome[$moves["me"]] == "draw") { return $moves["opponent"]; }
 
         return $this->myMoveOptions[$this->strategicOutcome[$moves["me"]]][$moves["opponent"]];
     }
 
-    private function gameResult($move) {
+    /**
+     * @param array<string> $move
+     */
+    private function gameResult(array $move): string {
         /**
          * A Rock
          * B Paper
@@ -115,7 +132,7 @@ class Day2 extends Day {
         return "lose";
     }
 
-    public function part1()
+    public function part1(): int
     {
         $score = 0;
         foreach($this->moves as $move) {
@@ -124,7 +141,7 @@ class Day2 extends Day {
         return $score;
     }
 
-    public function part2()
+    public function part2(): int
     {
         $score = 0;
         foreach($this->moves as $moves) {
