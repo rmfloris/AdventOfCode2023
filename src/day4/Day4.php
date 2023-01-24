@@ -4,7 +4,8 @@ namespace day4;
 use common\Day;
 
 class Day4 extends Day {
-    private $pairContent = array();
+    /** @var array<mixed> */
+    private array $pairContent;
 
     protected function LoadData():void
     {
@@ -12,17 +13,17 @@ class Day4 extends Day {
         $this->generatePairData();
     }
 
-    public function part1()
+    public function part1(): int
     {
         return $this->findNumberOfFullyOverlappingRange();
     }
 
-    public function part2()
+    public function part2(): int
     {
         return $this->findNumberOfPartylOverlappingRange();
     }
 
-    private function generatePairData() {
+    private function generatePairData(): void {
         foreach($this->inputData as $pair) {
             $dataPerPair = explode(",", $pair);
 
@@ -33,7 +34,7 @@ class Day4 extends Day {
         }
     }
 
-    public function findNumberOfFullyOverlappingRange() {
+    public function findNumberOfFullyOverlappingRange(): int {
         $number = 0;
         foreach($this->pairContent as $data) {
             $firstElf = explode("-", $data[0]);
@@ -47,7 +48,7 @@ class Day4 extends Day {
         return $number;
     }
 
-    public function findNumberOfPartylOverlappingRange() {
+    public function findNumberOfPartylOverlappingRange(): int {
         $number = 0;
         foreach($this->pairContent as $data) {
             $firstElf = explode("-", $data[0]);
@@ -60,12 +61,12 @@ class Day4 extends Day {
         return $number;
     }
 
-    private function checkFullOverlap($start1, $end1, $start2, $end2) {
+    private function checkFullOverlap(string $start1, string $end1, string $start2, string $end2): bool {
         if($start1 <= $start2 && $end1 >= $end2) { return true; }
         return false;
     }
 
-    private function checkpartlyOverlap($firstStart, $firstEnd, $secondStart, $secondEnd) {
+    private function checkpartlyOverlap(string $firstStart, string $firstEnd, string $secondStart, string $secondEnd): bool {
         return in_array($firstStart, range($secondStart, $secondEnd)) || 
         in_array($firstEnd, range($secondStart, $secondEnd)) || 
         in_array($secondStart, range($firstStart, $firstEnd)) || 
