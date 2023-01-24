@@ -1,7 +1,7 @@
 <?php
 require_once '../autoload.php';
 error_reporting(E_ALL & ~E_WARNING);
-use day13\utils\Day13;
+use day13\Day13;
 
 $filename = "input/input_test.txt";
 $filename = "input/input_sample.txt";

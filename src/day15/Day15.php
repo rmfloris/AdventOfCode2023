@@ -8,6 +8,8 @@ class Day15 extends Day {
 
     private array $map;	
     private array $count = [];	
+    private array $beacon = [];
+    private array $sensor = [];
     private int $xPosition;	
 
     protected function loadData(): void
@@ -25,30 +27,6 @@ class Day15 extends Day {
     {
         return $this->findDistressFrequency(0, 4000000);
     }
-
-    public function fillMap() {	
-        foreach($this->sensor as $position => $sensor) {	
-            $distance = $sensor["distance"];	
-            [$xPos, $yPos] = json_decode($position);	
-            // echo $distance;	
-
-            $yCorrection = 0;	
-            $max = false;	
-            for($x=$xPos-$distance; $x<=$xPos+$distance+1;$x++) {	
-                for($y=$yPos-$yCorrection;$y<=$yPos+$yCorrection;$y++) {	
-                    $key = $this->getKey($x, $y);	
-                    if(!isset($this->map[$key])) {	
-                        $this->map[$key] = "#";	
-                        (isset($this->count[$y]) ? $this->count[$y] += 1 : $this->count[$y] = 1);	
-                    }	
-                }	
-                ($max ? $yCorrection-- : $yCorrection++);	
-                if($yCorrection >= $distance) {	
-                    $max = true;	
-                }	
-            }	
-        }	
-    }	
 
     private function createMap() {	
         foreach($this->inputData as $line) {	
@@ -75,28 +53,6 @@ class Day15 extends Day {
         [$x1, $y1] = json_decode($position1);	
         [$x2, $y2] = json_decode($position2);	
         return abs($x1 - $x2) + abs($y1 - $y2);	
-    }	
-
-    public function printGraph() {	
-        $table = "<table>";	
-        $table .= "<tr><th></th>";	
-        // foreach(range(-2, 25) as $header) {	
-        foreach(range(0, 20) as $header) {	
-            $table .= "<th>". $header ."</th>";	
-        }	
-        $table .= "</tr>";	
-
-        // for($y = 0; $y <= 22; $y++) {	
-        for($y = 0; $y <= 20; $y++) {	
-            $table .= "<tr>";	
-            $table .= "<td>". $y ."</td>";	
-            // for($x = -2; $x <= 25; $x++) {	
-            for($x = 0; $x <= 20; $x++) {	
-                $value = $this->map[$this->getKey($x, $y)] ?? ".";	
-                $table .= "<td>". $value ."</td>";	
-            }	
-        }	
-        return $table;	
     }	
 
     private function getKey($x, $y) {	

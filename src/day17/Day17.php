@@ -39,6 +39,16 @@ class Day17 extends Day {
         $this->inputData = str_split($this->inputData[0]);
     }
 
+    public function part1() 
+    {
+        return 0;
+    }
+
+    public function part2() 
+    {
+        return 0;
+    }
+
     public function startMoving($moves = 5)
     {
         $shapeIndex = 0;

@@ -8,6 +8,7 @@ class Day21 extends Day {
     private array $monkeyNumbers;
     private int $totalMonkeys;
     private array $monkeys;
+    private int $inputLength;
 
     protected function LoadData(): void
     {

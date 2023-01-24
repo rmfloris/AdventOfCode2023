@@ -15,6 +15,7 @@ class Day11 extends Day{
     protected function loadData(): void 
     {
         parent::loadData();
+        $this->loadMonkeyData();
     }
 
     public function part1()
@@ -92,9 +93,8 @@ class Day11 extends Day{
         return 0;
     }
 
-    private function parseInput($filename) {
-        $lines = $this->inputData = explode("\n", (new LoadInput)->loadFile($filename));
-        foreach($lines as $key => $line) {
+    private function loadMonkeyData() {
+        foreach($this->inputData as $key => $line) {
             $indent = strspn($line, " ");
             if(strlen($line) > 0) {
                 switch($indent) {
