@@ -21,11 +21,13 @@ class Day22 extends Day {
 
     public function part1(): int
     {
-        var_dump($this->currentPosition);
+        // echo "start\n";
+        // var_dump($this->currentPosition);
         $this->startMoving();
-        var_dump($this->currentPosition);
-        var_dump($this->currentFacing);
-        return 0;
+        var_dump($this->calculateFinalPassword());
+        // var_dump($this->currentPosition);
+        // var_dump($this->currentFacing);
+        return $this->calculateFinalPassword();
     }
 
     public function part2(): int
@@ -35,33 +37,30 @@ class Day22 extends Day {
 
     private function startMoving(): void 
     {
-        // for($i=0; $i<count($this->moves["steps"]); $i++) {
-        for($i=0; $i<2; $i++) {
-            // do move
-            switch($this->currentFacing){
-                case 0:
-                    $this->checkMoveToRight($this->moves["steps"][$i]);
-                    break;
-                case 1:
-                    $this->checkMoveToDown($this->moves["steps"][$i]);
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-            }
-
-            $this->changeFacing($this->moves["turns"][$i]);
+        for($i=0; $i<count($this->moves["steps"]); $i++) {
+        // for($i=0; $i<4; $i++) {
+            // echo "loop ". $i ."\n";
+            // echo "number of steps: ". $this->moves["steps"][$i] ."\n";
+            // echo "direction: ". $this->currentFacing ."\n";
             /** options
              * no wall (#) so just move
              * wall (#) as x, so max X moves
              * end of array (pos + moves > max width | 0) -> continue next line
              */
+            $this->checkMove($this->moves["steps"][$i], $this->currentFacing);
+            $this->changeFacing($this->moves["turns"][$i]);
+            // var_dump($this->currentPosition);
         }
     }
 
     private function changeFacing(string $rotation): void
     {
+        /**
+         * 0 = R
+         * 1 = D
+         * 2 = L
+         * 3 = U
+         */
         switch($rotation) {
             case "R":
                 $this->incrementFacing();
@@ -84,38 +83,140 @@ class Day22 extends Day {
         $this->currentFacing = $newValue < 0 ? 3 : $newValue;
     }
 
-    private function checkMoveToRight(int $numberOfSteps): void {
+    private function checkMove(int $numberOfSteps, int $direction): void 
+    {
         ["x" => $currentX, "y" => $currentY] = $this->currentPosition;
-        $rowData = $this->getRowData($currentX);
+        $lineData = $this->getData($currentX, $currentY, $direction);
+        // echo "line: |". $lineData ."|\n";
+        // echo "length: ". strlen($lineData) ."\n";
+        $startOfMap = $this->getStartOfMap($lineData);
+        // echo "start of map: ". $startOfMap ."\n";
+        $endOfMap = $this->getEndOfMap($lineData, $startOfMap);
+        // echo "end of map: ". $endOfMap ."\n";
 
-        $startColumn = $this->getFirstColumn($rowData);
-        $endposition = $currentY + $numberOfSteps;
-        $firstWallPosition = strpos($rowData, "#", $startColumn);
-        $nextWallAfterCurrentPosition = strpos($rowData, "#", $currentY);
+        if($direction == 2 | $direction == 0) {
+            $startPosition = $currentX;
+            $proposedPosition = $startPosition + ($numberOfSteps * ($direction == 2 ? -1 : 1));
+        } else {
+            $startPosition = $currentY;
+            $proposedPosition = $startPosition + ($numberOfSteps * ($direction == 3 ? -1 : 1));
+        }
+        // echo "proposed Position: ". $proposedPosition ."\n";
+        
+        $firstWallPosition = $this->findNextWall($lineData, $direction, 0, $endOfMap);
+        // $nextWallAfterCurrentPosition = $this->findNextWall($lineData, $direction, $startPosition, $endOfMap);
 
-        // echo "firstwall: ". $firstWallPosition;
-        // echo "nextWall: ". $nextWallAfterCurrentPosition;
+        if($newPosition = $this->hitWall(
+                                $startPosition, 
+                                $proposedPosition, 
+                                $this->findNextWall($lineData, $direction, $startPosition, $endOfMap), 
+                                $direction)) {
+            // echo "hit wall\n";
+            // echo "Wall: ". $this->findNextWall($lineData, $direction, $startPosition, $endOfMap) ."\n";
+            // echo "New position: ". $newPosition ."\n";
+            // $newPosition = $nextWallAfterCurrentPosition-1;
+        } elseif($this->fitsOnMap($startOfMap, $endOfMap, $proposedPosition, $direction) ) {
+            // echo "To big\n";
+            // echo "firstWall: ". $firstWallPosition ."\n";
+            if($newPosition = $this->wallOnOtherSide($firstWallPosition, $startOfMap, $endOfMap, $direction)) {
+                // echo "end of wall position\n";
+                // echo "end of map:". $endOfMap ."\n";
+                // $newPosition = $endOfMap;
+            } else {
+                if($direction < 2) {
+                    $newProposedPosition = $startOfMap + ($proposedPosition - $endOfMap);
+                    $startPosition = $startOfMap;
+                }
+                if($direction > 1) {
+                    $newProposedPosition = $endOfMap - ($proposedPosition - $startOfMap);
+                    $startPosition = $endOfMap;
+                }
+                // echo "new: ". $newProposedPosition ."\n";
+                $newPosition = ($this->hitWall(
+                                    $startPosition, 
+                                    $newProposedPosition, 
+                                    $this->findNextWall($lineData, $direction, $startPosition, $endOfMap), 
+                                    $direction)
+                                ? $this->hitWall(
+                                    $startPosition, 
+                                    $newProposedPosition, 
+                                    $this->findNextWall($lineData, $direction, $startPosition, $endOfMap), 
+                                    $direction)
+                                : $newProposedPosition);
+                // $newPosition = ($newProposedPosition >= $firstWallPosition ? $firstWallPosition - 1 : $newProposedPosition);
+            }
+        } else {
+            // echo "Other\n";
+            $newPosition = $proposedPosition;
+        }
+        switch($direction) {
+            case 0:
+            case 2:
+                $newX = $newPosition;
+                $newY = $currentY;
+                break;
+            case 1:
+            case 3:
+                $newX = $currentX;
+                $newY = $newPosition;
+                break;
+        }
+        $this->setCurrentPosition($newX, $newY);
+    }
 
-        if($currentX + $numberOfSteps >= $nextWallAfterCurrentPosition) {
-            $this->setCurrentPosition($nextWallAfterCurrentPosition-1, $currentY);
+    private function hitWall(int $startPosition, int $proposedPosition, int $nextWall, int $direction): int|bool {
+        if($direction < 2) {
+            if($proposedPosition >= $nextWall && $startPosition < $nextWall) {
+                return $nextWall-1;    
+            }
+        }
+        if($direction > 1) {
+            if($proposedPosition <= $nextWall && $startPosition > $nextWall) {
+                return $nextWall+1;
+            }
+        }
+        return false;
+    }
+
+    private function fitsOnMap(int $startOfMap, int $endOfMap, int $proposedPosition, int $direction): bool {
+        if($direction < 2) {
+            if($proposedPosition >= $endOfMap) return true;
+        }
+        if($direction > 1) {
+            if($proposedPosition <= $startOfMap) return true;
+        }
+        return false;        
+    }
+
+    private function findNextWall(string $lineData, int $direction, int $currentPosition, int $endOfMap): int 
+    {
+        if($direction < 2) {
+            return strpos($lineData, "#", $currentPosition);
+        }
+        if($direction > 1) {
+            return $endOfMap - strrpos(strrev($lineData), "#", $endOfMap - $currentPosition) -1;
         }
     }
 
-    private function checkMoveToDown(int $numberOfSteps): void {
-        ["x" => $currentX, "y" => $currentY] = $this->currentPosition;
-
-        $columnData = $this->getColumnData($currentX);
-        $startColumn = $this->getFirstColumn($columnData);
-
-        $endposition = $currentY + $numberOfSteps;
-        $firstWallPosition = strpos($columnData, "#", $startColumn);
-        $nextWallAfterCurrentPosition = strpos($columnData, "#", $currentY);
-
-        if($currentY + $numberOfSteps >= $nextWallAfterCurrentPosition) {
-            $this->setCurrentPosition($currentX, $nextWallAfterCurrentPosition);
-        } else {
-            $this->setCurrentPosition($currentX, $currentY+$numberOfSteps);
+    private function wallOnOtherSide(int $firstWall, int $startOfMap, int $endOfMap, int $direction): int|bool {
+        if($direction < 2) {
+            return $firstWall == $startOfMap ? $endOfMap : false;
         }
+        if($direction > 1) {
+            return $firstWall == $endOfMap ? $startOfMap : false;
+        }
+        return false;
+    }
+
+    private function getData(int $x, int $y, int $direction): string
+    {
+        if($direction == 2 | $direction == 0){
+            return $this->getRowData($y);
+        }
+        if($direction == 3 | $direction == 1) {
+            return $this->getColumnData($x);
+        }
+        return "";
     }
 
     private function getRowData(int $row): string
@@ -139,7 +240,7 @@ class Day22 extends Day {
 
     private function setCurrentPosition(int $x, int $y): void
     {
-        echo "zet Y op: ". $y;
+        // echo "zet Y op: ". $y;
         $this->currentPosition = [
             "x" => $x, 
             "y" => $y
@@ -150,6 +251,26 @@ class Day22 extends Day {
     {
         return min(strpos($rowData, "."), strpos($rowData, "#"));
     }
+
+    private function getStartOfMap(string $lineData): int
+    {
+        return min(strpos($lineData, "."), strpos($lineData, "#"));
+    }
+
+    private function getEndOfMap(string $lineData, int $startOfMap): int 
+    {
+        // $temp = "";
+        // echo $startOfMap;
+        // if(!strpos($lineData, " ", $startOfMap)) {
+        //     echo "not found\n";
+        //     $temp = strlen($lineData)-1;
+        // } else {
+        //     echo "overig\n";
+        //     $temp = strpos($lineData, "", $startOfMap) - 1 + $startOfMap;
+        // }
+        // return $temp;
+        return (!strpos($lineData, " ", $startOfMap) ? strlen($lineData) : strpos($lineData, "", $startOfMap) - 1 + $startOfMap);
+    }    
 
     private function getMoves(): void
     {
@@ -188,8 +309,8 @@ class Day22 extends Day {
     {
         $score = 0;
         $score = 
-            ($this->currentPosition["x"] - 1) * 1000 +
-            ($this->currentPosition["y"] - 1)* 4 +
+            ($this->currentPosition["y"] + 1) * 1000 +
+            ($this->currentPosition["x"] + 1) * 4 +
             $this->currentFacing;
         return $score;
     }
