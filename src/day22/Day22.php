@@ -21,6 +21,7 @@ class Day22 extends Day {
 
     public function part1(): int
     {
+        var_dump($this->currentPosition);
         $this->startMoving();
         var_dump($this->currentPosition);
         var_dump($this->currentFacing);
@@ -35,7 +36,7 @@ class Day22 extends Day {
     private function startMoving(): void 
     {
         // for($i=0; $i<count($this->moves["steps"]); $i++) {
-        for($i=0; $i<3; $i++) {
+        for($i=0; $i<2; $i++) {
             // do move
             switch($this->currentFacing){
                 case 0:
@@ -85,44 +86,60 @@ class Day22 extends Day {
 
     private function checkMoveToRight(int $numberOfSteps): void {
         ["x" => $currentX, "y" => $currentY] = $this->currentPosition;
-        $rowData = $this->inputData[$currentX];
+        $rowData = $this->getRowData($currentX);
 
         $startColumn = $this->getFirstColumn($rowData);
         $endposition = $currentY + $numberOfSteps;
-        $firstWallOnRow = strpos($rowData, "#", $startColumn);
+        $firstWallPosition = strpos($rowData, "#", $startColumn);
         $nextWallAfterCurrentPosition = strpos($rowData, "#", $currentY);
 
-        if($currentY + $numberOfSteps >= $nextWallAfterCurrentPosition) {
-            $this->setCurrentPosition($currentX, $nextWallAfterCurrentPosition-1);
+        // echo "firstwall: ". $firstWallPosition;
+        // echo "nextWall: ". $nextWallAfterCurrentPosition;
+
+        if($currentX + $numberOfSteps >= $nextWallAfterCurrentPosition) {
+            $this->setCurrentPosition($nextWallAfterCurrentPosition-1, $currentY);
         }
     }
 
     private function checkMoveToDown(int $numberOfSteps): void {
         ["x" => $currentX, "y" => $currentY] = $this->currentPosition;
-        $rowData = $this->inputData[$currentX];
-        $startColumn = $this->getFirstColumn($rowData);
-var_dump($this->inputData);
-        $columnData = array_column($this->inputData, $currentY);
-        var_dump($columnData);
-        exit();
 
-        
+        $columnData = $this->getColumnData($currentX);
+        $startColumn = $this->getFirstColumn($columnData);
+
         $endposition = $currentY + $numberOfSteps;
-        $firstWallOnRow = strpos($rowData, "#", $startColumn);
-        $nextWallAfterCurrentPosition = strpos($rowData, "#", $currentY);
+        $firstWallPosition = strpos($columnData, "#", $startColumn);
+        $nextWallAfterCurrentPosition = strpos($columnData, "#", $currentY);
 
         if($currentY + $numberOfSteps >= $nextWallAfterCurrentPosition) {
-            $this->setCurrentPosition($currentX, $nextWallAfterCurrentPosition-1);
+            $this->setCurrentPosition($currentX, $nextWallAfterCurrentPosition);
+        } else {
+            $this->setCurrentPosition($currentX, $currentY+$numberOfSteps);
         }
+    }
+
+    private function getRowData(int $row): string
+    {
+        return $this->inputData[$row];
+    }
+
+    private function getColumnData(int $column): string
+    {
+        $columnData = "";
+        for($i=0; $i<count($this->inputData); $i++) {
+            $columnData .= $this->inputData[$i][$column] ?? " ";
+        }
+        return $columnData;
     }
 
     private function setStartingPosition(): void
     {
-        $this->setCurrentPosition(0, $this->getFirstColumn($this->inputData[0]));
+        $this->setCurrentPosition($this->getFirstColumn($this->inputData[0]), 0);
     }
 
     private function setCurrentPosition(int $x, int $y): void
     {
+        echo "zet Y op: ". $y;
         $this->currentPosition = [
             "x" => $x, 
             "y" => $y
