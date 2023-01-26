@@ -6,9 +6,12 @@ use common\Day;
 
 class Day11 extends Day{
 
-    private array $monkeyItems = [];
-    private array $monkeyInspections = [];
-    private array $monkeyRules = [];
+    /** @var array<mixed> */
+    private array $monkeyItems;
+    /** @var array<mixed> */
+    private array $monkeyInspections;
+    /** @var array<mixed> */
+    private array $monkeyRules;
     private int $currentMonkeyId = 0;
     private bool $monkeyGetsBored;
 
@@ -18,29 +21,33 @@ class Day11 extends Day{
         $this->loadMonkeyData();
     }
 
-    public function part1()
+    public function part1(): int
     {
         $this->startRounds(20);
         return $this->getScore();
     }
 
-    public function part2()
+    public function part2(): string
     {
         return "ELPLZGZL";
     }
 
-    public function startRounds($numberOfRound=1, $getsBored = TRUE) {
+    public function startRounds(int $numberOfRound=1, bool $getsBored = TRUE): void {
         $this->monkeyGetsBored = $getsBored;
         for($round=1;$round<=$numberOfRound;$round++) {
             $this->inspectItems();
         }
     }
 
-    public function getItemList(){
+    /**
+     * @return array<mixed>
+     */
+    public function getItemList(): array
+    {
         return $this->monkeyItems;
     }
 
-    private function inspectItems() {
+    private function inspectItems(): void {
         foreach($this->monkeyItems as $monkeyId => &$items) {
             if ( empty($this->monkeyItems[$monkeyId] ) ) {
 				continue;
@@ -54,7 +61,7 @@ class Day11 extends Day{
         }
     }
 
-    private function actOnItem($monkeyId, $itemId, $worryLevel) {
+    private function actOnItem(int $monkeyId, int $itemId, int $worryLevel): void {
         if($worryLevel % $this->monkeyRules[$monkeyId]["test"] == 0) {
             $toMonkey = $this->monkeyRules[$monkeyId]["testTrue"];
         } else {
@@ -65,11 +72,11 @@ class Day11 extends Day{
         $this->monkeyItems[$toMonkey][] = $worryLevel;
     }
 
-    private function getsBored($value) {
+    private function getsBored(int $value): int {
         $superModulo = array_product(array_column($this->monkeyRules, "test"));
         return ($this->monkeyGetsBored ? floor($value / 3) : $value % $superModulo);
     }
-    private function applyOperation($monkeyId, $value) {
+    private function applyOperation(int $monkeyId, int $value): int {
         $operation = $this->monkeyRules[$monkeyId]["operation"];
         preg_match("/[a-z]+ = ([a-z0-9]+) (.*) ([a-z0-9]+)/", $operation, $matches);
 
@@ -93,7 +100,7 @@ class Day11 extends Day{
         return 0;
     }
 
-    private function loadMonkeyData() {
+    private function loadMonkeyData(): void {
         foreach($this->inputData as $key => $line) {
             $indent = strspn($line, " ");
             if(strlen($line) > 0) {
@@ -142,11 +149,11 @@ class Day11 extends Day{
         }
     }
 
-    private function addItemToMonkeyNo($monkeyId, $item) {
+    private function addItemToMonkeyNo(int $monkeyId, string $item): void {
         $this->monkeyItems[$monkeyId][] = trim($item);
     }
 
-    public function getScore() {
+    public function getScore(): int {
         arsort($this->monkeyInspections,);
         $top2 = array_slice($this->monkeyInspections,0,2);
         return $top2[0] * $top2[1];
