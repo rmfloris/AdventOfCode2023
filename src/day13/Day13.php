@@ -6,7 +6,9 @@ use common\Day;
 
 class Day13 extends Day {
 
+    /** @var array<mixed> */
     private array $inputArray;
+    /** @var array<mixed> */
     private array $pairs;
 
     protected function loadData(): void
@@ -15,18 +17,18 @@ class Day13 extends Day {
         $this->parseData();
     }
 
-    public function part1()
+    public function part1(): int
     {
         $this->startComparing();
         return $this->getSumOfIndices();
     }
 
-    public function part2()
+    public function part2(): int
     {
         return 0;
     }
 
-    private function parseData() {
+    private function parseData(): void {
         foreach($this->inputData as $line) {
             if(strlen($line > 0)) {
                 $this->inputArray[] = json_decode($line);
@@ -34,7 +36,10 @@ class Day13 extends Day {
         }
     }
 
-    public function startComparing() {
+    /**
+     * @return array<mixed>
+     */
+    public function startComparing(): array {
         $pair = 1;
         for($i=0; $i<count($this->inputArray);$i++) {
             $this->pairs[$pair] = ($this->compareLines($this->inputArray[$i], $this->inputArray[$i+1]) < 1 ? 1 : 0);
@@ -44,17 +49,24 @@ class Day13 extends Day {
         return $this->pairs;
     }
 
-    public function getSumOfIndices() {
+    public function getSumOfIndices(): int {
         return array_sum(array_keys(array_filter($this->pairs, function($v, $k) {
             return $v > 0;
         }, ARRAY_FILTER_USE_BOTH)));
     }
 
-    public function getPairs() {
+    /**
+     * @return array<mixed>
+     */
+    public function getPairs(): array {
         return $this->pairs;
     }
 
-    private function compareLines($line1, $line2) {
+    /**
+     * @param array<mixed> $line1
+     * @param array<mixed> $line2
+     */
+    private function compareLines(array|int $line1, array|int $line2): int {
         if(is_int($line1) && is_int($line2)) {
             return $line1 <=> $line2;
         }
@@ -74,7 +86,10 @@ class Day13 extends Day {
         return count($line1) - count($line2);
     }
 
-    public function addPackage(array $package) {
+    /**
+     * @param array<mixed> $package
+     */
+    public function addPackage(array $package): void {
         array_push($this->inputData, $package);
     }
 }

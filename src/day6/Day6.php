@@ -22,7 +22,7 @@ class Day6 extends Day {
         $this->numberOfCharactersForMarker = $number;
     }
 
-    public function findStartOfPacketMarker(): void {
+    public function findStartOfPacketMarker(): int {
         $i=0;
         $letters = str_split($this->inputData[0]);
         foreach($letters as $letter) {
@@ -31,5 +31,6 @@ class Day6 extends Day {
             }
             $i++;
         }
+        return 0;
     }
 }

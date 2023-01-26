@@ -9,7 +9,7 @@ $filename = "input/input.txt";
 
 echo "<pre>";
 
-$distress = new Day13($filename);
+$distress = new Day13();
 $distress->startComparing();
 echo "<p>";
 echo "are these the same?<p>";

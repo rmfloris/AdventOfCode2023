@@ -7,7 +7,6 @@ use common\Day;
 class Day21 extends Day {
     /** @var array<mixed> */
     private array $monkeyNumbers;
-    private int $totalMonkeys;
     /** @var array<mixed> */
     private array $monkeys;
     private int $inputLength;
@@ -15,7 +14,6 @@ class Day21 extends Day {
     protected function LoadData(): void
     {
         parent::loadData();
-        $this->totalMonkeys = count($this->inputData);
 
         foreach($this->inputData as $value) {
             [$monkeyName, $action] = explode(": ", $value);
@@ -76,7 +74,7 @@ class Day21 extends Day {
         }
     }
 
-    private function checkIfMonkeyHasNumber(string $monkeyToCheck): int {
+    private function checkIfMonkeyHasNumber(string $monkeyToCheck): string {
         if(intval($monkeyToCheck)) {
             return $monkeyToCheck;
         } else {

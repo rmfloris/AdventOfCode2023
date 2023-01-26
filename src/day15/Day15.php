@@ -6,10 +6,12 @@ use common\Day;
 
 class Day15 extends Day {	
 
+    /** @var array<mixed> */
     private array $map;	
-    private array $count = [];	
-    private array $beacon = [];
-    private array $sensor = [];
+    /** @var array<mixed> */
+    private array $beacon;
+    /** @var array<mixed> */
+    private array $sensor;
     private int $xPosition;	
 
     protected function loadData(): void
@@ -18,17 +20,17 @@ class Day15 extends Day {
         $this->createMap();
     }
 
-    public function part1()
+    public function part1(): int
     {
         return $this->getPositionsAt(2000000);
     }
 
-    public function part2()
+    public function part2(): int
     {
         return $this->findDistressFrequency(0, 4000000);
     }
 
-    private function createMap() {	
+    private function createMap(): void {	
         foreach($this->inputData as $line) {	
             preg_match_all("#([+-])?(\d+)#", $line, $positions);	
 
@@ -49,21 +51,21 @@ class Day15 extends Day {
         }	
     }	
 
-    private function calculateDistance($position1, $position2) {	
+    private function calculateDistance(string $position1, string $position2): int {	
         [$x1, $y1] = json_decode($position1);	
         [$x2, $y2] = json_decode($position2);	
         return abs($x1 - $x2) + abs($y1 - $y2);	
     }	
 
-    private function getKey($x, $y) {	
+    private function getKey(string $x, string $y): string {	
         return json_encode([(string)$x, (string)$y]);	
     }	
 
-    public function getPositionsAt($row) {	
+    public function getPositionsAt(int $row): int {	
         return $this->fillRow($row);	
     }	
 
-    private function fillRow(int $row, int $minRange = null, int $maxRange = null, bool $subtractBeacons = true) {	
+    private function fillRow(int $row, int $minRange = null, int $maxRange = null, bool $subtractBeacons = true): int {	
         $score = 0;	
 
         foreach($this->sensor as $key => $sensorData) {	
@@ -110,7 +112,7 @@ class Day15 extends Day {
                 } else {	
                     if($xMin>= $max) {	
                         $this->xPosition = $xMin-1;	
-                        $xMin;	
+                        // $xMin;	
                     } else {                        	
                         $xMin = $max;	
                     }	
@@ -130,11 +132,11 @@ class Day15 extends Day {
         return $score;	
     }	
 
-    private function getBeaconsAtRow(int $row) {	
+    private function getBeaconsAtRow(int $row): int {	
         return count(array_keys(array_column($this->beacon, 'y'), $row));	
     }	
 
-    public function findDistressFrequency(int $min, int $max) {	
+    public function findDistressFrequency(int $min, int $max): string|int {	
         for($y=$min; $y<=$max; $y++) {	
             if($this->fillRow($y, $min, $max, false) < $max-$min+1) {	
                 $frequency = ($this->xPosition * 4000000) + $y;	

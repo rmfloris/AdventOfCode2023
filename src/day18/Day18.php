@@ -4,7 +4,10 @@ namespace day18;
 use common\Day;
 
 class Day18 extends Day {
+    /** @var array<mixed> */
     private array $grid;
+    
+    /** @var array<mixed> */
     private array $max;
     private int $sidesCount = 0;
     private int $surfaceCount = 0;
@@ -16,13 +19,12 @@ class Day18 extends Day {
         $this->addToGrid();
     }
 
-    public function preparePart2() {
+    public function preparePart2(): void {
         $this->setMaxBoundries();
         $this->findSurface();
-        return $this;
     }
 
-    private function findSurface() {
+    private function findSurface(): void {
         $start = $this->getKey(0,0,0);
         $queue[] = array($start);
 
@@ -47,7 +49,7 @@ class Day18 extends Day {
         }
     }
 
-    private function setMaxBoundries() {
+    private function setMaxBoundries(): void {
         $this->max = [
             "x" => max(array_column($this->grid, "x")),
             "y" => max(array_column($this->grid, "y")),
@@ -55,30 +57,30 @@ class Day18 extends Day {
         ];
     }
 
-    public function part1() {
+    public function part1(): int {
         return $this->sidesCount;
     }
 
-    public function part2() {
+    public function part2(): int {
         $this->preparePart2();
         return $this->surfaceCount;
     }
 
-    private function setMaxSides() {
+    private function setMaxSides(): int {
         return count($this->inputData) * 6;
     }
 
-    private function addToGrid() {
+    private function addToGrid(): void {
         foreach($this->inputData as $coords) {
             [$x, $y, $z] = explode(",", $coords);
 
-            $this->grid[$this->getKey($x, $y, $z)] = [
+            $this->grid[$this->getKey((int) $x, (int) $y, (int) $z)] = [
                 "x" => $x,
                 "y" => $y,
                 "z" => $z
             ];
 
-            $this->sidesCount += $this->checkFaces($x, $y, $z);
+            $this->sidesCount += $this->checkFaces((int) $x, (int) $y, (int) $z);
         }
     }
 
@@ -119,7 +121,7 @@ class Day18 extends Day {
         return $substraction;
     }
 
-    private function getKey(int $x, int $y, int $z) {
+    private function getKey(int $x, int $y, int $z): string {
         return json_encode([$x, $y, $z]);
     }
 

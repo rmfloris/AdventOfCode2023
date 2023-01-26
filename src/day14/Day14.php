@@ -6,7 +6,9 @@ use common\Day;
 
 class Day14 extends Day{
 
+    /** @var array<mixed> */
     private array $graph;
+    /** @var array<mixed> */
     private array $borders = array(
         "minX" => "500",
         "maxX" => "500",
@@ -22,25 +24,25 @@ class Day14 extends Day{
         $this->parseData();
     }
 
-    public function part1()
+    public function part1(): int
     {
         return $this->dropSandUnits();
     }
 
-    public function part2()
+    public function part2(): int
     {
         $this->setPart(2);
         return $this->dropSandUnits();
     }
 
-    public function setPart(int $part) {
+    public function setPart(int $part): void {
         $this->part = $part;
         if ($part == 2) {
             $this->setFloor();
         }
     }
 
-    private function setFloor() {
+    private function setFloor(): void {
         /**
          * minX - maxX for maxY+2
          */
@@ -60,14 +62,13 @@ class Day14 extends Day{
     //     return $this->score;
     // }
 
-    public function dropSandUnits() {
+    public function dropSandUnits(): int {
         while($this->dropSand()) {
         }
         return $this->score;
     }
 
-    private function dropSand() {
-        $score = 0 ;
+    private function dropSand(): bool {
         $sandX = 500;
         $sandY = 0;
 
@@ -131,10 +132,10 @@ class Day14 extends Day{
              * over left min or right min -> stop
              */
         }
-        return $score;
     }
 
-    private function parseData(){
+    private function parseData(): void
+    {
         foreach($this->inputData as $line) {
             $positions = explode(" -> ", $line);
 
@@ -166,14 +167,14 @@ class Day14 extends Day{
         }
     }
 
-    private function setMinMax($x, $y) {
+    private function setMinMax(string|int $x, string|int $y): void {
         if($x < $this->borders["minX"]) { $this->borders["minX"] = $x; }
         if($x > $this->borders["maxX"]) { $this->borders["maxX"] = $x; }
         if($y < $this->borders["minY"]) { $this->borders["minY"] = $y; }
         if($y > $this->borders["maxY"]) { $this->borders["maxY"] = $y; }
     }
 
-    public function printGraph() {
+    public function printGraph(): string {
         $table = "<table>";
         $table .= "<tr><th>";
         foreach(range($this->borders["minX"], $this->borders["maxX"]) as $header) {
@@ -192,7 +193,7 @@ class Day14 extends Day{
         return $table;
     }
 
-    private function getKey($x, $y) {
+    private function getKey(string|int $x, string|int $y): string {
         return json_encode([(string)$x, (string)$y]);
     }
 }

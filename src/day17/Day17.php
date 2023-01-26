@@ -7,6 +7,7 @@ use common\Day;
 class Day17 extends Day {
 
     private int $moveIndex = 0;
+    /** @var array<mixed> */
     private array $shapes = [
         [
             [1, 1, 1, 1,]
@@ -39,17 +40,17 @@ class Day17 extends Day {
         $this->inputData = str_split($this->inputData[0]);
     }
 
-    public function part1() 
+    public function part1(): int 
     {
         return 0;
     }
 
-    public function part2() 
+    public function part2(): int 
     {
         return 0;
     }
 
-    public function startMoving($moves = 5)
+    public function startMoving(int $moves = 5): void
     {
         $shapeIndex = 0;
         $chamber = [];
@@ -71,7 +72,7 @@ class Day17 extends Day {
          */
     }
 
-    private function applyMovement(int $shapeIndex) {
+    private function applyMovement(int $shapeIndex): void {
         $shape = $this->shapes[$shapeIndex];
         $left = 2;
         $bottom = 0;
@@ -87,8 +88,5 @@ class Day17 extends Day {
             if($i == 2) break;
             $i++;
         }
-
-
     }
-
 }

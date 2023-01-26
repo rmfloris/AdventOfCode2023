@@ -3,7 +3,7 @@ require_once '../autoload.php';
 use day17\Day17;
 
 echo "<pre>";
-$rocks = new Day17("true");
+$rocks = new Day17(true);
 // $root = new Day21();
 
 $rocks->startMoving();

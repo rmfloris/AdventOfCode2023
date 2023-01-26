@@ -45,6 +45,7 @@ class Day23 extends Day {
     }
 
     /**
+     * @param array<mixed> $proposals
      * @return array<mixed>
      */
     private function checkProposals(array $proposals): array
@@ -122,7 +123,7 @@ class Day23 extends Day {
         return $proposed;
     }
 
-    private function findMove(int $x, int $y):string|bool
+    private function findMove(int $x, int $y):string
     {
         // echo "x: ". $x ." - y: ". $y ."<br>";
         foreach($this->moveDirection as $direction) {
@@ -208,7 +209,7 @@ class Day23 extends Day {
         );
     }
 
-    public function showGrid() {
+    public function showGrid(): string {
         $minX = min((int)min(array_column($this->elfsLocations1, "x")),0);
         $maxX = max((int)max(array_column($this->elfsLocations1, "x")),5);
         $minY = min((int)min(array_column($this->elfsLocations1, "y")),0);
@@ -251,7 +252,7 @@ class Day23 extends Day {
         return (count(range($minX, $maxX))*count(range($minY, $maxY)))-count($this->elfsLocations1);
     }
 
-    public function part2()
+    public function part2(): int
     {
         // get number of rounds
         return ($this->noMoreMoves ? $this->rounds : 0);

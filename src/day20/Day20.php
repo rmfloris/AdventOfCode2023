@@ -5,6 +5,7 @@ namespace day20;
 use common\Day;
 
 class Day20 extends Day {
+    /** @var array<mixed> */
     private array $original;
     private int $decriptionKey = 811589153;
     private int $inputLength = 0;
@@ -21,7 +22,8 @@ class Day20 extends Day {
         $this->inputLength = count($this->inputData);
     }
 
-    public function applyDecriptionKey() {
+    public function applyDecriptionKey(): object {
+        $originalNew = [];
         foreach($this->original as $original) {
             $originalNew[] = [
                 "index" => $original["index"],
@@ -31,18 +33,18 @@ class Day20 extends Day {
         $this->original = $originalNew;
         return $this;
     }
-    public function part1()
+    public function part1(): int
     {
         return $this->startMoving();
     }
 
-    public function part2()
+    public function part2(): int
     {
         $this->applyDecriptionKey();
         return $this->startMoving(10);
     }
 
-    private function startMoving($number = 1) {
+    private function startMoving(int $number = 1): int {
         $data = $this->startMixing($number);
 
         $zeroIndex = $this->findZeroIndex($data);
@@ -57,7 +59,10 @@ class Day20 extends Day {
         return $answer;
     }
 
-    private function findZeroIndex($dataArray) {
+    /**
+     * @param array<mixed> $dataArray
+     */
+    private function findZeroIndex($dataArray): int {
         $index = null;
         foreach($dataArray as $index => $data){
             if($data["movement"] == 0){
@@ -67,7 +72,10 @@ class Day20 extends Day {
         return $index;
     }
 
-    private function startMixing($number) {
+    /**
+     * @return array<mixed>
+     */
+    private function startMixing(int $number): array {
         $data = $this->original;
         for($i=0; $i<$number;$i++) {
             foreach($this->original as $original) {

@@ -6,11 +6,15 @@ use common\Day;
 
 class Day12 extends Day{
 
+    /** @var array<mixed> */
     private array $inputArray;
+    /** @var array<mixed> */
     private array $graph;
+    /** @var array<mixed> */
     private array $stepGraph;
     private string $startKey;
     private string $endKey;
+    /** @var array<mixed> */
     private array $actionKey;
 
     protected function loadData(): void
@@ -20,12 +24,12 @@ class Day12 extends Day{
         $this->buildGraph();
     }
 
-    public function part1()
+    public function part1(): int
     {
         return count($this->findPath($this->startKey))-1;
     }
 
-    public function part2()
+    public function part2(): int
     {
         $routes = [];
         foreach($this->actionKey as $start => $value) {
@@ -37,13 +41,13 @@ class Day12 extends Day{
         return count($routes[array_key_first($routes)])-1;
     }
 
-    private function parseData() {
+    private function parseData(): void {
         foreach($this->inputData as $key => $line) {
             $this->inputArray[$key] = str_split($line);
         }
     }
 
-    private function buildGraph() {
+    private function buildGraph(): void{
         $width = count($this->inputArray[0]);
         $height = count($this->inputArray);
         for($y=0; $y < count($this->inputArray); $y++) {
@@ -72,11 +76,11 @@ class Day12 extends Day{
         }
     }
 
-    private function hasHigherValue($currentValue, $valueToCheck) {
+    private function hasHigherValue(int|string $currentValue, int|string $valueToCheck): bool {
         return ord($valueToCheck) - ord($currentValue) <= 1;
     }
 
-    private function getValue($x, $y){
+    private function getValue(string|int $x, string|int $y): string{
         $value = $this->inputData[$y][$x];
         if($value == "S") {
             $this->startKey = json_encode([$x, $y]);
@@ -94,7 +98,10 @@ class Day12 extends Day{
         return $value;
     }
 
-    private function findPath($start) {
+    /**
+     * @return array<mixed>
+     */
+    private function findPath(string $start): array {
         $queue[] = array($start);
         $visited[$start] = 0;
 

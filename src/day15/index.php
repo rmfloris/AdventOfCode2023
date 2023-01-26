@@ -1,5 +1,5 @@
 <?php
-ini_set('max_execution_time', 180);
+ini_set('max_execution_time', "180");
 
 require_once '../autoload.php';
 use day15\Day15;
