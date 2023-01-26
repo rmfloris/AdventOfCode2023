@@ -6,6 +6,7 @@ use common\Day;
 
 class Day8 extends Day{
 
+    /** @var array<mixed> */
     private array $inputArray = [];
 
     protected function loadData(): void 

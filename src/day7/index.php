@@ -11,7 +11,7 @@ use day7\Day7;
 $filename = "input/input_test.txt";
 // $filename = "input/input.txt";
 
-$size = new Day7($filename);
+$size = new Day7(true);
 
 echo "<P>Directory Structure<pre>";
 print_r($size->getDirStructure());

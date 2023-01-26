@@ -6,6 +6,7 @@ use common\Day;
 
 class Day25 extends Day {
 
+    /** @var array<mixed> */
     private array $snafu = [
         -2 => "=",
         "-",
@@ -14,7 +15,8 @@ class Day25 extends Day {
         2
     ];
 
-    public function part1() {
+    public function part1(): string 
+    {
         $sum = 0;
         foreach($this->inputData as $snafu) {
             $sum += $this->snafuToDecimal($snafu);
@@ -23,8 +25,9 @@ class Day25 extends Day {
         return $this->decimalToSnafu($sum);
     }
 
-    public function part2() {
-        return false;
+    public function part2(): int 
+    {
+        return 0;
     }
 
     private function snafuToDecimal(string $snafu): int

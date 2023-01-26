@@ -96,9 +96,11 @@ class Day22 extends Day {
 
         if($direction == 2 | $direction == 0) {
             $startPosition = $currentX;
+            $newPosition = $currentX;
             $proposedPosition = $startPosition + ($numberOfSteps * ($direction == 2 ? -1 : 1));
         } else {
             $startPosition = $currentY;
+            $newPosition = $currentY;
             $proposedPosition = $startPosition + ($numberOfSteps * ($direction == 3 ? -1 : 1));
         }
         // echo "proposed Position: ". $proposedPosition ."\n";

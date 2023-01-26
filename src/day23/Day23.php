@@ -6,7 +6,9 @@ use common\Day;
 use common\Helper;
 
 class Day23 extends Day {
+    /** @var array<string> */
     private array $moveDirection = ["N", "S", "W", "E"];
+    /** @var array<mixed> */
     private array $elfsLocations1; // contains X-Y coords
     private int $rounds = 0;
     private bool $noMoreMoves = false;
@@ -25,14 +27,13 @@ class Day23 extends Day {
         }
     }
 
-    public function startRounds($numberOfRounds = 1) {
+    public function startRounds(int $numberOfRounds = 1): object {
         for($i=1; $i<=$numberOfRounds; $i++) {
             // echo "round #". $i ."<br>";
             $this->rounds = $i;
             if(!$proposals = $this->findMoves()) {
                 $this->noMoreMoves = true;
                 break;
-
             }
                 
             $proposals = $this->checkProposals($proposals);
@@ -43,7 +44,10 @@ class Day23 extends Day {
         return $this;
     }
 
-    private function checkProposals(array $proposals):array
+    /**
+     * @return array<mixed>
+     */
+    private function checkProposals(array $proposals): array
     {
         $emptyKeys = array_keys($proposals, "");
         
@@ -65,7 +69,10 @@ class Day23 extends Day {
         return $proposals;
     }
 
-    private function performProposals($proposals) :void
+    /**
+     * @param array<mixed> $proposals
+     */
+    private function performProposals(array $proposals): void
     {
         foreach($proposals as $elf => $coords) {
             [$x, $y] = json_decode($coords);
@@ -87,7 +94,10 @@ class Day23 extends Day {
         array_push($this->moveDirection, array_shift($this->moveDirection));
     }
 
-    private function findMoves() {
+    /**
+     * @return array<mixed>
+     */
+    private function findMoves(): array {
         $proposed = [];
         foreach($this->elfsLocations1 as $elf => $position) {
             ["x" => $x, "y" => $y] = $position;

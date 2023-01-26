@@ -5,8 +5,10 @@ namespace day21;
 use common\Day;
 
 class Day21 extends Day {
+    /** @var array<mixed> */
     private array $monkeyNumbers;
     private int $totalMonkeys;
+    /** @var array<mixed> */
     private array $monkeys;
     private int $inputLength;
 
@@ -32,7 +34,7 @@ class Day21 extends Day {
         $this->inputLength = count($this->inputData);
     }
 
-    public function part1() {
+    public function part1(): int {
         // getRootNumber
         $i=0;
             while(count($this->monkeyNumbers) < $this->inputLength) {
@@ -50,7 +52,7 @@ class Day21 extends Day {
         return $this->monkeyNumbers["root"];
     }
 
-    private function canCalculate($monkeyName, $monkey1, $monkey2) {
+    private function canCalculate(string $monkeyName, int $monkey1, int $monkey2): void {
         if(intval($monkey1) && intval($monkey2)) {
             $operator = $this->monkeys[$monkeyName]["operator"];
             $outcome = 0;
@@ -74,7 +76,7 @@ class Day21 extends Day {
         }
     }
 
-    private function checkIfMonkeyHasNumber($monkeyToCheck) {
+    private function checkIfMonkeyHasNumber(string $monkeyToCheck): int {
         if(intval($monkeyToCheck)) {
             return $monkeyToCheck;
         } else {
@@ -86,8 +88,8 @@ class Day21 extends Day {
         }
     }
 
-    public function part2() 
+    public function part2(): int 
     {
-        return false;
+        return 0;
     }
 }

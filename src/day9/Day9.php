@@ -5,8 +5,10 @@ namespace day9;
 use common\Day;
 
 class Day9 extends Day{
-    private array $currentLocations = [];
-    private array $visitedLocations = [];
+    /** @var array<mixed> */
+    private array $currentLocations;
+    /** @var array<mixed> */
+    private array $visitedLocations;
 
     protected function loadData(): void 
     {
@@ -79,7 +81,9 @@ class Day9 extends Day{
         $this->setVisitedLocations($currentKnotIndex, $xCurrent+$x, $yCurrent+$y);
         return true;
     }
-
+    /**
+     * @return array<mixed>
+     */
     private function calculateStep(string $direction): array {
         $xValue = 0;
         $yValue = 0;
