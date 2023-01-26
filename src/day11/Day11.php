@@ -77,6 +77,8 @@ class Day11 extends Day{
         return ($this->monkeyGetsBored ? floor($value / 3) : $value % $superModulo);
     }
     private function applyOperation(int $monkeyId, int $value): int {
+        $part1 = 0;
+        $part2 = 0;
         $operation = $this->monkeyRules[$monkeyId]["operation"];
         preg_match("/[a-z]+ = ([a-z0-9]+) (.*) ([a-z0-9]+)/", $operation, $matches);
 
@@ -86,16 +88,12 @@ class Day11 extends Day{
         switch($matches[2]){
             case "+":
                 return $part1 + $part2;
-                break;
             case "-":
                 return $part1 - $part2;
-                break;
             case "*":
                 return $part1 * $part2;
-                break;
             case "/":
                 return $part1 / $part2;
-                break;
         }
         return 0;
     }

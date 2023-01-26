@@ -5,23 +5,25 @@ namespace day10;
 use common\Day;
 
 class Day10 extends Day{
-    private $registerX = 1;
-    private $cycle = 1;
-    private $valueAtCycle = [];
-    private $screenPixels = [];
+    private int $registerX = 1;
+    private int $cycle = 1;
+    /** @var array<mixed> */ 
+    private $valueAtCycle;
+    /** @var array<mixed> */ 
+    private $screenPixels;
 
-    public function part1()
+    public function part1(): int
     {
         $this->startProgram();
         return $this->getSignalStrength();
     }
 
-    public function part2()
+    public function part2(): string
     {
         return "ELPLZGZL";
     }
 
-    public function startProgram() {
+    public function startProgram(): void {
         foreach($this->inputData as $lines) {
             [$program, $value] = explode(" ", $lines) + ["1"=>null];
 
@@ -29,33 +31,31 @@ class Day10 extends Day{
         }
     }
 
-    private function noop($value) {
+    private function noop(?int $value): bool {
         $this->addCycle();
         return true;
     }
 
-    private function addX($value) {
+    private function addX(int $value): void {
         // echo "addX<br>";
         $this->addCycle(2);
         $this->setRegisterXValue($value);
     }
 
-    private function setRegisterXValue($addValue) {
+    private function setRegisterXValue(int $addValue): void {
         $this->registerX += $addValue;
-        return true;
     }
 
-    private function addCycle($numberOfTicks = 1) {
+    private function addCycle(int $numberOfTicks = 1): void {
         // $this->cycle += $numberOfTicks;
         for($i=0; $i<$numberOfTicks; $i++) {
             $this->setValueAtCycle();
             $this->markScreenPixel();
             $this->cycle++;
         }
-        return true;
     }
 
-    private function markScreenPixel() {
+    private function markScreenPixel(): void {
         $pixelPosition = ($this->cycle - 1) % 40;
         $spriteCenter = (($this->registerX - 1) % 40) + 1;
 
@@ -66,12 +66,11 @@ class Day10 extends Day{
             : ".");
     }
 
-    private function setValueAtCycle() {
+    private function setValueAtCycle(): void {
         $this->valueAtCycle[$this->cycle] = $this->registerX;
-        return true;
     }
 
-    public function getSignalStrength() {
+    public function getSignalStrength(): int {
         $totalSignalStrength = 0;
         for($i=20;$i<count($this->valueAtCycle);$i+=40) {
             // echo $i ." - ". $this->valueAtCycle[$i] ." - ". $i * $this->valueAtCycle[$i] ."<br>";
@@ -80,7 +79,7 @@ class Day10 extends Day{
         return $totalSignalStrength;
     }
 
-    public function showGrid() {
+    public function showGrid(): string {
         $table = "<table>";
 
         for($y=0;$y<240;$y+=40) {

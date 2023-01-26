@@ -17,13 +17,13 @@ class Day7 extends Day {
         $this->calculateFolderSize($this->dirStructure);
     }
 
-    public function part1()
+    public function part1(): int
     {
         $this->getDirStructure();
         return 0;
     }
 
-    public function part2()
+    public function part2(): int
     {
         return 0;
     }
@@ -116,9 +116,9 @@ class Day7 extends Day {
           */
         $parent = null;
         foreach($startingPoint as $key => $directory) {
-            echo "Key: ". $key ."<br>";
+            // echo "Key: ". $key ."<br>";
             if($this->hasSubDirectory($directory)) {
-                echo "subdir: ". print_r($directory, true) ."<br>";
+                // echo "subdir: ". print_r($directory, true) ."<br>";
                 // $this->calculateFolderSize($directory);
             } 
             // echo "- ". print_r($directory,true) ." - ". $this->getFolderSize($directory) ."<br>";

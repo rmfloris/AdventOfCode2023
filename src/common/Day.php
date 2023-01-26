@@ -3,8 +3,10 @@
 namespace common;
 
 abstract class Day {
-    protected array $inputData = [];
-    protected array $options = [];
+    /** @var array<mixed> */
+    protected array $inputData;
+    /** @var array<mixed> */
+    protected array $options;
     protected int $dayNumber;
     protected float $startTime;
 
@@ -18,8 +20,6 @@ abstract class Day {
         if($test) $this->setOption("test");
         
         $this->loadData();
-
-        // return $this;        
     }
 
     public function setOption(string $value): void
@@ -32,6 +32,9 @@ abstract class Day {
         $this->inputData = $this->getArrayFromInputFile();
     }
 
+    /**
+     * @return array<mixed>
+     */
     protected function getArrayFromInputFile(?string $inputFilename = NULL): array
     {
         $inputFilename = $this->getInputFilename($inputFilename);

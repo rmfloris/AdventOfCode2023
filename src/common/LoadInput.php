@@ -4,7 +4,7 @@ namespace common;
 
 class LoadInput {
 
-    public function loadFile($filename) {
+    public function loadFile(string $filename): string {
         $file = fopen($filename, "r") or die("Unable to open file!");
         $data = fread($file,filesize($filename));
         fclose($file);
@@ -12,11 +12,15 @@ class LoadInput {
         return $data;
     }
 
-    public function loadFileToLines($filename) {
+    /**
+     * @return array<mixed>
+     */
+    public function loadFileToLines(string $filename): array {
         return explode("\n", $this->readFile($filename));
     }
 
-    private function readFile($filename) {
+
+    private function readFile(string $filename): string {
         $file = fopen($filename, "r") or die("Unable to open file!");
         $data = fread($file,filesize($filename));
         fclose($file);
