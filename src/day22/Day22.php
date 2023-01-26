@@ -21,8 +21,8 @@ class Day22 extends Day {
 
     public function part1(): int
     {
-        // echo "start\n";
-        // var_dump($this->currentPosition);
+        echo "start\n";
+        var_dump($this->currentPosition);
         $this->startMoving();
         var_dump($this->calculateFinalPassword());
         // var_dump($this->currentPosition);
@@ -37,11 +37,12 @@ class Day22 extends Day {
 
     private function startMoving(): void 
     {
-        for($i=0; $i<count($this->moves["steps"]); $i++) {
-        // for($i=0; $i<4; $i++) {
-            // echo "loop ". $i ."\n";
-            // echo "number of steps: ". $this->moves["steps"][$i] ."\n";
-            // echo "direction: ". $this->currentFacing ."\n";
+        // for($i=0; $i<count($this->moves["steps"]); $i++) {
+        for($i=0; $i<2; $i++) {
+            echo "\n---------------------------------------------------------------\n";
+            echo "loop ". $i ."\n";
+            echo "number of steps: ". $this->moves["steps"][$i] ."\n";
+            echo "direction: ". $this->currentFacing ."\n";
             /** options
              * no wall (#) so just move
              * wall (#) as x, so max X moves
@@ -49,7 +50,7 @@ class Day22 extends Day {
              */
             $this->checkMove($this->moves["steps"][$i], $this->currentFacing);
             $this->changeFacing($this->moves["turns"][$i]);
-            // var_dump($this->currentPosition);
+            var_dump($this->currentPosition);
         }
     }
 
@@ -87,12 +88,12 @@ class Day22 extends Day {
     {
         ["x" => $currentX, "y" => $currentY] = $this->currentPosition;
         $lineData = $this->getData($currentX, $currentY, $direction);
-        // echo "line: |". $lineData ."|\n";
-        // echo "length: ". strlen($lineData) ."\n";
+        echo "line: |". $lineData ."|\n";
+        echo "length: ". strlen($lineData) ."\n";
         $startOfMap = $this->getStartOfMap($lineData);
-        // echo "start of map: ". $startOfMap ."\n";
+        echo "start of map: ". $startOfMap ."\n";
         $endOfMap = $this->getEndOfMap($lineData, $startOfMap);
-        // echo "end of map: ". $endOfMap ."\n";
+        echo "end of map: ". $endOfMap ."\n";
 
         if($direction == 2 | $direction == 0) {
             $startPosition = $currentX;
@@ -103,7 +104,7 @@ class Day22 extends Day {
             $newPosition = $currentY;
             $proposedPosition = $startPosition + ($numberOfSteps * ($direction == 3 ? -1 : 1));
         }
-        // echo "proposed Position: ". $proposedPosition ."\n";
+        echo "proposed Position: ". $proposedPosition ."\n";
         
         $firstWallPosition = $this->findNextWall($lineData, $direction, 0, $endOfMap);
         // $nextWallAfterCurrentPosition = $this->findNextWall($lineData, $direction, $startPosition, $endOfMap);
@@ -113,9 +114,9 @@ class Day22 extends Day {
                                 $proposedPosition, 
                                 $this->findNextWall($lineData, $direction, $startPosition, $endOfMap), 
                                 $direction)) {
-            // echo "hit wall\n";
-            // echo "Wall: ". $this->findNextWall($lineData, $direction, $startPosition, $endOfMap) ."\n";
-            // echo "New position: ". $newPosition ."\n";
+            echo "hit wall\n";
+            echo "Wall: ". $this->findNextWall($lineData, $direction, $startPosition, $endOfMap) ."\n";
+            echo "New position: ". $newPosition ."\n";
             // $newPosition = $nextWallAfterCurrentPosition-1;
         } elseif($this->fitsOnMap($startOfMap, $endOfMap, $proposedPosition, $direction) ) {
             // echo "To big\n";
@@ -173,6 +174,14 @@ class Day22 extends Day {
             }
         }
         if($direction > 1) {
+            // left(2) of up(3)
+
+            /**
+             * -40 <= 137 && ?? > 137
+             */
+            echo "startPosition: ". $startPosition ."\n";
+            echo "proposedPosition: ". $proposedPosition ."\n";
+            echo "nextWall: ". $nextWall ."\n";
             if($proposedPosition <= $nextWall && $startPosition > $nextWall) {
                 return $nextWall+1;
             }
@@ -196,7 +205,18 @@ class Day22 extends Day {
             return strpos($lineData, "#", $currentPosition);
         }
         if($direction > 1) {
-            return $endOfMap - strrpos(strrev($lineData), "#", $endOfMap - $currentPosition) -1;
+            // $reversedLineData = strrev($lineData);
+            // $startOfMap = $this->getStartOfMap($reversedLineData);
+
+            // echo "Line: ". $lineData ."\n";
+            // echo "rev: ". $reversedLineData ."\n";
+            // echo "start: ".$this->getStartOfMap($reversedLineData) ."\n";
+            // echo "#: ". strpos($reversedLineData, "#", $startOfMap) - $startOfMap ."\n";
+            // echo "outcome strrpos: ". strrpos(strrev($lineData), "#", $endOfMap - $currentPosition) ."\n";
+            // return $endOfMap - strrpos(strrev($lineData), "#", $endOfMap - $currentPosition) -1;
+            // echo "test: ". strrpos($lineData, "#") ."\n";
+            return strrpos($lineData, "#");
+            // return strpos($reversedLineData, "#", $startOfMap) - $startOfMap;
         }
     }
 
@@ -268,10 +288,10 @@ class Day22 extends Day {
         //     $temp = strlen($lineData)-1;
         // } else {
         //     echo "overig\n";
-        //     $temp = strpos($lineData, "", $startOfMap) - 1 + $startOfMap;
+        //     $temp = strpos($lineData, " ", $startOfMap) - 1 + $startOfMap;
         // }
         // return $temp;
-        return (!strpos($lineData, " ", $startOfMap) ? strlen($lineData) : strpos($lineData, "", $startOfMap) - 1 + $startOfMap);
+        return (!strpos($lineData, " ", $startOfMap) ? strlen($lineData) : strpos($lineData, " ", $startOfMap) - 1 + $startOfMap);
     }    
 
     private function getMoves(): void
