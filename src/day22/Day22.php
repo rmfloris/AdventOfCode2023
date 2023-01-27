@@ -8,6 +8,7 @@ class Day22 extends Day {
     /** @var array<mixed> */
     private array $currentPosition;
     private int $currentFacing = 0;
+    private array $visitedSpots;
     /** @var array<mixed> */
     private array $moves;
     
@@ -32,15 +33,16 @@ class Day22 extends Day {
 
     private function startMoving(): void 
     {
-        // for($i=0; $i<count($this->moves["steps"]); $i++) {
-        for($i=0; $i<2; $i++) {
-            echo "\n---------------------------------------------------------------\n";
-            echo "loop ". $i ."\n";
-            echo "number of steps: ". $this->moves["steps"][$i] ."\n";
-            echo "direction: ". $this->currentFacing ."\n";
+        for($i=0; $i<count($this->moves["steps"]); $i++) {
+        // for($i=0; $i<10; $i++) {
+            // echo "\n---------------------------------------------------------------\n";
+            // echo "loop ". $i ."\n";
+            // echo "number of steps: ". $this->moves["steps"][$i] ."\n";
+            // echo "direction: ". $this->currentFacing ."\n";
 
             $newPosition = $this->getNewPosition($this->getCurrentPosition(), $this->moves["steps"][$i]);
-            $this->setNewPosition
+            $this->updateCurrentPosition($newPosition);
+            // var_dump($this->currentPosition);
             $this->changeFacing($this->moves["turns"][$i]);
         }
     }
@@ -79,12 +81,12 @@ class Day22 extends Day {
     }
 
     private function getCurrentPosition(): int {
-        return (in_array($this->currentFacing, [0,1]) ? $this->currentPosition["x"] : $this->currentPosition["y"]);
+        return (in_array($this->currentFacing, [0,2]) ? $this->currentPosition["x"] : $this->currentPosition["y"]);
     }
 
     private function setStartingPosition(): void
     {
-        $this->setCurrentPosition($this->getFirstColumn($this->inputData[0]), 0);
+        $this->setCurrentPosition($this->getStartOfMap($this->inputData[0]), 0);
     }
 
     private function updateCurrentPosition($value): void
@@ -92,7 +94,7 @@ class Day22 extends Day {
         (in_array($this->currentFacing, [0,2]) 
             ? $this->setCurrentPosition($value, $this->currentPosition["y"])
             :$this->setCurrentPosition($this->currentPosition["x"], $value)
-    );
+        );
     }
 
     private function setCurrentPosition(int $x, int $y): void
@@ -101,22 +103,32 @@ class Day22 extends Day {
             "x" => $x, 
             "y" => $y
         ];
+        $this->visitedSpots[] = [
+            "x" => $x, 
+            "y" => $y
+        ];
+    }
+
+    public function getVisitedSpots(): array
+    {
+        return $this->visitedSpots;
     }
 
     private function getNewPosition(int $currentPosition, int $moves) {
         // echo "\n----------------\n";
         // echo "currentPosition: ". $currentPosition ."\n";
         // echo "moves: ". $moves ."\n";
-        $lineData = $this->getLineData($currentPosition);
+        $lineData = $this->getLineData();
         $nextWall = $this->findNextWall($lineData, $currentPosition);
         $proposedPosition = $currentPosition + ($moves * (in_array($this->currentFacing, [0,1]) ?  1 : -1));
 
+        // echo "does it hit a wall?\n";
         if($newPosition = $this->hitWall($nextWall, $proposedPosition)) { return $newPosition; }
         // echo "didn't hit wall\n";
-        if($this->isWallOnOtherEnd($lineData)) { return (in_array($this->currentFacing, [0,1]) ?  $this->getEndOfMap($lineData) : $this->getStartOfMap($lineData)); }
-        // echo "No Wall on other end\n";
         if($newPosition = $this->fitsOnMap($proposedPosition, $lineData)) { return $newPosition; }
         // echo "Doesn't fit on map\n";
+        if($this->isWallOnOtherEnd($lineData)) { return (in_array($this->currentFacing, [0,1]) ?  $this->getEndOfMap($lineData) : $this->getStartOfMap($lineData)); }
+        // echo "No Wall on other end\n";
         
         $newCurrentPosition = (in_array($this->currentFacing, [0,1]) ?  $this->getStartOfMap($lineData)-1 : $this->getEndOfMap($lineData)+1);
         $newMoves = abs($this->movesOverEdgeOfMap($lineData, $proposedPosition));
@@ -154,13 +166,13 @@ class Day22 extends Day {
 
     private function getStartOfMap(string $lineData): int
     {
-        $r = array_diff(
+        return min(array_diff(
             [
                 strpos($lineData, "."),
                 strpos($lineData, "#")
-            ], array(false));
-        return min($r);
-        return min(strpos($lineData, "."), strpos($lineData, "#"));
+            ], array(false)));
+        // return min($r);
+        // return min(strpos($lineData, "."), strpos($lineData, "#"));
     }
 
     private function getEndOfMap(string $lineData): int 
@@ -189,6 +201,68 @@ class Day22 extends Day {
             case 3:
                 return strrpos(substr($lineData,0, $currentPosition), "#");
         }
+    }
+
+    private function changeFacing(string $rotation): void
+    {
+        /**
+         * 0 = R
+         * 1 = D
+         * 2 = L
+         * 3 = U
+         */
+        switch($rotation) {
+            case "R":
+                $this->incrementFacing();
+                break;
+            case "L":
+                $this->decreaseFacing();
+                break;
+        }
+    }
+
+    private function incrementFacing(): void
+    {
+        $newValue = $this->currentFacing + 1;
+        $this->currentFacing = $newValue > 3 ? 0 : $newValue;
+    }
+
+    private function decreaseFacing(): void
+    {
+        $newValue = $this->currentFacing - 1;
+        $this->currentFacing = $newValue < 0 ? 3 : $newValue;
+    }
+
+    private function getLineData(): string
+    {
+        return (in_array($this->currentFacing, [0,2])
+            ? $this->getRowData()
+            : $this->getColumnData()
+        );
+    }
+
+    private function getRowData(): string
+    {
+        return $this->inputData[$this->currentPosition["y"]];
+    }
+
+    private function getColumnData(): string
+    {
+        $columnData = "";
+        for($i=0; $i<count($this->inputData); $i++) {
+            $columnData .= $this->inputData[$i][$this->currentPosition["x"]] ?? " ";
+        }
+        return $columnData;
+    }
+
+    private function calculateFinalPassword(): int
+    {
+        $score = 0;
+        $score = 
+            ($this->currentPosition["y"] + 1) * 1000 +
+            ($this->currentPosition["x"] + 1) * 4 +
+            $this->currentFacing;
+        return $score;
     }
 
 }
