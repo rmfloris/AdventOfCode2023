@@ -19,6 +19,9 @@ class Day221 {
     } 
 
     private function getNewPosition(int $currentPosition, int $moves) {
+        // echo "\n----------------\n";
+        // echo "currentPosition: ". $currentPosition ."\n";
+        // echo "moves: ". $moves ."\n";
         $lineData = $this->getLineData($currentPosition);
         $nextWall = $this->findNextWall($lineData, $currentPosition);
         $proposedPosition = $currentPosition + ($moves * (in_array($this->currentFacing, [0,1]) ?  1 : -1));
@@ -30,7 +33,7 @@ class Day221 {
         if($newPosition = $this->fitsOnMap($proposedPosition, $lineData)) { return $newPosition; }
         // echo "Doesn't fit on map\n";
         
-        $newCurrentPosition = (in_array($this->currentFacing, [0,1]) ?  $this->getStartOfMap($lineData) : $this->getEndOfMap($lineData));
+        $newCurrentPosition = (in_array($this->currentFacing, [0,1]) ?  $this->getStartOfMap($lineData)-1 : $this->getEndOfMap($lineData)+1);
         $newMoves = abs($this->movesOverEdgeOfMap($lineData, $proposedPosition));
         return $this->getNewPosition($newCurrentPosition, $newMoves);
 

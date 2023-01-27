@@ -89,18 +89,18 @@ final class Day221Test extends TestCase
     public function testInfiniteOverflow(): void
     {
         $lineData = "  ............  ";
-        $moves = 13;
+        $moves = 34;
 
         $this->day->setData($lineData, $moves, 0);
-        $this->assertSame(7, $this->day->part1());
+        $this->assertSame(4, $this->day->part1());
 
         $this->day->setData($lineData, $moves, 1);
-        $this->assertSame(7, $this->day->part1());
+        $this->assertSame(4, $this->day->part1());
 
         $this->day->setData($lineData, $moves, 2);
-        $this->assertSame(4, $this->day->part1());
+        $this->assertSame(8, $this->day->part1());
 
         $this->day->setData($lineData, $moves, 3);
-        $this->assertSame(4, $this->day->part1());
+        $this->assertSame(8, $this->day->part1());
     }
 }
