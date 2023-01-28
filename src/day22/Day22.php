@@ -8,6 +8,7 @@ class Day22 extends Day {
     /** @var array<mixed> */
     private array $currentPosition;
     private int $currentFacing = 0;
+    /** @var array<mixed> */
     private array $visitedSpots;
     /** @var array<mixed> */
     private array $moves;
@@ -19,13 +20,20 @@ class Day22 extends Day {
         $this->setStartingPosition();
     }
 
-    public function setData(int $currentFacing, array $moves, array $currentPosition) {
+    /**
+     * @param array<mixed> $moves
+     * @param array<mixed> $currentPosition
+     */
+    public function setData(int $currentFacing, array $moves, array $currentPosition): void {
         $this->currentFacing = $currentFacing;
         $this->moves = $moves;
         $this->currentPosition = $currentPosition;
     }
 
-    public function getData() {
+    /**
+     * @return array<mixed>
+     */
+    public function getData(): array {
         return [
             "currentPosition" => $this->currentPosition,
             "moves" => $this->moves,
@@ -37,7 +45,6 @@ class Day22 extends Day {
     {
         $this->startMoving();
         return $this->calculateFinalPassword();
-        return 0;
     }
 
     public function part2(): int
@@ -48,15 +55,8 @@ class Day22 extends Day {
     public function startMoving(): void 
     {
         for($i=0; $i<count($this->moves["steps"]); $i++) {
-        // for($i=0; $i<10; $i++) {
-            // echo "\n---------------------------------------------------------------\n";
-            // echo "loop ". $i ."\n";
-            // echo "number of steps: ". $this->moves["steps"][$i] ."\n";
-            // echo "direction: ". $this->currentFacing ."\n";
-
             $newPosition = $this->getNewPosition($this->getCurrentPosition(), $this->moves["steps"][$i]);
             $this->updateCurrentPosition($newPosition, $this->moves["steps"][$i]);
-            // var_dump($this->currentPosition);
             $this->changeFacing($this->moves["turns"][$i]);
         }
     }
@@ -103,7 +103,7 @@ class Day22 extends Day {
         $this->setCurrentPosition($this->getStartOfMap($this->inputData[0]), 0);
     }
 
-    private function updateCurrentPosition($value, $steps): void
+    private function updateCurrentPosition(int $value, int $steps): void
     {
         (in_array($this->currentFacing, [0,2]) 
             ? $this->setCurrentPosition($value, $this->currentPosition["y"], $steps)
@@ -125,12 +125,15 @@ class Day22 extends Day {
         ];
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getVisitedSpots(): array
     {
         return $this->visitedSpots;
     }
 
-    private function getNewPosition(int $currentPosition, int $moves) {
+    private function getNewPosition(int $currentPosition, int $moves): int {
         $this->printOut("--", "---------------------");
         $this->printOut("currentPosition", $currentPosition);
         $this->printOut("moves", $moves);
@@ -162,7 +165,7 @@ class Day22 extends Day {
         return $this->getNewPosition($newCurrentPosition, $newMoves);
     }
 
-    private function movesOverEdgeOfMap($lineData, $proposedPosition) {
+    private function movesOverEdgeOfMap(string $lineData, int $proposedPosition): int {
         return (in_array($this->currentFacing, [0,1])
             ? $this->getEndOfMap($lineData) - $proposedPosition
             : $proposedPosition - $this->getStartOfMap($lineData)
@@ -174,7 +177,7 @@ class Day22 extends Day {
         return $proposedPosition;
     }
 
-    private function isWallOnOtherEnd($lineData): bool {
+    private function isWallOnOtherEnd(string $lineData): bool {
         if(in_array($this->currentFacing, [0,1])) {
             return ($lineData[$this->getStartOfMap($lineData)] == "#" ? true : false);
         }
@@ -198,7 +201,7 @@ class Day22 extends Day {
         return strlen($lineData) - $this->getStartOfMap(strrev($lineData)) - 1;
     }
 
-    private function hitWall(int|bool $nextWall, int $proposedPosition) {
+    private function hitWall(int|bool $nextWall, int $proposedPosition): int|bool {
         if($nextWall === false) { return false; }
         if(in_array($this->currentFacing, [0,1])) {
             $this->printOut("new position", ($proposedPosition >= $nextWall ? $nextWall-1 : $proposedPosition));
@@ -207,6 +210,7 @@ class Day22 extends Day {
         if(in_array($this->currentFacing, [2,3])) {
             return ($proposedPosition <= $nextWall ? $nextWall+1 : $proposedPosition);
         }
+        return false;
     }
 
     private function findNextWall(string $lineData, int $currentPosition): int|bool {
@@ -219,6 +223,7 @@ class Day22 extends Day {
             case 3:
                 return strrpos(substr($lineData,0, $currentPosition), "#");
         }
+        return false;
     }
 
     private function changeFacing(string $rotation): void

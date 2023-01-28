@@ -5,8 +5,8 @@ use day22\Day22;
 final class Day22Test extends TestCase
 {
 
-    private $day;
-    private $dayTest;
+    private Day22 $day;
+    private Day22 $dayTest;
 
     protected function setUp(): void
     {
@@ -19,10 +19,10 @@ final class Day22Test extends TestCase
         $this->assertSame(6032, $this->dayTest->part1());
     }
 
-//     public function testPart1(): void
-//     {
-//         $this->assertSame(0, $this->day->part1());
-//     }
+    public function testPart1(): void
+    {
+        $this->assertSame(11464, $this->day->part1());
+    }
 
 //     public function testPart2(): void
 //     {
@@ -31,6 +31,10 @@ final class Day22Test extends TestCase
 
     /**
      * @dataProvider provideInputData
+     * @param array<mixed> $expected
+     * @param array<mixed> $moves
+     * @param array<mixed> $currentPosition
+     * 
      */
     public function testAllMovements(array $expected, array $moves, array $currentPosition, int $currentFacing): void
     {
@@ -43,6 +47,8 @@ final class Day22Test extends TestCase
 
     /**
      * @dataProvider provideFacingData
+     * @param array<mixed> $moves
+     * @param array<mixed> $currentPosition
      */
     public function testChangeFacing(int $expected, array $moves, array $currentPosition, int $currentFacing): void
     {
@@ -57,7 +63,10 @@ final class Day22Test extends TestCase
      * Dataprovides
      *******************************************************************/
     
-    public function provideInputData(){
+    /**
+     * @return array<mixed>
+     */
+    public function provideInputData(): array{
         $moves = [
             "steps"=> [
                 20
@@ -222,7 +231,10 @@ final class Day22Test extends TestCase
         ];
     }
 
-    public function provideFacingData()
+    /**
+     * @return array<mixed>
+     */
+    public function provideFacingData(): array
     {
         $movesLeftFacing = [
             "steps"=> [

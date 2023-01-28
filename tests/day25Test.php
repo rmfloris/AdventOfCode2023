@@ -5,7 +5,7 @@ use day25\Day25;
 final class Day25Test extends TestCase
 {
 
-    private $day;
+    private Day25 $day;
 
     protected function setUp(): void
     {
