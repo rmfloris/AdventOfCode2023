@@ -15,8 +15,22 @@ class Day22 extends Day {
     public function loadData(): void 
     {
         parent::loadData();
-        $this->getMoves();
+        $this->getMovesFromFile();
         $this->setStartingPosition();
+    }
+
+    public function setData(int $currentFacing, array $moves, array $currentPosition) {
+        $this->currentFacing = $currentFacing;
+        $this->moves = $moves;
+        $this->currentPosition = $currentPosition;
+    }
+
+    public function getData() {
+        return [
+            "currentPosition" => $this->currentPosition,
+            "moves" => $this->moves,
+            "currentFacing" => $this->currentFacing
+        ];
     }
 
     public function part1(): int 
@@ -31,7 +45,7 @@ class Day22 extends Day {
         return 0;
     }
 
-    private function startMoving(): void 
+    public function startMoving(): void 
     {
         for($i=0; $i<count($this->moves["steps"]); $i++) {
         // for($i=0; $i<10; $i++) {
@@ -47,7 +61,7 @@ class Day22 extends Day {
         }
     }
 
-    private function getMoves(): void
+    private function getMovesFromFile(): void
     {
         foreach($this->inputData as $id => $line) {
             if(strlen($line) == 0) {
