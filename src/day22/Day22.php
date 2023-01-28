@@ -134,6 +134,7 @@ class Day22 extends Day {
         // echo "moves: ". $moves ."\n";
         $lineData = $this->getLineData();
         $nextWall = $this->findNextWall($lineData, $currentPosition);
+        // echo "Next wall at: ". $nextWall ."\n";
         $proposedPosition = $currentPosition + ($moves * (in_array($this->currentFacing, [0,1]) ?  1 : -1));
 
         // echo "does it hit a wall?\n";
@@ -146,6 +147,7 @@ class Day22 extends Day {
         
         $newCurrentPosition = (in_array($this->currentFacing, [0,1]) ?  $this->getStartOfMap($lineData)-1 : $this->getEndOfMap($lineData)+1);
         $newMoves = abs($this->movesOverEdgeOfMap($lineData, $proposedPosition));
+        // echo "get a new run\n";
         return $this->getNewPosition($newCurrentPosition, $newMoves);
 
         // return "unknown";
@@ -210,6 +212,7 @@ class Day22 extends Day {
         switch($this->currentFacing){
             case 0:
             case 1:
+                $currentPosition = ($currentPosition < 0 ? 0 : $currentPosition);
                 return strpos($lineData, "#", $currentPosition);
             case 2:
             case 3:

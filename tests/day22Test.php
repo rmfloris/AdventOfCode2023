@@ -160,7 +160,7 @@ final class Day22Test extends TestCase
                 ["x"=>74, "y"=>138],
                 1
             ],'Moving right and have overflow' => [
-                ["x"=> 56, "y"=> 1],
+                ["x"=> 57, "y"=> 1],
                 $movesOverflow,
                 ["x"=> 147, "y"=> 1],
                 0
@@ -180,7 +180,31 @@ final class Day22Test extends TestCase
             'Moving up and have overflow' => [
                 ["x"=>36, "y"=>100],
                 $movesOverflow,
-                ["x"=> 36, "y"=> 104],
+                ["x"=>36, "y"=>104],
+                3
+            ],
+            'Moving right on bottom section and have overflow' => [
+                ["x"=>1, "y"=>197],
+                $movesOverflow,
+                ["x"=>46, "y"=>197],
+                0
+            ],
+            'Moving left on bottom section and have overflow' => [
+                ["x"=>44, "y"=>194],
+                $movesOverflow,
+                ["x"=>4, "y"=>194],
+                2
+            ],
+            'Moving down on bottom section and have overflow' => [
+                ["x"=>1, "y"=>100],
+                $movesOverflow,
+                ["x"=>1, "y"=>194],
+                1
+            ],
+            'Moving up on bottom section and have overflow' => [
+                ["x"=>6, "y"=>192],
+                $movesOverflow,
+                ["x"=>6, "y"=>102],
                 3
             ],
         ];
@@ -201,7 +225,7 @@ final class Day22Test extends TestCase
                 10
             ],
             "turns" => [
-                "L"
+                "R"
             ]
         ];
 
