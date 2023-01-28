@@ -207,6 +207,12 @@ final class Day22Test extends TestCase
                 ["x"=>6, "y"=>102],
                 3
             ],
+            'hit a wall directly on the other side' => [
+                ["x"=>49, "y"=>195],
+                $movesOverflow,
+                ["x"=>47, "y"=>195],
+                0
+            ],
         ];
     }
 

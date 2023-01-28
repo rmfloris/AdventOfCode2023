@@ -129,43 +129,36 @@ class Day22 extends Day {
     }
 
     private function getNewPosition(int $currentPosition, int $moves) {
-        // echo "\n----------------\n";
-        // echo "currentPosition: ". $currentPosition ."\n";
-        // echo "moves: ". $moves ."\n";
+        $this->printOut("--", "---------------------");
+        $this->printOut("currentPosition", $currentPosition);
+        $this->printOut("moves", $moves);
         $lineData = $this->getLineData();
         $nextWall = $this->findNextWall($lineData, $currentPosition);
-        // echo "Next wall at: ". $nextWall ."\n";
+        $this->printOut("Next wall at", $nextWall);
         $proposedPosition = $currentPosition + ($moves * (in_array($this->currentFacing, [0,1]) ?  1 : -1));
 
-        // echo "does it hit a wall?\n";
+        $this->printOut("hit a wall", "?");
         if($newPosition = $this->hitWall($nextWall, $proposedPosition)) { return $newPosition; }
-        // echo "didn't hit wall\n";
+        $this->printOut("result:", "didn't hit wall");
         if($newPosition = $this->fitsOnMap($proposedPosition, $lineData)) { return $newPosition; }
-        // echo "Doesn't fit on map\n";
+        $this->printOut("fits", "doesn't fit on map");
         if($this->isWallOnOtherEnd($lineData)) { return (in_array($this->currentFacing, [0,1]) ?  $this->getEndOfMap($lineData) : $this->getStartOfMap($lineData)); }
-        // echo "No Wall on other end\n";
+        $this->printOut("other end", "no wall on other end");
         
         $newCurrentPosition = (in_array($this->currentFacing, [0,1]) ?  $this->getStartOfMap($lineData)-1 : $this->getEndOfMap($lineData)+1);
         $newMoves = abs($this->movesOverEdgeOfMap($lineData, $proposedPosition));
-        // echo "get a new run\n";
+        $this->printOut("new run", "yes, new run");
         return $this->getNewPosition($newCurrentPosition, $newMoves);
-
-        // return "unknown";
-        // return $proposedPosition;
     }
 
     private function movesOverEdgeOfMap($lineData, $proposedPosition) {
-        // echo "end: ". $this->getEndOfMap($lineData) ."\n";
-        // echo "prop: ". $proposedPosition ."\n";
         return (in_array($this->currentFacing, [0,1])
             ? $this->getEndOfMap($lineData) - $proposedPosition
             : $proposedPosition - $this->getStartOfMap($lineData)
         );
-        
     }
 
     private function fitsOnMap(int $proposedPosition, string $lineData): int|bool {
-        // echo "moves over: ". $this->movesOverEdgeOfMap($lineData, $proposedPosition) ."\n";
         if($this->movesOverEdgeOfMap($lineData, $proposedPosition) < 0) { return false; } 
         return $proposedPosition;
     }
@@ -187,14 +180,10 @@ class Day22 extends Day {
                 strpos($lineData, "."),
                 strpos($lineData, "#")
             ], array(false)));
-        // return min($r);
-        // return min(strpos($lineData, "."), strpos($lineData, "#"));
     }
 
     private function getEndOfMap(string $lineData): int 
     {
-        // echo "len: ". strlen($lineData) ."\n";
-        // echo "start: ". $this->getStartOfMap(strrev($lineData)) ."\n";
         return strlen($lineData) - $this->getStartOfMap(strrev($lineData)) - 1;
     }
 
@@ -281,5 +270,4 @@ class Day22 extends Day {
             $this->currentFacing;
         return $score;
     }
-
 }

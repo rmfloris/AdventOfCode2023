@@ -6,7 +6,9 @@ use day22\Day22;
 echo "<pre>";
 
 $day = new Day22();
-echo "outcome: ". $day->part1() ." \n";
+// echo "outcome: ". $day->part1() ." \n";
+// var_dump($day->getVisitedSpots());
+
 $moves = [
     "steps"=> [
         10
@@ -17,14 +19,14 @@ $moves = [
 ];  
 
 $currentPosition = [
-    "x" => 46,
-    "y" => 197
+    "x" => 47,
+    "y" => 194
 ];
 
+$day->setDebugMode();
 $day->setData(0, $moves, $currentPosition);
 $day->startMoving();
+echo "<p>";
 var_dump($day->getData());
-print_r(["x"=>1, "y"=>197]);
-// echo "outcome: ". $day->part1() ." \n";
 
-// var_dump($day->getVisitedSpots());
+

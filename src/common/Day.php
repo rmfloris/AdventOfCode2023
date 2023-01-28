@@ -9,6 +9,7 @@ abstract class Day {
     protected array $options;
     protected int $dayNumber;
     protected float $startTime;
+    protected bool $debug = false;
 
     public function __construct(bool $test = false)
     {
@@ -75,6 +76,18 @@ abstract class Day {
     public function getElapsedTime(): string
     {
         return round($this->getMicroSeconds() - $this->startTime, 4) ." seconds\n";
+    }
+
+    public function setDebugMode(): void
+    {
+        $this->debug = true;
+    }
+
+    protected function printOut(string $title, mixed $value): void
+    {
+        if($this->debug) { 
+            echo $title. ": ". (is_array($value) ? print_r($value, true) : $value) ."\n";
+        }
     }
 
     abstract protected function part1(): int|string;
