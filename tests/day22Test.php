@@ -213,6 +213,12 @@ final class Day22Test extends TestCase
                 ["x"=>47, "y"=>195],
                 0
             ],
+            'Error Move' => [
+                "expectedPosition"=>["x"=>116, "y"=>0],
+                "moves"=>["steps"=>[26], "turns"=>["R"]],
+                "currentPosition"=>["x"=>116, "y"=>47],
+                "currentFacing"=>1
+            ],
         ];
     }
 
@@ -242,10 +248,10 @@ final class Day22Test extends TestCase
 
         return [
             'Moving right & change left' => [
-                3,
-                $movesLeftFacing,
-                $currentPosition,
-                0
+                "outcomeFacing"=>3,
+                "moves"=>$movesLeftFacing,
+                "currentPosition"=>$currentPosition,
+                "currentFacing"=>0
             ],
             'Moving left & change left' => [
                 1,

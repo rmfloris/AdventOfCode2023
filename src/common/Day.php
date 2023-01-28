@@ -90,6 +90,12 @@ abstract class Day {
         }
     }
 
+    protected function getInputFile(): string
+    {
+        $inputFilename = $this->getInputFilename();
+        return file_get_contents($inputFilename);
+    }
+
     abstract protected function part1(): int|string;
     abstract protected function part2(): int|string;
 }

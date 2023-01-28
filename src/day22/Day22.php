@@ -55,7 +55,7 @@ class Day22 extends Day {
             // echo "direction: ". $this->currentFacing ."\n";
 
             $newPosition = $this->getNewPosition($this->getCurrentPosition(), $this->moves["steps"][$i]);
-            $this->updateCurrentPosition($newPosition);
+            $this->updateCurrentPosition($newPosition, $this->moves["steps"][$i]);
             // var_dump($this->currentPosition);
             $this->changeFacing($this->moves["turns"][$i]);
         }
@@ -103,21 +103,23 @@ class Day22 extends Day {
         $this->setCurrentPosition($this->getStartOfMap($this->inputData[0]), 0);
     }
 
-    private function updateCurrentPosition($value): void
+    private function updateCurrentPosition($value, $steps): void
     {
         (in_array($this->currentFacing, [0,2]) 
-            ? $this->setCurrentPosition($value, $this->currentPosition["y"])
-            :$this->setCurrentPosition($this->currentPosition["x"], $value)
+            ? $this->setCurrentPosition($value, $this->currentPosition["y"], $steps)
+            :$this->setCurrentPosition($this->currentPosition["x"], $value, $steps)
         );
     }
 
-    private function setCurrentPosition(int $x, int $y): void
+    private function setCurrentPosition(int $x, int $y, int $steps = null): void
     {
         $this->currentPosition = [
             "x" => $x, 
             "y" => $y
         ];
         $this->visitedSpots[] = [
+            "stepsDone" => $steps,
+            "currentFacing" => $this->currentFacing,
             "x" => $x, 
             "y" => $y
         ];
@@ -136,11 +138,20 @@ class Day22 extends Day {
         $nextWall = $this->findNextWall($lineData, $currentPosition);
         $this->printOut("Next wall at", $nextWall);
         $proposedPosition = $currentPosition + ($moves * (in_array($this->currentFacing, [0,1]) ?  1 : -1));
-
+        $this->printOut("ProposedPosition", $proposedPosition);
+        
         $this->printOut("hit a wall", "?");
-        if($newPosition = $this->hitWall($nextWall, $proposedPosition)) { return $newPosition; }
+        $newPosition = $this->hitWall($nextWall, $proposedPosition);
+        if($newPosition !== false) {
+            return $newPosition;
+        }
+        // if($newPosition = $this->hitWall($nextWall, $proposedPosition)) { echo $newPosition ."--\n"; return $newPosition; }
         $this->printOut("result:", "didn't hit wall");
-        if($newPosition = $this->fitsOnMap($proposedPosition, $lineData)) { return $newPosition; }
+        $newPosition = $this->fitsOnMap($proposedPosition, $lineData);
+        if($newPosition !== false) {
+            return $newPosition;
+        }
+        // if($newPosition = $this->fitsOnMap($proposedPosition, $lineData)) { return $newPosition; }
         $this->printOut("fits", "doesn't fit on map");
         if($this->isWallOnOtherEnd($lineData)) { return (in_array($this->currentFacing, [0,1]) ?  $this->getEndOfMap($lineData) : $this->getStartOfMap($lineData)); }
         $this->printOut("other end", "no wall on other end");
@@ -190,6 +201,7 @@ class Day22 extends Day {
     private function hitWall(int|bool $nextWall, int $proposedPosition) {
         if($nextWall === false) { return false; }
         if(in_array($this->currentFacing, [0,1])) {
+            $this->printOut("new position", ($proposedPosition >= $nextWall ? $nextWall-1 : $proposedPosition));
             return ($proposedPosition >= $nextWall ? $nextWall-1 : $proposedPosition);
         }
         if(in_array($this->currentFacing, [2,3])) {
