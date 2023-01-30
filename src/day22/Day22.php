@@ -145,7 +145,7 @@ class Day22 extends Day {
         
         $this->printOut("hit a wall", "?");
         $newPosition = $this->hitWall($nextWall, $proposedPosition);
-        if($newPosition !== false) {
+        if($newPosition != -1) {
             return $newPosition;
         }
         // if($newPosition = $this->hitWall($nextWall, $proposedPosition)) { echo $newPosition ."--\n"; return $newPosition; }
@@ -201,8 +201,8 @@ class Day22 extends Day {
         return strlen($lineData) - $this->getStartOfMap(strrev($lineData)) - 1;
     }
 
-    private function hitWall(int|bool $nextWall, int $proposedPosition): int|bool {
-        if($nextWall === false) { return false; }
+    private function hitWall(int|bool $nextWall, int $proposedPosition): int {
+        if($nextWall === false) { return -1; }
         if(in_array($this->currentFacing, [0,1])) {
             $this->printOut("new position", ($proposedPosition >= $nextWall ? $nextWall-1 : $proposedPosition));
             return ($proposedPosition >= $nextWall ? $nextWall-1 : $proposedPosition);
@@ -210,7 +210,7 @@ class Day22 extends Day {
         if(in_array($this->currentFacing, [2,3])) {
             return ($proposedPosition <= $nextWall ? $nextWall+1 : $proposedPosition);
         }
-        return false;
+        return -1;
     }
 
     private function findNextWall(string $lineData, int $currentPosition): int|bool {
