@@ -1,7 +1,6 @@
 # Advent of Coda
 Done for the years:
 * 2022
-* 2023
 
 # How to....
 - Install dependencies via `sudo composer install`
