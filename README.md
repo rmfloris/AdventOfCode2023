@@ -1,2 +1,9 @@
-# advent_of_code_2022
-advent_of_code_2022
+# Advent of Coda
+Done for the years:
+* 2022
+* 2023
+
+# How to....
+- Install dependencies via `sudo composer install`
+- Run tests via `./vendor/bin/phpunit tests/2022` where the year can change
+- Run code quality via `./vendor/bin/phpstan`

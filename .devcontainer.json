@@ -8,8 +8,8 @@
         "formulahendry.auto-rename-tag",
         "chrmarti.regex",
         "bmewburn.vscode-intelephense-client",
-	"amatiasq.sort-imports",
-	"ms-azuretools.vscode-docker",
-	"ecmel.vscode-html-css"
+	    "amatiasq.sort-imports",
+	    "ms-azuretools.vscode-docker",
+	    "ecmel.vscode-html-css"
     ]
 }
