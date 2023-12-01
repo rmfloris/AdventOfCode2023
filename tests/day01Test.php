@@ -14,11 +14,11 @@ final class Day01Test extends TestCase
     
     public function testPart1(): void
     {
-        $this->assertSame(67658, $this->day->part1());
+        $this->assertSame(54081, $this->day->part1());
     }
 
     public function testPart2(): void
     {
-        $this->assertSame(200158, $this->day->part2());
+        $this->assertSame(54649, $this->day->part2());
     }
 }

@@ -2,8 +2,14 @@
 
 namespace common;
 
+/**
+ * @var array<mixed>
+ */
 class Helper {
-    public static function getKey(int $x, int $y) :string {
-        return json_encode([(string)$x, (string)$y]);
+
+    public static function printRFormatted($data) {
+        echo "<pre>";
+        print_r($data);
+        echo "<pre>";
     }
 }
