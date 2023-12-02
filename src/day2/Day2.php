@@ -9,6 +9,7 @@ class Day2 extends Day {
         "blue" => 14,
         "green" => 13
     ];
+    private $minDice = [];
 
     private function checkNumberOfCubesBelowMax() {
         foreach($this->inputData as $gameKey => $line) {
@@ -23,12 +24,38 @@ class Day2 extends Day {
         }
     }
 
+    private function getMinimumCubes() {
+        foreach($this->inputData as $gameKey => $line) {
+            $this->minDice[$gameKey] = [];
+            preg_match_all("#(\d+) ([a-zA-Z]+)#", $line, $matches);
+        
+            foreach($matches[1] as $index => $colorCount) {
+                $color = $matches[2][$index];
+                if(!array_key_exists($color, $this->minDice[$gameKey])) {
+                    $this->minDice[$gameKey][$color] = $colorCount;
+                } elseif($colorCount > $this->minDice[$gameKey][$color]) {
+                    $this->minDice[$gameKey][$color] = $colorCount;
+                }  
+            }
+        }
+    }
+
+    private function getGameResult() {
+        $gameResult = 0;
+        foreach($this->minDice as $game) {
+            $gameResult += array_product($game);
+        }
+        return $gameResult;
+    }
+
     public function part1(): int {
         $this->checkNumberOfCubesBelowMax();
         return array_sum($this->gameResult);
     }
 
     public function part2(): int {
-        return 1;
+        $this->getMinimumCubes();
+
+        return $this->getGameResult();
     }   
 }

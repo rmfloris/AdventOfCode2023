@@ -19,9 +19,6 @@ final class Day02Test extends TestCase
 
     public function testPart2(): void
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-          );
-        $this->assertSame(54649, $this->day->part2());
+        $this->assertSame(67335, $this->day->part2());
     }
 }
