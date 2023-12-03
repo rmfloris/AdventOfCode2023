@@ -2,12 +2,12 @@
 
 namespace common;
 
-/**
- * @var array<mixed>
- */
 class Helper {
 
-    public static function printRFormatted($data) {
+    /**
+     * @param array<mixed> $data
+     */
+    public static function printRFormatted($data):void {
         echo "<pre>";
         print_r($data);
         echo "<pre>";

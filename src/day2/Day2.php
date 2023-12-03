@@ -3,15 +3,18 @@ namespace day2;
 use common\Day;
 
 class Day2 extends Day {
+    /** @var array<mixed> */
     private $gameResult = [];
+    /** @var array<mixed> */
     private $maxDice = [
         "red" => 12,
         "blue" => 14,
         "green" => 13
     ];
+    /** @var array<mixed> */
     private $minDice = [];
 
-    private function checkNumberOfCubesBelowMax() {
+    private function checkNumberOfCubesBelowMax(): void {
         foreach($this->inputData as $gameKey => $line) {
             $this->gameResult[$gameKey] = $gameKey + 1;
             preg_match_all("#(\d+) ([a-zA-Z]+)#", $line, $matches);
@@ -24,7 +27,7 @@ class Day2 extends Day {
         }
     }
 
-    private function getMinimumCubes() {
+    private function getMinimumCubes(): void {
         foreach($this->inputData as $gameKey => $line) {
             $this->minDice[$gameKey] = [];
             preg_match_all("#(\d+) ([a-zA-Z]+)#", $line, $matches);
@@ -40,7 +43,7 @@ class Day2 extends Day {
         }
     }
 
-    private function getGameResult() {
+    private function getGameResult(): int {
         $gameResult = 0;
         foreach($this->minDice as $game) {
             $gameResult += array_product($game);

@@ -5,26 +5,25 @@ use common\Helper;
 
 class Day1 extends Day {
     /**
-    * @return array<int>
+    * @return array<string>
     */
-    private function getFirstAndLastNumber($inputData) {
+    private function getFirstAndLastNumber() {
         $numbersArray = [];
-        foreach($inputData as $line) {
+        foreach($this->inputData as $line) {
             preg_match_all("#\d#", $line, $matches);
             $numbersArray[] = $this->combineStrings($matches[0][0], end($matches[0]));
         }
         return $numbersArray;
     }
 
-    private function combineStrings(string $firstValue, string $secondValue): string {
+    private function combineStrings(string|int $firstValue, string|int $secondValue): string {
         return $firstValue . $secondValue;
     }
 
-    private function summation($numbersArray) {
-        return array_sum($numbersArray);
-    }
-
-    private function getFirstAndLastNumberV2($inputData) {
+    /**
+     * @return array<mixed>
+     */
+    private function getFirstAndLastNumberV2() {
         $numbersAsStringOptions = [
             "one" => 1,
             "two" => 2,
@@ -46,7 +45,7 @@ class Day1 extends Day {
             9 => 9
         ];
         $numbersArray = [];
-        foreach($inputData as $line) {
+        foreach($this->inputData as $line) {
             $positions = [];
             foreach($numbersAsStringOptions as $numberToFind => $numbericValue) {
                 $start = 0;
@@ -63,10 +62,10 @@ class Day1 extends Day {
     }
 
     public function part1(): int {
-        return $this->summation($this->getFirstAndLastNumber($this->inputData));
+        return array_sum($this->getFirstAndLastNumber());
     }
 
     public function part2(): int {
-        return $this->summation($this->getFirstAndLastNumberV2($this->inputData));
+        return array_sum($this->getFirstAndLastNumberV2());
     }
 }
