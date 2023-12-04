@@ -5,10 +5,11 @@ namespace day4;
 use common\Day;
 
 class Day4 extends Day {
-
     private int $totalPoints = 0;
+    /** @var array<int> */
     private $scorePerCard = [];
-    private int $totalCards = 0;
+    /** @var array<int> */
+    private $additionalPointsPerCard = [];
 
     private function calculatePoints(): void {
         foreach($this->inputData as $lineId => $line) {
@@ -22,15 +23,11 @@ class Day4 extends Day {
 
             $numberOfWinningNumbers = count(array_intersect($winningNumbers, $cardNumbers));
 
-            $this->scorePerCard[] = [
-                "cardNo" => $lineId,
-                "score" => $numberOfWinningNumbers
-            ];
+            $this->scorePerCard[$lineId] = $numberOfWinningNumbers;
 
             if($numberOfWinningNumbers === 0) { 
                 continue;
             } elseif ($numberOfWinningNumbers === 1) {
-                
                 $this->totalPoints += 1;
             } else {
                 $this->totalPoints += pow(2, $numberOfWinningNumbers-1);
@@ -38,23 +35,21 @@ class Day4 extends Day {
         }
     }
 
-    private function getNumberOfCards() {
-        while(count($this->scorePerCard) > 0) {
-            $this->totalCards += 1;
-
-            // add new cards to the list
-            $cardNo = current($this->scorePerCard)["cardNo"];
-            $score = current($this->scorePerCard)["score"];
-
-            echo $cardNo ." - ". $score ."<br>";
-            if($score !== 0) {
-                echo "adding<br>";
-            }
+    private function getNumberOfCards(): void {
+        for (end($this->scorePerCard); key($this->scorePerCard)!==null; prev($this->scorePerCard)){
+            $cardId = key($this->scorePerCard);
+            $score = current($this->scorePerCard);
             
-            // remove current card from list
-            array_shift($this->scorePerCard);
+            if($cardId + $score > count($this->scorePerCard)) {
+                $score = count($this->scorePerCard) - $cardId;
+            }
+            $additionalScore = 0;
+            
+            for($x=1;$x<=$score;$x++) {
+                $additionalScore += $this->additionalPointsPerCard[$cardId+$x];
+            }
+            $this->additionalPointsPerCard[$cardId] = $additionalScore + $score;
         }
-        return 1;
     }
 
     public function part1(): int {
@@ -65,7 +60,7 @@ class Day4 extends Day {
     public function part2(): int {
         $this->calculatePoints();
         $this->getNumberOfCards();
-        return 1;
+        return array_sum($this->additionalPointsPerCard) + count($this->scorePerCard);
     }
     
 }

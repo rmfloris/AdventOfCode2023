@@ -27,13 +27,13 @@ final class day04Test extends TestCase
 
     public function testPart2Sample(): void
     {
-        $this->markTestIncomplete("To be done");
-        // $this->assertSame(467835, $this->sampleDay->part2());
+        // $this->markTestIncomplete("To be done");
+        $this->assertSame(30, $this->sampleDay->part2());
     }
 
     public function testPart2(): void
     {
-        $this->markTestIncomplete("To be done");
-        // $this->assertSame(84363105, $this->day->part2());
+        // $this->markTestIncomplete("To be done");
+        $this->assertSame(5489600, $this->day->part2());
     }
 }
