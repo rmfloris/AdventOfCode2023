@@ -3,14 +3,13 @@
 namespace day5;
 
 use common\Day;
-use common\Helper;
 
 class Day5 extends Day {
 
     private $maps = [];
     private $seeds = [];
-    private $seedsRange = [];
     private $locations = [];
+    private $seedStack = [];
 
     private function parseData() {
         $map = '';
@@ -31,9 +30,8 @@ class Day5 extends Day {
         }
     }
 
-    private function findClosesLocation($seeds) {
-        // foreach($this->seeds as $seed) {
-        foreach($seeds as $seed) {
+    private function findClosesLocation() {
+        foreach($this->seeds as $seed) {
             $originalSeed = $seed;
             foreach($this->maps as $key => $map) {
                 foreach($map as $range) {
@@ -55,32 +53,96 @@ class Day5 extends Day {
         }
     }
 
-    private function seedsToRanges() {
-        
-        for($i=0;$i<count($this->seeds); $i+=2){
-            
-            $seed = $this->seeds[$i];
-            // echo "seend: ". $seed;
-            $range = $this->seeds[$i+1];
-            // echo "range: ". $range;
-            for($x=$seed; $x<$seed+$range; $x++) {
-                $this->seedsRange[] = $x;
-            }
+    private function createSeedStack() {
+        for($i=0; $i<count($this->seeds); $i+=2) {
+            $this->seedStack[] = [
+                "mapIndex"=> -1,
+                "minRange" => $this->seeds[$i], 
+                "maxRange" => $this->seeds[$i]+$this->seeds[$i+1]-1
+            ];
         }
+    }
+
+    private function findClosesLocationBasedOnRange() {
+        $mapIndex = array_keys($this->maps);
+        $targetIndex = count($mapIndex)-1;
+
+        while(!empty($this->seedStack)) {
+            $currentRange = array_pop($this->seedStack);
+            // echo "<hr>CurrentRange -> ";
+            // print_r($currentRange);
+            if($currentRange["mapIndex"] == $targetIndex) {
+                // echo "found";
+                $this->locations[] = $currentRange["minRange"];
+                continue;
+            }
+            
+            foreach($this->maps[$mapIndex[$currentRange["mapIndex"]+1]] as $range) {
+                $minRange = $range["sourceStart"];
+                $maxRange = $range["sourceStart"]+$range["rangeLength"]-1;
+                // print_r($range);
+                if($currentRange["minRange"] <= $maxRange && $currentRange["maxRange"] >= $minRange) {       
+                    $shiftNumbers = $range["destinationStart"] - $range["sourceStart"];
+                    $matchedRange = [
+                        "minRange" => max($minRange, $currentRange["minRange"]),
+                        "maxRange" => min($maxRange, $currentRange["maxRange"])
+                    ];
+        
+                    $this->seedStack[] = [
+                        "mapIndex" => $currentRange["mapIndex"]+1,
+                        "minRange" => $matchedRange["minRange"]+$shiftNumbers,
+                        "maxRange" => $matchedRange["maxRange"]+$shiftNumbers
+                    ];
+        
+                    // echo "AddedToStack -> ";
+                    // print_r(end($this->seedStack));
+        
+                    if($currentRange["minRange"] < $matchedRange["minRange"]) {
+                        // echo "<br>Below<br>";
+                        $this->seedStack[] = [
+                            "mapIndex" => $currentRange["mapIndex"],
+                            "minRange" => $currentRange["minRange"],
+                            "maxRange" => $matchedRange["minRange"]-1
+                        ];
+                        // echo "AddedToStack -> ";
+                        // print_r(end($this->seedStack));
+                    }
+        
+                    if($currentRange["maxRange"] > $matchedRange["maxRange"]) {
+                        // echo "<br>Above<br>";
+                        $this->seedStack[] = [
+                            "mapIndex" => $currentRange["mapIndex"],
+                            "minRange" => $matchedRange["maxRange"]+1,
+                            "maxRange" => $currentRange["maxRange"]
+                        ];
+                        // echo "AddedToStack -> ";
+                        // print_r(end($this->seedStack));
+                    }
+                    
+                    continue 2;
+                }
+            }
+            $this->seedStack[] = [
+                "mapIndex" => $currentRange["mapIndex"]+1,
+                "minRange" => $currentRange["minRange"],
+                "maxRange" => $currentRange["maxRange"]
+            ];
+            // echo "AddedToStack -> ";
+            // print_r(end($this->seedStack));
+        }
+
     }
 
     public function part1(): int {
         $this->parseData();
-        $this->findClosesLocation($this->seeds);
+        $this->findClosesLocation();
         return min($this->locations);
     }
 
     public function part2(): int {
         $this->parseData();
-        $this->seedsToRanges();
-        // Helper::printRFormatted($this->seedsRange);
-        $this->findClosesLocation($this->seedsRange);
+        $this->createSeedStack();
+        $this->findClosesLocationBasedOnRange();
         return min($this->locations);
     }
-    
 }
