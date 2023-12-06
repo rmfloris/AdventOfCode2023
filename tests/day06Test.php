@@ -15,25 +15,25 @@ final class day06Test extends TestCase
     
     public function testPart1Sample(): void
     {
-        $this->markTestIncomplete("To be done");
-        // $this->assertSame(4361, $this->sampleDay->part1());
+        // $this->markTestIncomplete("To be done");
+        $this->assertSame(288, $this->sampleDay->part1());
     }
 
     public function testPart1(): void
     {
-        $this->markTestIncomplete("To be done");
-        // $this->assertSame(553079, $this->day->part1());
+        // $this->markTestIncomplete("To be done");
+        $this->assertSame(2269432, $this->day->part1());
     }
 
     public function testPart2Sample(): void
     {
-        $this->markTestIncomplete("To be done");
-        // $this->assertSame(467835, $this->sampleDay->part2());
+        // $this->markTestIncomplete("To be done");
+        $this->assertSame(71503, $this->sampleDay->part2());
     }
 
     public function testPart2(): void
     {
-        $this->markTestIncomplete("To be done");
-        // $this->assertSame(84363105, $this->day->part2());
+        // $this->markTestIncomplete("To be done");
+        $this->assertSame(35865985, $this->day->part2());
     }
 }
