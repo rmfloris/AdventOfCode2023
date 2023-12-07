@@ -5,12 +5,14 @@ namespace day6;
 use common\Day;
 
 class Day6 extends Day {
-
+    /** @var array<int> */
     private array $time = [];
+    /** @var array<int> */
     private array $distance = [];
+    /** @var array<int> */
     private array $winners = [];
 
-    private function parseData() {
+    private function parseData(): void {
         preg_match_all("#\d+#", $this->inputData[0], $matches);    
         $this->time = $matches[0];
         $this->winners = array_fill(0,count($matches[0]), 0);
@@ -20,7 +22,7 @@ class Day6 extends Day {
         
     }
 
-    private function calculateWinners() {
+    private function calculateWinners(): void {
         foreach($this->time as $key => $time) {
             for($i=1; $i<$time;$i++) {
                 $distance = ($time - $i) * $i;
@@ -30,15 +32,20 @@ class Day6 extends Day {
             }
         }
     }
-
-    private function mergeArray($array) {
-        $string = '';
+    /**
+     * @param array<int> $array
+     */
+    private function mergeArray($array): int {
+        $combinedValues = '';
         foreach($array as $value) {
-            $string = $string . $value;
+            $combinedValues = $combinedValues . $value;
         }
-        return $string;
+        return (int) $combinedValues;
     }
 
+    /**
+     * @return array<string, int>
+     */
     private function getOptions() {
         $time = $this->mergeArray($this->time);
         $distance = $this->mergeArray($this->distance);
@@ -46,8 +53,8 @@ class Day6 extends Day {
         $minOption = ($time-(sqrt(pow($time,2)-4*$distance)))/2;
 
         return [
-            "min" => ceil($minOption),
-            "max" => floor($maxOption)
+            "min" => (int) ceil($minOption),
+            "max" => (int) floor($maxOption)
         ];
     }
 

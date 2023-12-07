@@ -6,12 +6,16 @@ use common\Day;
 
 class Day5 extends Day {
 
+    /** @var array<array<array<string>>> */
     private $maps = [];
+    /** @var array<int> */
     private $seeds = [];
+    /** @var array<int> */
     private $locations = [];
+    /** @var array<mixed> */
     private $seedStack = [];
 
-    private function parseData() {
+    private function parseData(): void {
         $map = '';
         foreach($this->inputData as $key => $line) {
             if($key === 0) {
@@ -30,30 +34,23 @@ class Day5 extends Day {
         }
     }
 
-    private function findClosesLocation() {
+    private function findClosesLocation(): void {
         foreach($this->seeds as $seed) {
             $originalSeed = $seed;
-            foreach($this->maps as $key => $map) {
+            foreach($this->maps as $map) {
                 foreach($map as $range) {
                     if($seed >= $range["sourceStart"] && $seed < ($range["sourceStart"] + $range["rangeLength"])) {
                         $newSeed = $seed + $range["destinationStart"] - $range["sourceStart"];
                         $seed = $newSeed;
-                        // echo "start: ". $range["sourceStart"] ."<br>";
-                        // echo "map: ". $key ."<br>";
-                        // echo "length: ". $range["rangeLength"] ."<br>";
-                        // echo "seed: ". $seed ."<br>"; 
-                        // echo "new: ". $newSeed ."<br><br>";
-                        
                         break;
                     }
                 }
             }
-        
             $this->locations[$originalSeed] = $seed;
         }
     }
 
-    private function createSeedStack() {
+    private function createSeedStack(): void {
         for($i=0; $i<count($this->seeds); $i+=2) {
             $this->seedStack[] = [
                 "mapIndex"=> -1,
@@ -63,7 +60,7 @@ class Day5 extends Day {
         }
     }
 
-    private function findClosesLocationBasedOnRange() {
+    private function findClosesLocationBasedOnRange(): void {
         $mapIndex = array_keys($this->maps);
         $targetIndex = count($mapIndex)-1;
 
