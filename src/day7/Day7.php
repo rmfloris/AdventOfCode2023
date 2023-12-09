@@ -51,11 +51,7 @@ class Day7 extends Day {
 
     private function calculateScore($frequencyPerCard): int {
         arsort($frequencyPerCard);
-        // echo "before -> ";
-        // print_r($frequencyPerCard);
         $frequencyPerCard = ($this->areJokersActive ? $this->updateHandForJokers($frequencyPerCard) : $frequencyPerCard);
-        // echo "after -> ";
-        // print_r($frequencyPerCard);
         $maxScore = (max($frequencyPerCard) == 1 ? 0 : max($frequencyPerCard));
         $pointsToAllocate = $maxScore;        
 

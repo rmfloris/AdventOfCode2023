@@ -5,8 +5,13 @@ namespace day9;
 use common\Day;
 
 class Day9 extends Day {
+    /** @var array<int> */
     private $newHistory = [];
 
+    /**
+     * @param array<string|int> $numbers
+     * @return array<int>
+     */
     private function calculateDeltas($numbers) {
         $deltas = [];
         for($i=1; $i<count($numbers); $i++) {
@@ -15,29 +20,34 @@ class Day9 extends Day {
         return $deltas;
     }
 
-    private function getHistoryNumbers($numbers, $lookupRight=true) {
-        // $data = ($lookupRight ? "end" : "Begin");
-        // echo "--". $data ."--<br>";
-        $historicNumbers[] = ($lookupRight ? end($numbers) : reset($numbers));
+    /**
+     * @param array<string> $numbers
+     * @return array<int>
+     */
+    private function getHistoryNumbers($numbers, bool $lookupRight=true) {
+        $historicNumbers[] = (int) ($lookupRight ? end($numbers) : reset($numbers));
         $deltas = $this->calculateDeltas($numbers);
 
         while(!$this->deltasAreAllZeros($deltas)) {
-            // echo "inside loop";
-            $historicNumbers[] = ($lookupRight ? end($deltas) : reset($deltas));
-            // $lastNumbers[] = end($deltas);
+            $historicNumbers[] = (int) ($lookupRight ? end($deltas) : reset($deltas));
 
             $deltas = $this->calculateDeltas($deltas);
         }
-        // print_r($historicNumbers);
         return $historicNumbers;
     }
     
-    private function deltasAreAllZeros($numbers) {
+    /**
+     * @param array<int> $numbers
+     */
+    private function deltasAreAllZeros($numbers): bool {
         if(empty($numbers)) { return false; }
         return (array_sum($numbers) === 0 && $numbers[0] === 0);
     }
 
-    private function getFirstNumbersScore($numbers) {
+    /**
+     * @param array<int> $numbers
+     */
+    private function getFirstNumbersScore($numbers): int {
         $result = 0;
         foreach(array_reverse($numbers) as $number) {
             $result = $number - $result;
