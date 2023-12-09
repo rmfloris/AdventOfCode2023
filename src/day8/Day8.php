@@ -90,7 +90,7 @@ class Day8 extends Day {
         return $answer;
     }
 
-    private function gcd($a, $b) {
+    private function gcd($a, $b): int {
         if ($b == 0) {
             return $a;
         }

@@ -12,15 +12,7 @@ class Day7 extends Day {
     /** @var array<string | int> */
     private array $cardsWithJokerActive = ["A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3","2", "J"];
     /** @var array<string | int> */
-    private array $typeOptions = [
-        50 => "5 of a kind", // $score = 5
-        40 => "4 of a kind", // $score = 4
-        35 => "full house",  // $score = 3 & $score = 2 
-        30 => "3 of a kind", // $score = 3 & $score != 2
-        20 => "2 pair",      // $score = 2 & $score = 2 
-        10 => "1 pair",      // $score = 1 & $score = 1
-        0 =>  "high card"    // $score = 1   
-    ];
+
     private bool $areJokersActive = false;
 
     private function parseData() {

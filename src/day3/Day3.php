@@ -3,6 +3,7 @@
 namespace day3;
 
 use common\Day;
+use common\Helper;
 
 class Day3 extends Day {
     /** @var array<string> */
@@ -30,7 +31,7 @@ class Day3 extends Day {
         foreach($this->inputData as $lineNumber => $line) {
             for($i=0; $i<strlen($line); $i++) {
                 if(array_search($line[$i], $this->symbols) !== false) {
-                    $this->symbolLocations[$this->getKey($i,$lineNumber)] = [
+                    $this->symbolLocations[Helper::getKey($i,$lineNumber)] = [
                         "x" => $i,
                         "y" => $lineNumber,
                         "symbol" => $line[$i]
@@ -64,10 +65,10 @@ class Day3 extends Day {
         
             foreach($yRange as $y) {
                 foreach($xRange as $x) {
-                    if(isset($this->symbolLocations[$this->getKey($x,$y)])) {
+                    if(isset($this->symbolLocations[Helper::getKey($x,$y)])) {
                         $this->touchingNumbers[] = $numberInfo["value"];
-                        if($this->symbolLocations[$this->getKey($x,$y)]["symbol"] === $this->gear) {
-                            $this->gears[$this->getKey($x,$y)][$numberInfo["value"]] = $numberInfo["value"]; 
+                        if($this->symbolLocations[Helper::getKey($x,$y)]["symbol"] === $this->gear) {
+                            $this->gears[Helper::getKey($x,$y)][$numberInfo["value"]] = $numberInfo["value"]; 
                         }
                     }
                 }
@@ -81,10 +82,6 @@ class Day3 extends Day {
                 $this->gearRatios[] = current($gearConnections) * end($gearConnections);
             }
         }
-    }
-
-    private function getKey(string|int|float $x, string|int|float $y): string{
-        return $x .",".$y;
     }
 
     public function part1(): int {
