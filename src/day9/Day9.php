@@ -15,17 +15,21 @@ class Day9 extends Day {
         return $deltas;
     }
 
-    private function getLastNumbers($numbers) {
-        $lastNumbers[] = end($numbers);
+    private function getHistoryNumbers($numbers, $lookupRight=true) {
+        // $data = ($lookupRight ? "end" : "Begin");
+        // echo "--". $data ."--<br>";
+        $historicNumbers[] = ($lookupRight ? end($numbers) : reset($numbers));
         $deltas = $this->calculateDeltas($numbers);
 
         while(!$this->deltasAreAllZeros($deltas)) {
             // echo "inside loop";
-            $lastNumbers[] = end($deltas);
+            $historicNumbers[] = ($lookupRight ? end($deltas) : reset($deltas));
+            // $lastNumbers[] = end($deltas);
 
             $deltas = $this->calculateDeltas($deltas);
         }
-        return $lastNumbers;
+        // print_r($historicNumbers);
+        return $historicNumbers;
     }
     
     private function deltasAreAllZeros($numbers) {
@@ -33,34 +37,32 @@ class Day9 extends Day {
         return (array_sum($numbers) === 0 && $numbers[0] === 0);
     }
 
-    private function getScore($lastNumbers) {
-        $prevLast = 0;
-        foreach($lastNumbers as $lastNumber) {
-            $prevLast = $lastNumber + $prevLast;
+    private function getFirstNumbersScore($numbers) {
+        $result = 0;
+        foreach(array_reverse($numbers) as $number) {
+            $result = $number - $result;
         }
-        // echo "prevLast: ". $prevLast ."<br>";
-        return $prevLast;
+        return $result;
     }
 
     public function part1(): int {
         foreach($this->inputData as $line) {
             $numbers = explode(" ", $line);
-            $lastNumbers = $this->getLastNumbers($numbers);
-            // print_r($lastNumbers);
+            $lastNumbers = $this->getHistoryNumbers($numbers);
             $this->newHistory[] = array_sum($lastNumbers);
-            // $this->newHistory[] = $this->getScore($lastNumbers);
-
         }
-        // print_r($this->newHistory);
         return array_sum($this->newHistory);
-
-        /**
-         * right answer: 1993300041
-         */
     }
 
     public function part2(): int {
-        return 1;
+        foreach($this->inputData as $line) {
+            $numbers = explode(" ", $line);
+            $lastNumbers = $this->getHistoryNumbers($numbers, false);
+            $this->newHistory[] = $this->getFirstNumbersScore($lastNumbers);
+        }
+
+        // print_r($this->newHistory);
+        return array_sum($this->newHistory);
     }
     
 }
