@@ -16,4 +16,8 @@ class Helper {
     public static function getKey(string|int|float $x, string|int|float $y): string {
         return $x .",". $y;
     }
+
+    public static function getCoordsFromKey(string $key) {
+        return explode(",", $key);
+    }
 }
