@@ -2,6 +2,7 @@
 <?php
 
 if($argv[0] === "createDay") {
+    $year = "2023";
     $day = $argv[1];
 
     if($day < 1 || $day > 25) {
@@ -64,5 +65,25 @@ if($argv[0] === "createDay") {
         file_put_contents($destinationFilename, $data);
         echo outputString(" - Created {$destination}", "OKGREEN");
     }
+
+    // get input
+    $url = "https://adventofcode.com/{$year}/day/{$day}/input";
+    $ch = curl_init($url);
+    $inputDestination = realpath(__DIR__ . "/src/input/day{$day}.txt");
+    $fp = fopen($inputDestination, "w");
+
+    curl_setopt($ch,CURLOPT_FILE, $fp);
+    curl_setopt($ch,CURLOPT_COOKIE, "session=53616c7465645f5fca0b30f821fd0d030a7a340fcb687f516e072833990dcd9f931956d1abb5d303a0790611afa4945b89dbe877cd652da49b264862a5cbb964");
+    curl_setopt($ch,CURLOPT_USERAGENT, "github.com/rmfloris");
+
+    curl_exec($ch);
+    if(curl_error($ch)) {
+        echo outputString(" Could not fetch the input", "FAIL");
+        exit();
+    }
+    curl_close($ch);
+    fclose($fp);
+    echo outputString("Stored the input file at {$inputDestination}", "OKGREEN");
+
     echo outputString("All files copied and you are ready to go. Happy Coding! \n", "OKBLUE");
 }
