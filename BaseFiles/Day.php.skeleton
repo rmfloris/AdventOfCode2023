@@ -1,10 +1,10 @@
 <?php
 
-namespace dayX;
+namespace day{:day};
 
 use common\Day;
 
-class DayX extends Day {
+class Day{:day} extends Day {
 
     public function part1(): int {
         return 1;

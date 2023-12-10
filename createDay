@@ -1,0 +1,68 @@
+#!/usr/bin/env php
+<?php
+
+if($argv[0] === "createDay") {
+    $day = $argv[1];
+
+    if($day < 1 || $day > 25) {
+        echo "Error: Day should be between 1 and 25\n";
+    }
+
+    $fileMapping = [
+        'BaseFiles/Day.php.skeleton' => 'src/day{:day}/Day{:day}.php',
+        'BaseFiles/dayTest.php.skeleton' => 'tests/Day{:day}/day{:day}Test.php',
+        'BaseFiles/input.sample.txt' => 'src/input/sample/day{:day}.txt',
+        'BaseFiles/input.txt' => 'src/input/day{:day}.txt',
+    ];
+
+    $colors = [
+        "OKBLUE"  => '\033[95m',
+        "OKCYAN"  => '\033[94m',
+        "OKGREEN" => '\033[92m',
+        "WARNING" => '\033[93m',
+        "FAIL"    => '\033[91m'
+    ];
+
+    function outputString($value, $type) {
+        if($type == "FAIL") return "\033[91m" . $value . "\033[0m \n";
+        if($type == "OKGREEN") return "\033[92m" . $value . "\033[0m \n";
+        if($type == "OKBLUE") return "\033[95m" . $value . "\033[0m \n";
+        if($type == "WARNING") return "\033[93m" . $value . "\033[0m \n";
+        return $value;
+    }
+
+    $files = array_map(function($filename) use ($day) {
+        return str_replace('{:day}', $day, $filename);
+    }, $fileMapping);
+
+    $existing = array_filter($files, function(string $filename): bool {
+        $filename = realpath(__DIR__ . "/{$filename}");
+        return file_exists($filename);
+    });
+    if ($existing) {
+        echo outputString("Following files already exists", "FAIL");
+        foreach($existing as $file) {
+            echo outputString(" - ". $file, "FAIL");
+        }
+
+        echo outputString("Some errors occured! \n", "WARNING");
+        exit();
+    }
+
+    foreach ($files as $source => $destination) {
+        $sourceFilename = realpath(__DIR__ . "/{$source}");
+        $destinationFilename = __DIR__ . "/{$destination}";
+
+        $data = file_get_contents($sourceFilename);
+        $data = str_replace('{:day}', $day, $data);
+        
+        $directoryParts = explode('/', $destinationFilename);
+        $filename = array_pop($directoryParts);
+        $dir = '';
+        foreach($directoryParts as $directoryPart)
+            if(!is_dir($dir .= "/$directoryPart")) mkdir($dir);
+        file_put_contents($destinationFilename, $data);
+        echo outputString(" - Created {$destination}", "OKGREEN");
+    }
+    echo outputString("All files copied and you are ready to go. Happy Coding! \n", "OKBLUE");
+}

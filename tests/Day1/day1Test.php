@@ -2,7 +2,7 @@
 use PHPUnit\Framework\TestCase;
 use day1\Day1;
 
-final class Day01Test extends TestCase
+final class Day1Test extends TestCase
 {
 
     private mixed $day;

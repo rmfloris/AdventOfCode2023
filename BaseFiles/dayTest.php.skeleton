@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
-use dayX\DayX;
+use day{:day}\Day{:day};
 
-final class day0XTest extends TestCase
+final class day{:day}Test extends TestCase
 {
     private mixed $day;
     private mixed $sampleDay;
 
     protected function setUp(): void
     {
-        $this->day = new DayX();
-        $this->sampleDay = new DayX(true);
+        $this->day = new Day{:day}();
+        $this->sampleDay = new Day{:day}(true);
     }
     
     public function testPart1Sample(): void
