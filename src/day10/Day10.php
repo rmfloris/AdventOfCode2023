@@ -58,26 +58,19 @@ class Day10 extends Day {
         $i=0;
 
         $startNeightbour = key($neightbours);
-        $neightbour = current($neightbours);
-        // foreach($neightbours as $startNeightbour => $neightbour) {
-            // echo "- ". $startNeightbour ." -> ". $neightbour ."<br>";
-        $this->visitedLocations[] = $this->startPoint;
-        $this->visitedLocations[] = $startNeightbour;
-        $i=0;
+        $this->setVisitedLocation($this->startPoint);
+        $this->setVisitedLocation($startNeightbour);
+        
         $newPosition = $this->getNewPosition($this->newLocations($startNeightbour), $this->startPoint); //108,75
         $prevPosition = $startNeightbour; //108,76
 
         while($newPosition != $this->startPoint) {
-            // echo "new Position: ". $newPosition ."<br>";
-            $this->visitedLocations[] = $newPosition;//108,75
+            $this->setVisitedLocation($newPosition);
             $nextPrevPosition = $newPosition;
             $newPosition = $this->getNewPosition($this->newLocations($newPosition), $prevPosition);
             $prevPosition = $nextPrevPosition;
 
-            if($i>10000000) { break;}
-            $i++;
         }
-    // }
     }
 
     private function getNewPosition($newLocations, $prevLocation) {
@@ -121,6 +114,11 @@ class Day10 extends Day {
         return $stack;
     }
 
+    private function setVisitedLocation($location) {
+        [$x, $y] = Helper::getCoordsFromKey($location);
+        $this->visitedLocations[$location] = ["x"=> $x, "y"=>$y];
+    }
+
     private function newLocations($position) {
         $moves = $this->moves[$this->map[$position]];
         [$xCoord, $yCoord] = Helper::getCoordsFromKey($position);
@@ -141,6 +139,7 @@ class Day10 extends Day {
         $this->createMap();
         $this->setStartingPoint();
         $this->findLoop($this->startPoint);
+        print_r($this->visitedLocations);
         return count($this->visitedLocations) / 2;
     }
 
