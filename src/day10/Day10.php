@@ -39,8 +39,10 @@ class Day10 extends Day {
     private string $startPoint = "";
     /** @var array<string> */
     private array $visitedLocations = [];
+    private int $numberOfTilesInsideLoop = 0;
 
-    private function createMap() {
+    protected function LoadData():void {
+        parent::loadData();
         foreach($this->inputData as $y => $line) {
             for($x=0; $x<strlen($line); $x++) {
                 $this->map[Helper::getKey($x, $y)] = $line[$x];
@@ -136,15 +138,49 @@ class Day10 extends Day {
     }
 
     public function part1(): int {
-        $this->createMap();
         $this->setStartingPoint();
         $this->findLoop($this->startPoint);
-        print_r($this->visitedLocations);
+        // print_r(array_keys($this->visitedLocations));
         return count($this->visitedLocations) / 2;
     }
 
     public function part2(): int {
-        return 1;
+        $this->setStartingPoint();
+        $this->findLoop($this->startPoint);
+        // Helper::printRFormatted(($this->visitedLocations));
+        foreach($this->inputData as $y => $line) {
+            $allXCoords = array_filter($this->visitedLocations, fn($n) => $n["y"] == $y);
+            if(empty($allXCoords)) continue;
+
+            $xStart = min(array_column($allXCoords, "x"));
+            for($x=$xStart; $x<strlen($line); $x++) {
+                if(!isset($this->visitedLocations[Helper::getKey($x, $y)])) {
+                    echo "x: ". $x ." - y: ". $y;
+                    $numberOfLines = array_filter($this->visitedLocations, fn($n) => $n["x"] >= $x && $n["y"] == $y);
+                    if(count($numberOfLines) % 2 != 0) {
+                        echo " - count<br>";
+                        $this->numberOfTilesInsideLoop += 1;
+                    }
+                    echo " - no count<br>";
+                }
+            }
+
+            /**
+             * 717 was too high
+             */
+
+
+
+
+            /**
+             * Find first line (x value)
+             * From that point onwards look for a value not in visited locations
+             * count number of lines from that position
+             * counter + 1 is number of lines is odd
+             */
+            
+        }
+        return $this->numberOfTilesInsideLoop;
     }
     
 }
