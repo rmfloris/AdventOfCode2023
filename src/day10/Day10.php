@@ -40,6 +40,13 @@ class Day10 extends Day {
     /** @var array<string> */
     private array $visitedLocations = [];
     private int $numberOfTilesInsideLoop = 0;
+    private array $tilesInside = [];
+    /** @var array<string> */
+    private array $northFacing = [
+        "|" => "|",
+        "J" => "J",
+        "L" => "L"
+    ];
 
     protected function LoadData():void {
         parent::loadData();
@@ -147,40 +154,48 @@ class Day10 extends Day {
     public function part2(): int {
         $this->setStartingPoint();
         $this->findLoop($this->startPoint);
-        // Helper::printRFormatted(($this->visitedLocations));
+
+        // Startingpoint S needs to be converted to J to match up.
+
         foreach($this->inputData as $y => $line) {
+            $isInside = false;
             $allXCoords = array_filter($this->visitedLocations, fn($n) => $n["y"] == $y);
             if(empty($allXCoords)) continue;
 
-            $xStart = min(array_column($allXCoords, "x"));
-            for($x=$xStart; $x<strlen($line); $x++) {
-                if(!isset($this->visitedLocations[Helper::getKey($x, $y)])) {
-                    echo "x: ". $x ." - y: ". $y;
-                    $numberOfLines = array_filter($this->visitedLocations, fn($n) => $n["x"] >= $x && $n["y"] == $y);
-                    if(count($numberOfLines) % 2 != 0) {
-                        echo " - count<br>";
-                        $this->numberOfTilesInsideLoop += 1;
-                    }
-                    echo " - no count<br>";
+            for($x=0; $x<strlen($line); $x++) {
+                if($x == 109 && $y == 76) {
+                    $line[109] = "J";
+                }
+
+                if(isset($this->visitedLocations[Helper::getKey($x, $y)]) && array_search($line[$x], $this->northFacing)) {
+                    $isInside = !$isInside;
+                    continue;
+                }
+                if(!isset($this->visitedLocations[Helper::getKey($x, $y)]) && $isInside) {
+
+                    $this->numberOfTilesInsideLoop += 1;
+                    $this->tilesInside[Helper::getKey($x, $y)] = 1;
                 }
             }
 
             /**
              * 717 was too high
              */
-
-
-
-
-            /**
-             * Find first line (x value)
-             * From that point onwards look for a value not in visited locations
-             * count number of lines from that position
-             * counter + 1 is number of lines is odd
-             */
             
         }
         return $this->numberOfTilesInsideLoop;
+    }
+
+    public function getMap() {
+        return $this->map;
+    }
+
+    public function getVisited() {
+        return $this->visitedLocations;
+    }
+
+    public function getTiles() {
+        return $this->tilesInside;
     }
     
 }

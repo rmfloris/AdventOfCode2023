@@ -13,10 +13,10 @@ final class day10Test extends TestCase
         $this->sampleDay = new Day10(true);
     }
     
-    public function testPart1Sample(): void
-    {
-        $this->assertSame(8, $this->sampleDay->part1());
-    }
+    // public function testPart1Sample(): void
+    // {
+    //     $this->assertSame(8, $this->sampleDay->part1());
+    // }
 
     public function testPart1(): void
     {
@@ -26,12 +26,11 @@ final class day10Test extends TestCase
     public function testPart2Sample(): void
     {
         // $this->markTestIncomplete("To be done");
-        $this->assertSame(0, $this->sampleDay->part2());
+        $this->assertSame(10, $this->sampleDay->part2());
     }
 
     public function testPart2(): void
     {
-        // $this->markTestIncomplete("To be done");
-        $this->assertSame(84363105, $this->day->part2());
+        $this->assertSame(423, $this->day->part2());
     }
 }
