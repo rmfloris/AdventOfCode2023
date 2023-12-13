@@ -163,6 +163,10 @@ class Day10 extends Day {
             if(empty($allXCoords)) continue;
 
             for($x=0; $x<strlen($line); $x++) {
+                /** ToDo
+                 * How to automatically have this tile being resolved?
+                 */
+
                 if($x == 109 && $y == 76) {
                     $line[109] = "J";
                 }
