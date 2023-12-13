@@ -5,9 +5,13 @@ namespace day11;
 use common\Day;
 
 class Day11 extends Day {
+    /** @var array<mixed> */
     private $map = [];
+    /** @var array<mixed> */
     private $galaxies = [];
+    /** @var array<mixed> */
     private $possiblePaths = [];
+    /** @var array<int> */
     private $pathDistance = [];
 
     protected function loadData(): void {
@@ -15,7 +19,7 @@ class Day11 extends Day {
         $this->map = array_map(fn($r)=>str_split($r), $this->inputData);
     }
     
-    private function expandUniverse() {
+    private function expandUniverse(): void {
         $yAddition = 0;
         $xAddition = 0;
         foreach($this->inputData as $y => $line) {
@@ -25,7 +29,6 @@ class Day11 extends Day {
             }
         }
         for($x=0;$x<strlen($this->inputData[0]); $x++){
-            // echo "x: ". $x ."<br>";
             if(substr_count(implode(array_column($this->map, $x+$xAddition)), ".") === count($this->map)) {
                 foreach($this->map as $y => $line) {
                     array_splice($line, $x+$xAddition, 0, "." );
@@ -36,7 +39,7 @@ class Day11 extends Day {
         }
     }
 
-    private function findGalaxies() {
+    private function findGalaxies(): void {
         foreach($this->map as $y => $line) {
             $locations = array_filter($line, fn($v, $k) => $v == "#", ARRAY_FILTER_USE_BOTH );
             foreach($locations as $x => $location) {
@@ -48,7 +51,7 @@ class Day11 extends Day {
         }
     }
 
-    private function findPossiblePaths() {
+    private function findPossiblePaths(): void {
         $numberOfGalaxies = count($this->galaxies);
         for($i=0; $i<$numberOfGalaxies; $i++) {
             for($x=0; $x<$numberOfGalaxies; $x++) {
@@ -61,7 +64,7 @@ class Day11 extends Day {
         }
     }
 
-    private function findShortesPaths() {
+    private function findShortesPaths(): void {
         foreach($this->possiblePaths as $path) {
             $start = $this->galaxies[$path["start"]];
             $end = $this->galaxies[$path["end"]];

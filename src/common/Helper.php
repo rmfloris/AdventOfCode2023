@@ -17,6 +17,9 @@ class Helper {
         return $x .",". $y;
     }
 
+    /**
+     * @return array<int|string>
+     */
     public static function getCoordsFromKey(string $key) {
         return explode(",", $key);
     }

@@ -40,7 +40,7 @@ class Day10 extends Day {
     /** @var array<string> */
     private array $visitedLocations = [];
     private int $numberOfTilesInsideLoop = 0;
-    private array $tilesInside = [];
+    // private array $tilesInside = [];
     /** @var array<string> */
     private array $northFacing = [
         "|" => "|",
@@ -57,15 +57,13 @@ class Day10 extends Day {
         }
     }
 
-    private function setStartingPoint() {
+    private function setStartingPoint(): void {
         $this->startPoint = array_search("S", $this->map);
     }
 
-    private function findLoop($position) {
+    private function findLoop(string $position):void {
         $neightbours = $this->findNeightbours($position);
-        $stack = [];
-        $i=0;
-
+ 
         $startNeightbour = key($neightbours);
         $this->setVisitedLocation($this->startPoint);
         $this->setVisitedLocation($startNeightbour);
@@ -82,23 +80,28 @@ class Day10 extends Day {
         }
     }
 
-    private function getNewPosition($newLocations, $prevLocation) {
+    /**
+     * @param array<mixed> $newLocations
+     */
+    private function getNewPosition($newLocations, string $prevLocation): string {
         unset($newLocations[$prevLocation]);
         return current($newLocations);
     }
 
-    private function isSymbol($position): string | bool {
+    private function isSymbol(string $position): string | bool {
         return ($this->map[$position] != '.' ?  $this->map[$position] : false);
     }
 
-    private function isValidNewPosition($position, $currentPosition) {
-        if(!isset($this->map[$position])) return;
-        if(!$this->isSymbol($position)) return;
+    private function isValidNewPosition(string $position, string $currentPosition): bool  {
+        if(!isset($this->map[$position])) return false;
+        if(!$this->isSymbol($position)) return false;
         if(array_search($currentPosition, $this->newLocations($position))) return true;
-        return;
+        return false;
     }
-
-    private function findNeightBours($position, $symbol=false) {
+    /**
+     * @return array<mixed>
+     */
+    private function findNeightBours(string $position) {
         $stack = [];
         [$xCoord, $yCoord] = Helper::getCoordsFromKey($position);
         $xOptions = [-1, 1];
@@ -123,12 +126,16 @@ class Day10 extends Day {
         return $stack;
     }
 
-    private function setVisitedLocation($location) {
+
+    private function setVisitedLocation(string $location): void {
         [$x, $y] = Helper::getCoordsFromKey($location);
         $this->visitedLocations[$location] = ["x"=> $x, "y"=>$y];
     }
 
-    private function newLocations($position) {
+    /**
+     * @return array<string>
+     */
+    private function newLocations(string $position): array {
         $moves = $this->moves[$this->map[$position]];
         [$xCoord, $yCoord] = Helper::getCoordsFromKey($position);
         $newPositions = [];
@@ -178,28 +185,10 @@ class Day10 extends Day {
                 if(!isset($this->visitedLocations[Helper::getKey($x, $y)]) && $isInside) {
 
                     $this->numberOfTilesInsideLoop += 1;
-                    $this->tilesInside[Helper::getKey($x, $y)] = 1;
+                    // $this->tilesInside[Helper::getKey($x, $y)] = 1;
                 }
-            }
-
-            /**
-             * 717 was too high
-             */
-            
+            }           
         }
         return $this->numberOfTilesInsideLoop;
-    }
-
-    public function getMap() {
-        return $this->map;
-    }
-
-    public function getVisited() {
-        return $this->visitedLocations;
-    }
-
-    public function getTiles() {
-        return $this->tilesInside;
-    }
-    
+    }    
 }

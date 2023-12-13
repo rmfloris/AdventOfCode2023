@@ -25,7 +25,10 @@ class Day12 extends Day {
         }
     }
 
-    private function findPossibleArrangements($springs) {
+    /**
+     * @return array<mixed>
+     */
+    private function findPossibleArrangements(string $springs): array {
         $index = strpos($springs, "?");
         if ($index === false) return [$springs]; 
 
@@ -35,17 +38,24 @@ class Day12 extends Day {
         );
     }
 
-    private function replaceChar($string, $replaceValue, $position) {
+    private function replaceChar(string $string, string $replaceValue, int $position):string {
         return substr_replace($string, $replaceValue, $position, 1);
     }
 
-    private function validateOptions($options, $damaged) {
+    /**
+     * @param array<string> $options
+     * @param array<string> $damaged
+     */
+    private function validateOptions($options, $damaged): void {
         foreach($options as $option) {
             if($this->isValidOption($option, $damaged)) $this->validOptionsList[] = $option;
         }
     }
 
-    private function isValidOption($option, $damaged) {
+    /**
+    * @param array<string> $damaged
+    */
+    private function isValidOption(string $option, $damaged): bool {
         $damagedLength = 0;
         $damageOption = 0;
         foreach(str_split($option) as $char) {
