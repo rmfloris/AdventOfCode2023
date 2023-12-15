@@ -3,6 +3,7 @@
 namespace day14;
 
 use common\Day;
+use common\Helper;
 
 class Day14 extends Day {
     /** @var array<mixed> */
@@ -68,7 +69,7 @@ class Day14 extends Day {
     }
 
     public function getTableData() {
-        return $this->map;
+        return Helper::showDataAsTable($this->map);
     }
 
     public function part1(): int {

@@ -1,9 +1,9 @@
 <?php
 require_once '../autoload.php';
 
-use day14\Day14;
+use day13\Day13;
 
-$day = new Day14(true);
+$day = new Day13(true);
 // echo "<br>Game Total: #". $day->part1();
 
 echo "<pre>";
@@ -12,5 +12,4 @@ echo "<br>";
 echo "memory: ". $day->getMemoryUsage() ."<br>";
 echo "time: ". $day->getElapsedTime();
 
-print_r($day->getTableData());
 

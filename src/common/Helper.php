@@ -23,4 +23,25 @@ class Helper {
     public static function getCoordsFromKey(string $key) {
         return explode(",", $key);
     }
+
+    /**
+     * @param array<mixed> $tableData
+     */
+    public static function showDataAsTable($tableData): string {
+        $html = "<table border='1' style='border-collapse: collapse;'>\n";
+        $html .= "<th>";
+        for($i=0; $i<count($tableData[0]); $i++) {
+            $html .= "<td>". $i ."</td>";
+        }
+        $html .= "</th>";
+        foreach($tableData as $key => $row) {
+            $html .="<tr>";
+            $html .="<td>". $key ."</td>";
+            for($i=0; $i<count($tableData[0]); $i++) {
+                $html .= "<td>". $row[$i] ."</td>";
+            }
+            $html .= "</tr>";
+        }
+        return $html;
+    }
 }
