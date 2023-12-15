@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
   phpunit:
     image: php:8.2-cli
-    restart: never
+    # restart: never
     volumes:
       - .:/app
     working_dir: /app
@@ -21,16 +21,16 @@ services:
       - COMPOSER_CACHE_DIR=/app/.cache/composer
     volumes:
       - .:/app
-    restart: never
+    # restart: never
   phpcli:
     image: php:8.2-cli
-    restart: never
+    # restart: never
     volumes:
       - .:/app
     working_dir: /app
   phpstan:
     image: php:8.2-cli
-    restart: never
+    # restart: never
     volumes:
       - .:/app
     working_dir: /app
