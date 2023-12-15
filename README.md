@@ -1,8 +1,8 @@
-# Advent of Coda
-Done for the years:
-* 2022
+# Advent of Code 2023
 
 # How to....
 - Install dependencies via `sudo composer install`
-- Run tests via `./vendor/bin/phpunit tests/2022` where the year can change
-- Run code quality via `./vendor/bin/phpstan`
+- create alias `alias dcr='docker-compose run'`
+- Run tests via `dcr phpunit` to run them all
+- Run specific tests via `dcr phpunit tests/DayX/dayXTest.php`
+- Run code quality via `dcr phpstan`
