@@ -32,6 +32,7 @@ class Day16 extends Day {
             "<" => [$x-1, $y],
             "^" => [$x, $y-1],
             "v" => [$x, $y+1],
+            default => [$x, $y]
         };
         return $newPosition;
     }

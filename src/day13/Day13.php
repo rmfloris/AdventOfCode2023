@@ -7,17 +7,9 @@ use common\Day;
 class Day13 extends Day {
 
     /** @var array<mixed> */
-    private $possibilities = [];
-    /** @var array<mixed> */
     private $map = [];
     private int $score = 0;
-    private $debug1 = [];
-    /**
-     * for each line, validate if it can be mirrored
-     * add it as option
-     * next line to validate the options
-     * stop if one is left
-     */
+
     protected function loadData(): void
     {
         parent::loadData();
@@ -31,6 +23,9 @@ class Day13 extends Day {
         }
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function findOptions($string) {
         $length = strlen($string);
         $possibilities = [];
@@ -48,6 +43,10 @@ class Day13 extends Day {
         return $possibilities;
     }
 
+    /**
+     * @return array<mixed>
+     * @param array<mixed> $map
+     */
     private function findOptionsCols($map) {
         $options = [];
         foreach($map as $row) {
@@ -56,7 +55,11 @@ class Day13 extends Day {
         }
         return $options;
     }
-
+    
+    /**
+     * @return array<mixed>
+     * @param array<mixed> $map
+     */
     private function findOptionsRows($map) {
         $options = [];
         for($x=0; $x<count($map[0]); $x++) {
@@ -79,13 +82,7 @@ class Day13 extends Day {
             if($rowNumber !== false) {
                 $this->score += ($rowNumber+1)*100;
             }
-            // echo "cols: ". $colNumber ." - row: ". $rowNumber ."\n";
-            // $this->debug1[$key] = [
-            //     "row" => $rowNumber,
-            //     "col" => $colNumber
-            // ];
         }
-        // print_r($this->debug1);
         return $this->score;
     }
 

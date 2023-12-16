@@ -33,7 +33,7 @@ class Day14 extends Day {
 
 
 
-    private function tiltSouth() {
+    private function tiltSouth():void {
         foreach($this->map as $y => $mapRow) {
             foreach($this->map[$y] as $x => $position) {
                 if($y === 0) continue;
@@ -68,7 +68,7 @@ class Day14 extends Day {
         return $totalValue;
     }
 
-    public function getTableData() {
+    public function getTableData():string {
         return Helper::showDataAsTable($this->map);
     }
 

@@ -80,16 +80,27 @@ class Day12 extends Day {
         return false;
     }
 
-    public function part1(): int {
+    private function solve() {
         foreach($this->springsInfo as $springInfo) {
             $options = $this->findPossibleArrangements($springInfo["map"]);
             $this->validateOptions($options, $springInfo["damaged"]);    
         }
+    }
+
+    public function part1(): int {
+        $this->solve();
         return count($this->validOptionsList);;
     }
 
-    public function part2(): int {
-        return 1;
+    public function part2(): int { 
+        foreach($this->springsInfo as $key => $value) {
+            $this->springsInfo[$key] = [
+                "map" => implode("?", array_fill(0,5, $value["map"])),
+                "damaged" => array_merge(...array_fill(0,5, $value["damaged"]))
+            ];
+        }
+        $this->solve();
+        return count($this->validOptionsList);;
     }
     
 }

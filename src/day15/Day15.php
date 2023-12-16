@@ -18,7 +18,7 @@ class Day15 extends Day {
         }
     }   
 
-    private function getHasNumber(string $char): string {
+    private function getHasNumber(string $char): int {
         return ord($char);
     }
 
