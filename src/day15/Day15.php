@@ -18,7 +18,7 @@ class Day15 extends Day {
         }
     }   
 
-    private function getHasNumber(string $char) {
+    private function getHasNumber(string $char): string {
         return ord($char);
     }
 
@@ -32,34 +32,32 @@ class Day15 extends Day {
         return $currentValue;
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function getDetails(string $string) {
         preg_match('/^(.+)([=-])(.*)$/',$string, $matches);
         return [$matches[1], $matches[2], $matches[3]];
     }
 
-    private function updateBoxes($string) {
+    private function updateBoxes(string $string): void {
         [$label, $operator, $lens] = $this->getDetails($string);
         $labelValue = $this->calculateHash($label);
-        // echo "Start - ";
         if($operator === "-") {
             unset($this->boxes[$labelValue][$label]);
-            // echo "unset";
             return;
         }
-        // echo "adding";
         $this->boxes[$labelValue][$label] = $lens;
     }
 
-    private function calcFocusPower() {
+    private function calcFocusPower(): int {
         $totalValue = 0;
         foreach($this->boxes as $boxNo => $box) {
             if(empty($box)) {
                 continue;
             }
-            // print_r($box);
             $position = 0;
             foreach($box as $lens) {
-                // echo "pos: ". $position ." - ". $lens ."<br>";
                 $totalValue += ($boxNo+1) * ++$position * $lens;
             }
         }
