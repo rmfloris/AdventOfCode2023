@@ -8,6 +8,8 @@ use common\Helper;
 class Day14 extends Day {
     /** @var array<mixed> */
     private $map = [];
+    /** @var array<mixed> */
+    private $cache = [];
 
     protected function loadData(): void
     {
@@ -72,13 +74,60 @@ class Day14 extends Day {
         return Helper::showDataAsTable($this->map);
     }
 
+    private function checkCache($cycle): int {
+        $cacheKey = json_encode($this->map);
+        if(isset($this->cache[$cacheKey])) {
+            // echo "found in cache ". $cycle ."<br>";
+            return $this->cache[$cacheKey];
+        }
+        $this->cache[$cacheKey] = $cycle;
+        return 0;
+    }
+
     public function part1(): int {
         $this->tiltSouth();
         return $this->calculateLoad();
     }
 
     public function part2(): int {
-        return 1;
+        $cycles = 1000000000;
+        // $cycles = 200;
+
+        $directions = ["^", ">", "v", "<"];
+        $isInCache = 0;
+        $loopEverySteps = 0;
+
+        for($i=0;$i<$cycles;$i++) {
+            // north
+            $isInCache = $this->checkCache($i);
+
+            if($isInCache > 0) {
+                // echo "in Cache<br>";
+                // echo "i: ". $i ."<br>";
+                // echo "isInCache: ". $isInCache ."<br>";
+                $loopEverySteps = $i - $isInCache;
+                break;
+            }
+
+            foreach($directions as $direction) {
+                // echo "Cycle: ". $i ." - direction: ". $direction ."<br>";
+                $this->tiltSouth();
+                
+                // echo "Cache result: ". $isInCache ."<br>";
+                $this->map = Helper::rotateMatrix90Clockwise($this->map);
+            }
+        }
+
+        $missingSteps = ($cycles-$i)%$loopEverySteps;
+        for($m=0;$m<$missingSteps;$m++) {
+
+            foreach($directions as $direction) {
+                $this->tiltSouth();
+                $this->map = Helper::rotateMatrix90Clockwise($this->map);
+            }
+        }
+
+        return $this->calculateLoad();
     }
     
 }

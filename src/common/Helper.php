@@ -44,4 +44,19 @@ class Helper {
         }
         return $html;
     }
+
+    /**
+    * @param array<array<int, string>> @array
+    * @return array<mixed>
+    */
+    public static function rotateMatrix90Clockwise($matrix):array {
+        $matrix = array_values( $matrix );
+        $matrix90 = array();
+    
+        foreach( array_keys( $matrix[0] ) as $column ){
+            $matrix90[] = array_reverse( array_column( $matrix, $column ) );
+        }
+    
+        return $matrix90;
+    }
 }
