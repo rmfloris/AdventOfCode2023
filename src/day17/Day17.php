@@ -72,33 +72,35 @@ class Day17 extends Day {
         return $options;
     }
 
-    private function newEntry($heatLoss, $newX, $newY, $currentX, $currentY, $directionX, $directionY, $steps, $path) {
-        return [$heatLoss, $newX, $newY, $currentX, $currentY, $directionX, $directionY, $steps, $path];
+    private function newEntry($heatLoss, $newX, $newY, $currentX, $currentY, $directionX, $directionY, $steps) {
+        return ["heatloss" => $heatLoss, "x" => $newX, "y"=> $newY, "prevX" => $currentX, "prevY" => $currentY, "directionX" => $directionX, "directionY" => $directionY, "steps" => $steps];
     }
 
     private function loop($x, $y) {
         $queue = new Queue;
 
         $start = json_encode([$x,$y]);
-        $queue->push($this->newEntry(0, 0, 0, -1, -1, 0, 1, 0, [$start]), 0);
-        // $this->visited[json_encode([0, 0, 0, 1, 0])] = 1;
+        $queue->push($this->newEntry(0, 0, 0, -1, -1, 0, 1, 0), 0);
         $this->grid[$start] = [
             "value" => 0,
             "path" => $start
         ];
         
         $i=0;
-        // print_r($this->grid);
+
         while($queue->isNotEmpty()) {
-            [$heatLoss, $x, $y, $prevX, $prevY, $xDirection, $yDirection, $steps, $path] = $queue->shift();
+            echo "<hr>";
+            echo "queue size: ". $queue->queueSize() ."<br>";
+            ["heatloss" => $heatLoss, "x" => $x, "y" => $y, "prevX" => $prevX, "prevY" => $prevY, "directionX" => $xDirection, "directionY" => $yDirection, "steps" => $steps] = $queue->shift();
+            echo "Node: ". $x ." - ". $y ."<br>";
 
             if ($x === $this->width-1 && $y === $this->height-1) {
-                return [$heatLoss, $path];
+                return [$heatLoss];
             }
             
             // been before
             if (isset($this->visited[json_encode([$x, $y, $xDirection, $yDirection, $steps])])) {
-                // echo "x: ". $x .", y: ". $y .", already visited<br>";
+                echo "x: ". $x .", y: ". $y .", already visited<br>";
                 continue;
             }
             $this->visited[json_encode([$x, $y, $xDirection, $yDirection, $steps])] = 1;
@@ -129,12 +131,12 @@ class Day17 extends Day {
                 // print_r($options);
 
                 $newValue = $heatLoss+$this->map[$neightbour];
-                $newPath = array_merge($path, [$neightbour]);
 
-                $queue->push($this->newEntry($newValue, $newX, $newY, $x, $y, $xNewDirection, $yNewDirection, $steps, $newPath), $newValue);
+                $queue->push($this->newEntry($newValue, $newX, $newY, $x, $y, $xNewDirection, $yNewDirection, $steps), $newValue);
             }
 
-            if($i>1000000) {
+            print_r($queue->show());
+            if($i>10) {
                 echo"i-break!!!!";
                 break;
             }
@@ -153,7 +155,7 @@ class Day17 extends Day {
         // print_r($this->grid);
         // echo "final path -->";
         // print_r($this->grid[$endPoint]["path"]);
-        [$heatLoss, $path] = $this->loop(0,0);
+        [$heatLoss] = $this->loop(0,0);
         // print_r($path);
         return $heatLoss;
     }

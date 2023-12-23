@@ -48,4 +48,12 @@ class Queue {
     public function isEmpty() {
         return empty($this->queue);
     }
+
+    public function queueSize() {
+        return count($this->queue);
+    }
+
+    public function show() {
+        return ($this->queue);
+    }
 }
