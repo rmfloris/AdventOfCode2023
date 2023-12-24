@@ -4,11 +4,12 @@ namespace day18;
 
 use common\Day;
 use common\Helper;
+use common\Picks;
+use common\Shoelace;
 
 class Day18 extends Day {
-    private $map = [];
     private $moves = [];
-
+    private $points = [];
 
     protected function loadData(): void
     {
@@ -34,67 +35,84 @@ class Day18 extends Day {
     }
 
     private function startDrilling($x, $y) {
-        $this->map[$y][$x] = "#";
-
         foreach($this->moves as $move) {
             $steps = $move["steps"];
             $direction = $move["direction"];
+            [$xDirection, $yDirection] = $this->newPosition($direction);
 
-            for($i=0;$i<$steps;$i++) {
-                [$xDirection, $yDirection] = $this->newPosition($direction);
-                $x += $xDirection;
-                $y += $yDirection;
-                // echo "x: ". $x ." - y: ". $y ."<br>";
-                $this->map[$y][$x] = "#";
-            }
+            $x += $xDirection * $steps;
+            $y += $yDirection * $steps;
+
+            $this->points[] = [
+                "x" => $x,
+                "y" => $y,
+            ];
         }
     }
 
-    private function fillupMap() {
-        echo "fill up<br>";
-        foreach($this->map as $y => $cells) {
-            ksort($cells);
-            $min = min(array_keys($cells));
-            $max = max(array_keys($cells));
-            $isInside = false;
-            echo "min: ". $min ." - max: ". $max ."<br>";
+    private function getInteriorPoints(): int {
+        $areaSize = new Shoelace;
+        $interiorPoints = new Picks;
 
-            for($x=$min; $x<$max; $x++) {
-                if(isset($this->map[$y][$x])) {
-                    $isInside = !$isInside;
-                    continue;
-                }
-                if($isInside) {
-                    $this->map[$y][$x] = "#";
-                } else {
-                    $this->map[$y][$x] = ".";
-                }
-            }
-            // print_r($cells);
+        for($i=0;$i<count($this->points); $i++) {
+            $z = $i+1;
+            if($z >= count($this->points)) $z = 0;
+        
+            $areaSize->addPoints(
+                $this->points[$i]["x"], 
+                $this->points[$i]["y"], 
+                $this->points[$z]["x"], 
+                $this->points[$z]["y"]
+            );
         }
+        $interiorPoints->setArea($areaSize->getAreaSize());
+        $interiorPoints->setBoundries($this->getExternalPoints());
+
+        return $interiorPoints->calculateInteriorPoints();
     }
 
-    private function countHoles() {
-        $count = 0;
-        foreach($this->map as $line) {
-            $count += array_count_values($line)["#"];
-        }
-        return $count;
+    private function convertHex(string $hex): int {
+         return hexdec($hex);
     }
 
-    public function getTableData():string {
-        return Helper::showDataAsTable($this->map);
+    private function convertMoveNumberToLetter(int $direction) {
+        return match($direction) {
+            0 => "R",
+            1 => "D",
+            2 => "L",
+            3 => "U",
+            default => "X"
+        };
+    }
+
+    private function getNewMoves(): void {
+        $newMoves = [];
+        foreach($this->moves as $move) {
+            $newMoves[] =[
+                "direction" => $this->convertMoveNumberToLetter(substr($move["color"], -1)),
+                "steps" => $this->convertHex(substr($move["color"],1,5))
+            ];
+        }
+        $this->moves = $newMoves;
+    }
+
+    private function getExternalPoints() {
+        return array_sum(array_column($this->moves, "steps"));
     }
 
     public function part1(): int {
         $this->startDrilling(0,0);
-        $this->fillupMap();
-        // print_r($this->map);
-        return $this->countHoles();
+        $this->getInteriorPoints();
+        
+        return $this->getInteriorPoints() + $this->getExternalPoints();
     }
 
     public function part2(): int {
-        return 1;
+        $this->getNewMoves();
+        $this->startDrilling(0,0);
+        $this->getInteriorPoints();
+        
+        return $this->getInteriorPoints() + $this->getExternalPoints();
     }
     
 }
