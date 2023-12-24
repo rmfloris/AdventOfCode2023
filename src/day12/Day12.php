@@ -80,7 +80,7 @@ class Day12 extends Day {
         return false;
     }
 
-    private function solve() {
+    private function solve(): void {
         foreach($this->springsInfo as $springInfo) {
             $options = $this->findPossibleArrangements($springInfo["map"]);
             $this->validateOptions($options, $springInfo["damaged"]);    

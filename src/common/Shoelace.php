@@ -11,11 +11,11 @@ class Shoelace {
         $this->area = 0;
     }
 
-    public function addPoints($x1, $y1, $x2, $y2) {
+    public function addPoints(int $x1, int $y1, int $x2, int $y2):void {
         $this->area += ($x1 * $y2 - $x2 * $y1)/2;
     }
 
-    public function getAreaSize() {
+    public function getAreaSize(): float {
         return abs($this->area);
     }
 }

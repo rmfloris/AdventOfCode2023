@@ -21,20 +21,28 @@ class Queue {
             // echo "<hr>";
             // echo "sorting";
             // sort($this->queue);
-            array_multisort(array_column($this->queue, "value"), SORT_ASC, $this->queue);
+            $data = array_column($this->queue, "value");
+            array_multisort($data, SORT_ASC, $this->queue);
             // print_r($this->queue);
             // echo "<hr>";
         }
     }
 
-    public function pop() {
+    /**
+     * @return array<mixed>
+     */
+    public function pop(): array|NULL {
         if ($this->isNotEmpty()) {
             return array_pop($this->queue)['option'];
         }
         return null;
     }
 
-    public function shift() {
+    /**
+     * @return array<mixed>
+     */
+
+    public function shift(): array|NULL {
         if ($this->isNotEmpty()) {
             return array_shift($this->queue)['option'];
         }
@@ -45,15 +53,18 @@ class Queue {
         return !empty($this->queue);
     }
 
-    public function isEmpty() {
+    public function isEmpty():bool {
         return empty($this->queue);
     }
 
-    public function queueSize() {
+    public function queueSize():int {
         return count($this->queue);
     }
 
-    public function show() {
+    /**
+     * @return array<mixed>
+     */
+    public function show(): array {
         return ($this->queue);
     }
 }

@@ -6,12 +6,15 @@ use common\Day;
 use common\Queue;
 
 class Day17 extends Day {
+    /** @var array<mixed> */
     private $visited = [];
-    private $height = 0;
-    private $width = 0;
+    private int $height = 0;
+    private int $width = 0;
+    /** @var array<mixed> */
     private $grid = [];
+    /** @var array<mixed> */
     private $map = [];
-    private $maxSteps = 3;
+    private int $maxSteps = 3;
 
     protected function loadData(): void
     {
@@ -34,11 +37,14 @@ class Day17 extends Day {
         }
     }
 
-    private function outOfBound($x, $y) {
+    private function outOfBound(int $x, int $y): bool {
         return ($x < 0 || $x > $this->width-1 || $y <0 || $y>$this->height-1);
     }
 
-    private function findNeighbours($x, $y, $prevX, $prevY, $xDirection, $yDirection, $steps) {
+    /**
+     * @return array<mixed>
+     */
+    private function findNeighbours(int $x, int $y, int $prevX, int $prevY, int $xDirection, int $yDirection, int $steps): array {
         $options = [];
 
         foreach([[1,0], [-1,0], [0,1], [0,-1]] as [$xChange, $yChange]) {
@@ -72,11 +78,14 @@ class Day17 extends Day {
         return $options;
     }
 
-    private function newEntry($heatLoss, $newX, $newY, $currentX, $currentY, $directionX, $directionY, $steps) {
+    /**
+     * @return array<mixed>
+     */
+    private function newEntry(int $heatLoss, int $newX, int $newY, int $currentX, int $currentY, int $directionX, int $directionY, int $steps): array {
         return ["heatloss" => $heatLoss, "x" => $newX, "y"=> $newY, "prevX" => $currentX, "prevY" => $currentY, "directionX" => $directionX, "directionY" => $directionY, "steps" => $steps];
     }
 
-    private function loop($x, $y) {
+    private function loop(int $x, int $y): void {
         $queue = new Queue;
 
         $start = json_encode([$x,$y]);
@@ -144,7 +153,10 @@ class Day17 extends Day {
         }
     }
 
-    public function getGrid() {
+    /**
+     * @return array<mixed>
+     */
+    public function getGrid():array {
         return $this->grid;
     }
 

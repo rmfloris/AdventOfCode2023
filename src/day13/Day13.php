@@ -26,7 +26,7 @@ class Day13 extends Day {
     /**
      * @return array<mixed>
      */
-    private function findOptions($string) {
+    private function findOptions(string $string) {
         $length = strlen($string);
         $possibilities = [];
         for($i=0;$i<$length-1; $i++) {

@@ -8,7 +8,9 @@ use common\Picks;
 use common\Shoelace;
 
 class Day18 extends Day {
+    /** @var array<mixed> */
     private $moves = [];
+    /** @var array<mixed> */
     private $points = [];
 
     protected function loadData(): void
@@ -24,7 +26,10 @@ class Day18 extends Day {
         }
     }
 
-    private function newPosition($direction) {
+    /**
+     * @return array<int>
+     */
+    private function newPosition(string $direction): array {
         return match($direction) {
             "R" => [1, 0],
             "L" => [-1, 0],
@@ -34,7 +39,7 @@ class Day18 extends Day {
         };
     }
 
-    private function startDrilling($x, $y) {
+    private function startDrilling(int $x, int $y): void {
         foreach($this->moves as $move) {
             $steps = $move["steps"];
             $direction = $move["direction"];
@@ -75,7 +80,7 @@ class Day18 extends Day {
          return hexdec($hex);
     }
 
-    private function convertMoveNumberToLetter(int $direction) {
+    private function convertMoveNumberToLetter(int $direction): string {
         return match($direction) {
             0 => "R",
             1 => "D",
@@ -89,14 +94,14 @@ class Day18 extends Day {
         $newMoves = [];
         foreach($this->moves as $move) {
             $newMoves[] =[
-                "direction" => $this->convertMoveNumberToLetter(substr($move["color"], -1)),
+                "direction" => $this->convertMoveNumberToLetter((int) substr($move["color"], -1)),
                 "steps" => $this->convertHex(substr($move["color"],1,5))
             ];
         }
         $this->moves = $newMoves;
     }
 
-    private function getExternalPoints() {
+    private function getExternalPoints(): int {
         return array_sum(array_column($this->moves, "steps"));
     }
 

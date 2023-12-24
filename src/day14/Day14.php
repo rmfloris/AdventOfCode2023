@@ -74,6 +74,9 @@ class Day14 extends Day {
         return Helper::showDataAsTable($this->map);
     }
 
+    /**
+     * @param array<mixed> $cycle
+     */
     private function checkCache($cycle): int {
         $cacheKey = json_encode($this->map);
         if(isset($this->cache[$cacheKey])) {
