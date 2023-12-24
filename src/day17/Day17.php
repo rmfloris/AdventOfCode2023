@@ -89,7 +89,7 @@ class Day17 extends Day {
         $queue = new Queue;
 
         $start = json_encode([$x,$y]);
-        $queue->push($this->newEntry(0, 0, 0, -1, -1, 0, 1, 0), 0);
+        $queue->insert($this->newEntry(0, 0, 0, -1, -1, 0, 1, 0), 0);
         $this->grid[$start] = [
             "value" => 0,
             "path" => $start
@@ -141,7 +141,7 @@ class Day17 extends Day {
 
                 $newValue = $heatLoss+$this->map[$neightbour];
 
-                $queue->push($this->newEntry($newValue, $newX, $newY, $x, $y, $xNewDirection, $yNewDirection, $steps), $newValue);
+                $queue->insert($this->newEntry($newValue, $newX, $newY, $x, $y, $xNewDirection, $yNewDirection, $steps), $newValue);
             }
 
             print_r($queue->show());

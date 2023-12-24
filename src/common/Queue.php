@@ -12,7 +12,7 @@ class Queue {
     /**
     * @param array<mixed> $option
     */
-    public function push($option, int $value = NULL) {
+    public function insert($option, int $value = NULL) {
         array_push($this->queue, [
             "option"=>$option, 
             "value"=>$value
