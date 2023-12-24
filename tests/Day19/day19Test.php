@@ -20,7 +20,6 @@ final class day19Test extends TestCase
 
     public function testPart1(): void
     {
-        // $this->markTestIncomplete("To be done");
         $this->assertSame(487623, $this->day->part1());
     }
 
