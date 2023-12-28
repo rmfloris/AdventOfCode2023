@@ -21,7 +21,6 @@ final class day24Test extends TestCase
 
     public function testPart1(): void
     {
-        // $this->markTestIncomplete("To be done");
         $this->day->setBoundries(200000000000000,400000000000000);
         $this->assertSame(19523, $this->day->part1());
     }

@@ -5,7 +5,9 @@ namespace day24;
 use common\Day;
 
 class Day24 extends Day {
+    /** @var array<array{x: int, y: int, z: int}> */
     private array $positions;
+    /** @var array<array{x: int, y: int, z: int}> */
     private array $vectors;
     private int $minValue;
     private int $maxValue;
